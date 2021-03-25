@@ -1,32 +1,58 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <topbar></topbar>
+      <router-view></router-view>
     </div>
-    <router-view/>
-  </div>
 </template>
 
-<style lang="less">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import topbar from '@/components/topbar.vue';
 
-#nav {
-  padding: 30px;
+export default {
+  name:"app",
+  data(){
+    return{
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
     }
+  },
+  components: {
+    topbar
   }
 }
+</script>
+
+
+<style>
+body,
+html {
+  width: 100%;
+  height: 100%;
+  /* overflow: hidden; */
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+
+</style>
+
+<style scoped lang="less">
+#app {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  // overflow: hidden;
+  background-color: #f0f2f9;
+}
+@media screen and (max-height:750px) {
+  #app{
+    height: 754px;
+  }
+}
+@media screen and (max-width:1500px) {
+  #app{
+    width: 1520px;
+  }
+}
+// @media screen and (max-aspect-ratio: 16/10)
 </style>
