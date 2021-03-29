@@ -1,7 +1,8 @@
 export default {
     namespaced: true,
     state: {
-        
+        isLogin:false,
+        access_token:null
 	},
     //修改state
 	mutations: {

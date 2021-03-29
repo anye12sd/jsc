@@ -7,7 +7,8 @@
 
 <script>
 import topbar from '@/components/topbar.vue';
-
+import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
+import {aaaa,bbbb,cccc,dddd} from "@/api/user.js"
 export default {
   name:"app",
   data(){
@@ -15,8 +16,26 @@ export default {
 
     }
   },
+  mounted(){
+    // console.log(this.isLogin)
+    // aaaa().then(res=>{
+    //   console.log("aaaa",res)
+    // })
+    // bbbb().then(res=>{
+    //   console.log("bbbb",res)
+    // })
+    // cccc().then(res=>{
+    //   console.log("cccc",res)
+    // })
+    // dddd().then(res=>{
+    //   console.log("dddd",res)
+    // })
+  },
   components: {
     topbar
+  },
+  computed:{
+    ...mapState('config',['isLogin'])
   }
 }
 </script>
@@ -44,9 +63,9 @@ html {
   // overflow: hidden;
   background-color: #f0f2f9;
 }
-@media screen and (max-height:750px) {
+@media screen and (max-height:720px) {
   #app{
-    height: 754px;
+    height: 1000px;
   }
 }
 @media screen and (max-width:1500px) {

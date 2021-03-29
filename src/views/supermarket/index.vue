@@ -102,9 +102,11 @@ export default {
 
 <style scoped lang="less">
 .supermarket {
-  margin: 1% auto 0 auto;
+   margin: 1% auto 1% auto;
   width: 91%;
-  height: 89%;
+  // height: 89%;
+  height: 89.6%;
+  overflow: hidden;
   background: #ffffff;
   border-radius: 4px;
   padding: 20px 30px;
@@ -161,16 +163,18 @@ export default {
   }
 
   .list {
+    height: 86%;
     .line {
       // margin: 0.1% 0;
       margin-top: 0.1%;
       display: flex;
+      height: 8%;
       border: 1px solid #f5f6f9;
       div {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0.45% 0;
+        // padding: 0.45% 0;
         font-family: MicrosoftYaHei;
         font-size: 14px;
         color: #666f8e;
@@ -217,8 +221,8 @@ export default {
       }
     }
   }
-  .pagination {
-    margin-top: 1%;
-  }
+  // .pagination {
+  //   margin-top: 1%;
+  // }
 }
 </style>

@@ -24,7 +24,7 @@
         v-if="four == true"
         placeholder="请选择时间范围"
       /> -->
-      <input type="text" id="time" v-else :placeholder="four" />
+      <input type="text" id="time" v-else :placeholder="three" />
     </div>
     <div>
       <input
@@ -34,7 +34,7 @@
         placeholder="查询输入"
       />
       <div class="searchlogo">
-        <img :src="search" alt="" />
+        <img :src="search" alt="图片丢失" />
       </div>
     </div>
   </div>
@@ -63,7 +63,7 @@ export default {
     },
     three: {
       type: String,
-      default: "请输入姓名",
+      default: "请输入申请人姓名",
     },
     four: {
       default: "请选择时间范围",

@@ -33,9 +33,11 @@ export default {
 
 <style scoped lang="less">
 .pcCockpit {
-  margin: 1% auto 0 auto;
+  margin: 1% auto 1% auto;
   width: 91%;
-  height: 89%;
+  // height: 89%;
+  height: 89.6%;
+  overflow: hidden;
   // width: 1350px;
   // height: 670px;
   background: #ffffff;

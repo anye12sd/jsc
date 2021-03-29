@@ -1,6 +1,6 @@
 <template>
   <div class="modelApproval">
-    <searchdemo :four="true" one="模型编号" two="请输入模型编号"></searchdemo>
+    <searchdemo :four="'申请人'" one="模型编号" two="请输入模型编号"></searchdemo>
     <div class="list">
       <div class="line topline">
         <div>模型编号</div>
@@ -68,16 +68,18 @@ export default {
 .modelApproval {
     height: 91%;
   .list {
+    height: 86%;
     .line {
       // margin: 0.1% 0;
       margin-top: 0.1%;
       display: flex;
+      height: 8%;
       border: 1px solid #f5f6f9;
       div {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0.45% 0;
+        // padding: 0.45% 0;
         font-family: MicrosoftYaHei;
         font-size: 14px;
         color: #666f8e;
@@ -109,10 +111,6 @@ export default {
       }
       .actions > p:nth-of-type(2) {
         margin-left: 5px;
-        color: #017cf8;
-      }
-      .actions > p:nth-of-type(3) {
-        margin-left: 5px;
         color: #fd6969;
       }
     }
@@ -124,8 +122,8 @@ export default {
       }
     }
   }
-  .pagination {
-    margin-top: 1%;
-  }
+  // .pagination {
+  //   margin-top: 1%;
+  // }
 }
 </style>

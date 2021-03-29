@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 import PcCokpit from "@/views/pcCockpit"
 Vue.use(VueRouter)
 
@@ -11,6 +10,11 @@ const routes = [
     component: PcCokpit
   },
   {
+    path:"/login",
+    name:"Login",
+    component:()=> import ('../views/login')
+  },
+  {
     path:"/pcCockpit",
     name:"PcCockpit",
     component:PcCokpit
@@ -19,6 +23,11 @@ const routes = [
     path:"/supermarket",
     name:"Supermarket",
     component:() => import('../views/supermarket')
+  },
+  {
+    path:"/modelIntroduce",
+    name:"ModelIntroduce",
+    component:() => import ('../views/modelIntroduce')
   }
 
 ]

@@ -2,10 +2,10 @@
   <div class="topbar">
     <div class="tit">长兴驾驶舱PC端后台管理系统</div>
     <div
-      v-for="(p, index) in option"
+      v-for="(p) in option"
       :key="p.txt"
-      :class="'item ' + (index == current ? 'active' : '')"
-      @click="chose(index, p.path)"
+      :class="'item ' + (p.id == current ? 'active' : '')"
+      @click="chose(p.id, p.path)"
     >
       <img :src="p.img" alt="图片缺失" style="width:30px;" />
       <p>{{ p.txt }}</p>
@@ -38,21 +38,25 @@ export default {
       },
       option: [
         {
+          id:0,
           img: require("@/assets/topBar/pccok.png"),
           txt: "PC驾驶舱",
           path: "/pcCockpit",
         },
         {
+          id:1,
           img: require("@/assets/topBar/modle.png"),
-          txt: "模型超市",
+          txt: "应用成果超市",
           path: "/supermarket",
         },
         {
+          id:2,
           img: require("@/assets/topBar/introduce.png"),
           txt: "模型介绍",
-          path: "/",
+          path: "/modelIntroduce",
         },
         {
+          id:3,
           img: require("@/assets/topBar/needs.png"),
           txt: "需求管理",
           path: "/",
@@ -89,8 +93,8 @@ export default {
         case "/supermarket":
           this.current = 1;
           break;
-        case "/":
-          this.current = 0;
+        case "/modelIntroduce":
+          this.current = 2;
           break;
       }
     },

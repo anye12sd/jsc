@@ -64,17 +64,19 @@ export default {
 .Approval {
   height: 91%;
   .list {
+    height: 86%;
     .line {
       // margin: 0.1% 0;
       margin-top: 0.1%;
       display: flex;
+      height: 8%;
       border: 1px solid #F5F6F9;
       div {
         // padding: 0.75% 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0.45% 0;
+        // padding: 0.45% 0;
         font-family: MicrosoftYaHei;
         font-size: 14px;
         color: #666f8e;
@@ -121,8 +123,8 @@ export default {
       }
     }
   }
-  .pagination{
-    margin-top: 1%;
-  }
+  // .pagination{
+  //   margin-top: 1%;
+  // }
 }
 </style>
