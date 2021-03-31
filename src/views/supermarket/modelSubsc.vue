@@ -1,24 +1,25 @@
 <template>
-  <div class="modelApproval">
-    <searchdemo :four="'申请人'" one="模型编号" two="请输入模型编号"></searchdemo>
+  <div class="modelSubsc">
+    <searchdemo
+      four="所属单位"
+      one="模型名称"
+      two="请输入模型名称"
+      three="请输入所属单位"
+    ></searchdemo>
     <div class="list">
       <div class="line topline">
-        <div>模型编号</div>
-        <div>模型名称</div>
-        <div>类型</div>
-        <div>所属单位</div>
-        <div>模型修改时间</div>
+        <div class="name">页面名称</div>
+        <div class="type">类型</div>
+        <div class="company">所属单位</div>
         <div class="actions">操作</div>
       </div>
       <div v-for="(k, index) in list" :key="index" class="line">
-        <div>{{ k.num }}</div>
-        <div>{{ k.name }}</div>
-        <div>{{ k.type }}</div>
-        <div>{{ k.address }}</div>
-        <div>{{ k.time }}</div>
+        <div class="name">{{ k.name }}</div>
+        <div class="type">{{ k.type }}</div>
+        <div class="company">{{ k.company }}</div>
         <div class="actions">
-          <p> <img :src="adopt" alt="图片资源缺失"> <span>通过</span></p>
-          <p> <img :src="reject" alt="图片资源缺失"> <span>驳回</span></p>
+          <p><img :src="subsc" alt="图片资源缺失" /> <span>订阅</span></p>
+          <p><img :src="subsc" alt="图片资源缺失" /> <span>取消订阅</span></p>
         </div>
       </div>
     </div>
@@ -38,18 +39,68 @@
 
 <script>
 import searchdemo from "@/components/searchdemo.vue";
-import ll from "./data.json";
-import adopt from "@/assets/listlogo/adopt.png"
-import reject from "@/assets/listlogo/reject.png"
+import subsc from "@/assets/listlogo/subscribe.png";
 export default {
-  name: "modelApproval",
+  name: "modelSubsc",
   data() {
     return {
-        adopt,reject,
-        list:ll,
-        currentPage:1
+      subsc,
+      currentPage:1,
+      list: [
+        {
+          name: "招商引资",
+          type: "SOL类型",
+          company: "质监局",
+        },
+        {
+          name: "招商引资",
+          type: "SOL类型",
+          company: "质监局",
+        },
+        {
+          name: "招商引资",
+          type: "SOL类型",
+          company: "质监局",
+        },
+        {
+          name: "招商引资",
+          type: "SOL类型",
+          company: "质监局",
+        },
+        {
+          name: "招商引资",
+          type: "SOL类型",
+          company: "质监局",
+        },
+        {
+          name: "招商引资",
+          type: "SOL类型",
+          company: "质监局",
+        },
+        {
+          name: "招商引资",
+          type: "SOL类型",
+          company: "质监局",
+        },
+        {
+          name: "招商引资",
+          type: "SOL类型",
+          company: "质监局",
+        },
+        {
+          name: "招商引资",
+          type: "SOL类型",
+          company: "质监局",
+        },
+        {
+          name: "招商引资",
+          type: "SOL类型",
+          company: "质监局",
+        },
+      ],
     };
   },
+  mounted() {},
   components: {
     searchdemo,
   },
@@ -65,8 +116,8 @@ export default {
 </script>
 
 <style scoped lang="less">
-.modelApproval {
-    height: 91%;
+.modelSubsc {
+  height: 91%;
   .list {
     height: 86%;
     .line {
@@ -87,7 +138,7 @@ export default {
         flex: 1;
       }
       .actions {
-        flex: 2;
+        //   flex: 2;
         p {
           // display: flex;
           // align-items: center;
@@ -111,8 +162,10 @@ export default {
       }
       .actions > p:nth-of-type(2) {
         margin-left: 5px;
+        width: 85px;
         color: #fd6969;
       }
+      
     }
     .topline {
       background: #f5f6f9;
@@ -122,8 +175,5 @@ export default {
       }
     }
   }
-  // .pagination {
-  //   margin-top: 1%;
-  // }
 }
 </style>

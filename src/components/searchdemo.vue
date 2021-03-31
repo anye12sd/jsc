@@ -59,7 +59,7 @@ export default {
     },
     two: {
       type: String,
-      default: "修改时间",
+      default: "请输入姓名",
     },
     three: {
       type: String,
@@ -154,9 +154,9 @@ export default {
   display: flex;
   align-items: center;
 }
-.search > div:nth-of-type(2) {
-  justify-content: flex-end;
-}
+// .search > div:nth-of-type(2) {
+//   justify-content: flex-end;
+// }
 </style>
 
 <style lang="less">

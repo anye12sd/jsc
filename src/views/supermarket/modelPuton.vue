@@ -63,7 +63,14 @@ export default {
       value: "",
     };
   },
-  methods: {},
+  methods: {
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+    },
+  },
 };
 </script>
 
@@ -141,34 +148,34 @@ export default {
       border-color: #409eff;
     }
     .confirm {
-        width: 148px;
-        height: 36px;
-        line-height: 36px;
-        background: #017CF8;
-        border-radius: 4px;
-        font-family: SourceHanSansCN-Regular;
-        font-size: 18px;
-        color: #FFFFFF;
-        text-align: center;
-        box-sizing: border-box;
-        display: inline-block;
-        vertical-align: middle;
-        margin-left: 8px;
-        cursor: pointer;
+      width: 148px;
+      height: 36px;
+      line-height: 36px;
+      background: #017cf8;
+      border-radius: 4px;
+      font-family: SourceHanSansCN-Regular;
+      font-size: 18px;
+      color: #ffffff;
+      text-align: center;
+      box-sizing: border-box;
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 8px;
+      cursor: pointer;
     }
     .cancel {
-        width: 148px;
-        height: 36px;
-        line-height: 36px;
-        text-align: center;
-        background: #FFFFFF;
-        border: 1px solid #CCCFD7;
-        box-shadow: 0 0 6px 0 rgba(38,91,218,0.04);
-        border-radius: 4px;
-        box-sizing: border-box;
-        display: inline-block;
-        vertical-align: middle;
-        cursor: pointer;
+      width: 148px;
+      height: 36px;
+      line-height: 36px;
+      text-align: center;
+      background: #ffffff;
+      border: 1px solid #cccfd7;
+      box-shadow: 0 0 6px 0 rgba(38, 91, 218, 0.04);
+      border-radius: 4px;
+      box-sizing: border-box;
+      display: inline-block;
+      vertical-align: middle;
+      cursor: pointer;
     }
   }
   .main > .item:nth-of-type(2) {

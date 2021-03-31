@@ -1,28 +1,20 @@
 <template>
-  <div class="Approval">
-    <searchdemo
-      four="所属单位"
+  <div class="subscribe">
+    four="所属单位"
       one="页面名称"
       two="请输入页面名称"
       three="请输入所属单位"
-    ></searchdemo>
     <div class="list">
       <div class="line topline">
-        <div class="pagename">页面名称</div>
-        <div class="company">所属单位</div>
-        <div class="sort">排序</div>
+        <div class="person">页面名称</div>
+        <div class="pagename">所属单位</div>
         <div class="actions">操作</div>
       </div>
       <div v-for="(k, index) in list" :key="index" class="line">
-        <div class="pagename">{{ k.name }}</div>
-        <div class="company">{{ k.company }}</div>
-        <div class="sort">{{ k.sort }}</div>
+        <div class="person">{{ k.name }}</div>
+        <div class="pagename">{{ k.company }}</div>
         <div class="actions">
-          <p><img :src="adopt" alt="图片资源缺失" /> <span>上移</span></p>
-          <p><img :src="reject" alt="图片资源缺失" /> <span>下移</span></p>
-          <p>
-            <img :src="delelogo" alt="图片资源缺失" /> <span>删除页面</span>
-          </p>
+          <p><img :src="subsc" alt="图片资源缺失" /> <span>订阅</span></p>
         </div>
       </div>
     </div>
@@ -41,76 +33,63 @@
 </template>
 
 <script>
+// 页面订阅
 import searchdemo from "@/components/searchdemo.vue";
-// import ll from "./data.json";
-import adopt from "@/assets/listlogo/adopt.png";
-import reject from "@/assets/listlogo/reject.png";
-import delelogo from "@/assets/listlogo/delete.png";
+import subsc from "@/assets/listlogo/subscribe.png"
 export default {
-  name: "Approval",
+  name: "subscribe",
   data() {
     return {
-      adopt,
-      reject,
-      delelogo,
+        subsc,
+        currentPage:1,
       list: [
         {
           name: "幼儿园入学人数预测",
           company: "教育局",
-          sort: 1,
         },
         {
           name: "升学排行",
           company: "教育局",
-          sort: 2,
-        },
-        {
-          name: "人口变化趋势",
-          company: "民政局",
-          sort: 3,
         },
         {
           name: "幼儿园入学人数预测",
           company: "教育局",
-          sort: 1,
         },
         {
           name: "升学排行",
           company: "教育局",
-          sort: 2,
-        },
-        {
-          name: "人口变化趋势",
-          company: "民政局",
-          sort: 3,
         },
         {
           name: "幼儿园入学人数预测",
           company: "教育局",
-          sort: 1,
         },
         {
           name: "升学排行",
           company: "教育局",
-          sort: 2,
-        },
-        {
-          name: "人口变化趋势",
-          company: "民政局",
-          sort: 3,
         },
         {
           name: "幼儿园入学人数预测",
           company: "教育局",
-          sort: 1,
+        },
+        {
+          name: "升学排行",
+          company: "教育局",
+        },
+        {
+          name: "幼儿园入学人数预测",
+          company: "教育局",
+        },
+        {
+          name: "升学排行",
+          company: "教育局",
         },
       ],
-      currentPage: 1,
     };
   },
   components: {
     searchdemo,
   },
+  mounted() {},
   methods: {
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
@@ -123,7 +102,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-.Approval {
+.subscribe {
   height: 91%;
   .list {
     height: 86%;
@@ -144,45 +123,36 @@ export default {
         color: #666f8e;
         text-align: center;
       }
-
-      p {
-        // display: flex;
-        // align-items: center;
-        display: inline-block;
-        vertical-align: middle;
-        width: 70px;
-        background: #f5f4f7;
-        border: 1px solid #e5e6eb;
-        border-radius: 4px;
-        padding: 2px;
-        font-family: MicrosoftYaHei;
-        font-size: 14px;
-        cursor: pointer;
-        * {
+      .person,
+      .actions,
+      .pagename {
+        flex: 1;
+        p {
+          // display: flex;
+          // align-items: center;
+          display: inline-block;
           vertical-align: middle;
+          width: 70px;
+          background: #f5f4f7;
+          border: 1px solid #e5e6eb;
+          border-radius: 4px;
+          padding: 2px;
+          font-family: MicrosoftYaHei;
+          font-size: 14px;
+          cursor: pointer;
+          * {
+            vertical-align: middle;
+          }
         }
       }
-
       .actions > p:nth-of-type(1) {
         color: #017cf8;
       }
       .actions > p:nth-of-type(2) {
         margin-left: 5px;
-        color: #017cf8;
-      }
-      .actions > p:nth-of-type(3) {
-        margin-left: 5px;
         color: #fd6969;
-        width: 85px;
       }
-      .sort {
-        flex: 1;
-      }
-      .pagename,
-      .company,
-      .actions {
-        flex: 2;
-      }
+      
     }
     .topline {
       background: #f5f6f9;
@@ -192,8 +162,5 @@ export default {
       }
     }
   }
-  // .pagination{
-  //   margin-top: 1%;
-  // }
 }
 </style>

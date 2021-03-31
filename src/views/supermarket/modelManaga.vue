@@ -1,6 +1,6 @@
 <template>
-  <div class="modelApproval">
-    <searchdemo :four="'申请人'" one="模型编号" two="请输入模型编号"></searchdemo>
+  <div class="modelManaga">
+    <searchdemo :four="true" one="模型编号" two="请输入模型编号"></searchdemo>
     <div class="list">
       <div class="line topline">
         <div>模型编号</div>
@@ -17,8 +17,9 @@
         <div>{{ k.address }}</div>
         <div>{{ k.time }}</div>
         <div class="actions">
-          <p> <img :src="adopt" alt="图片资源缺失"> <span>通过</span></p>
-          <p> <img :src="reject" alt="图片资源缺失"> <span>驳回</span></p>
+          <p><img :src="change" alt="图片资源缺失" /> <span>上架</span></p>
+          <p><img :src="off" alt="图片资源缺失" /> <span>修改</span></p>
+          <p><img :src="puton" alt="图片资源缺失" /> <span>下架</span></p>
         </div>
       </div>
     </div>
@@ -37,21 +38,19 @@
 </template>
 
 <script>
-import searchdemo from "@/components/searchdemo.vue";
 import ll from "./data.json";
-import adopt from "@/assets/listlogo/adopt.png"
-import reject from "@/assets/listlogo/reject.png"
+import change from "@/assets/listlogo/channge.png";
+import off from "@/assets/listlogo/off.png";
+import puton from "@/assets/listlogo/puton.png";
+import searchdemo from "@/components/searchdemo.vue";
 export default {
-  name: "modelApproval",
+  name: "modelManaga",
   data() {
-    return {
-        adopt,reject,
-        list:ll,
-        currentPage:1
-    };
+    return { list: ll, change, off, puton, currentPage: 1 };
   },
-  components: {
-    searchdemo,
+  mounted() {},
+  components:{
+      searchdemo,
   },
   methods: {
     handleSizeChange(val) {
@@ -65,8 +64,8 @@ export default {
 </script>
 
 <style scoped lang="less">
-.modelApproval {
-    height: 91%;
+.modelManaga {
+  height: 91%;
   .list {
     height: 86%;
     .line {
@@ -111,6 +110,10 @@ export default {
       }
       .actions > p:nth-of-type(2) {
         margin-left: 5px;
+        color: #017cf8;
+      }
+      .actions > p:nth-of-type(3) {
+        margin-left: 5px;
         color: #fd6969;
       }
     }
@@ -122,8 +125,5 @@ export default {
       }
     }
   }
-  // .pagination {
-  //   margin-top: 1%;
-  // }
 }
 </style>

@@ -1,24 +1,26 @@
 <template>
-  <div class="modelApproval">
-    <searchdemo :four="'申请人'" one="模型编号" two="请输入模型编号"></searchdemo>
+  <div class="waitDemand">
+    <searchdemo
+      four="所属单位"
+      one="页面名称"
+      two="请输入页面名称"
+      three="请输入所属单位"
+    ></searchdemo>
     <div class="list">
       <div class="line topline">
-        <div>模型编号</div>
-        <div>模型名称</div>
-        <div>类型</div>
-        <div>所属单位</div>
-        <div>模型修改时间</div>
+        <div class="num">需求编号</div>
+        <div class="name">需求名称</div>
+        <div class="company">需求单位</div>
+        <div class="describe">需求描述</div>
         <div class="actions">操作</div>
       </div>
       <div v-for="(k, index) in list" :key="index" class="line">
-        <div>{{ k.num }}</div>
-        <div>{{ k.name }}</div>
-        <div>{{ k.type }}</div>
-        <div>{{ k.address }}</div>
-        <div>{{ k.time }}</div>
+        <div class="num">{{ index }}</div>
+        <div class="name" :title="k.name">{{ k.name }}</div>
+        <div class="company" :title="k.company">{{ k.company }}</div>
+        <div class="describe" :title="k.describe">{{ k.describe }}</div>
         <div class="actions">
-          <p> <img :src="adopt" alt="图片资源缺失"> <span>通过</span></p>
-          <p> <img :src="reject" alt="图片资源缺失"> <span>驳回</span></p>
+          <span @click="addnew(k)">新增模型</span>
         </div>
       </div>
     </div>
@@ -37,24 +39,18 @@
 </template>
 
 <script>
+// 需求待办
 import searchdemo from "@/components/searchdemo.vue";
-import ll from "./data.json";
-import adopt from "@/assets/listlogo/adopt.png"
-import reject from "@/assets/listlogo/reject.png"
 export default {
-  name: "modelApproval",
+  name: "waitDemand",
   data() {
     return {
-        adopt,reject,
-        list:ll,
-        currentPage:1
+        currentPage:1,
     };
   },
-  components: {
-    searchdemo,
-  },
+  mounted() {},
   methods: {
-    handleSizeChange(val) {
+      handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
@@ -65,8 +61,8 @@ export default {
 </script>
 
 <style scoped lang="less">
-.modelApproval {
-    height: 91%;
+.waitDemand {
+  height: 91%;
   .list {
     height: 86%;
     .line {
@@ -76,6 +72,7 @@ export default {
       height: 8%;
       border: 1px solid #f5f6f9;
       div {
+        // padding: 0.75% 0;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -84,10 +81,11 @@ export default {
         font-size: 14px;
         color: #666f8e;
         text-align: center;
-        flex: 1;
       }
-      .actions {
-        flex: 2;
+      .person,
+      .actions,
+      .pagename {
+        flex: 1;
         p {
           // display: flex;
           // align-items: center;
@@ -113,6 +111,7 @@ export default {
         margin-left: 5px;
         color: #fd6969;
       }
+      
     }
     .topline {
       background: #f5f6f9;
@@ -122,8 +121,5 @@ export default {
       }
     }
   }
-  // .pagination {
-  //   margin-top: 1%;
-  // }
 }
 </style>

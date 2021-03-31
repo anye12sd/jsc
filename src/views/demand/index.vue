@@ -1,6 +1,6 @@
 <template>
-  <div class="pcCockpit">
-    <div class="tit">PC驾驶舱</div>
+  <div class="demand">
+    <div class="tit">需求管理</div>
     <div class="option">
       <div
         v-for="k in options"
@@ -15,79 +15,78 @@
       <div :class="'op '+(current==2?'status12':'status11')" @click="chose(2)">页面订阅</div> -->
     </div>
     <router-view></router-view>
-    <!-- <div v-if="current == 0"></div>
-    <approval v-else-if="current== 1"></approval>
-    <subscribe v-else></subscribe> -->
   </div>
 </template>
 
 <script>
+// 需求管理
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-// import approval from './approval'
-// import subscribe from "./subscribe"
 export default {
-  name: "pcCockpit",
+  name: "demand",
   data() {
     return {
-      current: 0,
-      options: [
-        {
-          id: 0,
-          routerpath: "/pcCockpit/pageShow",
-          name: "页面展示",
-          classname1: "status02",
-          classname2: "status01",
-        },
-        {
-          id: 1,
-          routerpath: "/pcCockpit/approval",
-          name: "页面管理",
-          classname1: "status12",
-          classname2: "status11",
-        },
-        {
-          id: 2,
-          routerpath: "/pcCockpit/subScribe",
-          name: "页面订阅",
-          classname1: "status12",
-          classname2: "status11",
-        },
-      ],
+        current:0,
+        options:[
+          {
+            id:0,
+            routerpath:"/demand/addNewDemand",
+            name:"新增需求",
+            classname1:"status02",
+            classname2:"status01"
+          },
+          {
+            id:1,
+            routerpath:"/demand/demandHandle",
+            name:"需求处理",
+            classname1:"status12",
+            classname2:"status11"
+          },
+          {
+            id:2,
+            routerpath:"/demand/waitDemand",
+            name:"待办事项",
+            classname1:"status12",
+            classname2:"status11"
+          },
+          {
+            id:3,
+            routerpath:"/demand/hasDoneDemand",
+            name:"已办事项",
+            classname1:"status12",
+            classname2:"status11"
+          }
+        ]
     };
   },
-  components: {
-    // approval,subscribe
-  },
-  computed: {
-    ...mapState("config", ["currentRouterPath"]),
-  },
+  mounted() {},
   methods: {
-    chose(item) {
-      this.current = item.id;
-      this.$router.push(item.routerpath);
-    },
+      chose(item){
+          this.current = item.id;
+          this.$router.push(item.routerpath)
+      }
+  },
+  computed:{
+    ...mapState("config",["currentRouterPath"])
   },
   watch: {
-    currentRouterPath(newValue, oldValue) {
-      this.options.forEach((item) => {
-        if (newValue.includes(item.routerpath)) {
+    currentRouterPath(newValue,oldValue) {
+      this.options.forEach(item=>{
+        if(newValue.includes(item.routerpath)){
           this.current = item.id;
         }
-      });
+      })
     },
-  },
+  }
 };
 </script>
 
 <style scoped lang="less">
-.pcCockpit {
+.demand{
   margin: 1% auto 0 auto;
   width: 91%;
   // height: 89%;
   height: 89.6%;
   overflow: hidden;
-  // width: 1350px;
-  // height: 670px;
   background: #ffffff;
   border-radius: 4px;
   padding: 20px 30px;
@@ -122,6 +121,19 @@ export default {
       text-align: center;
       position: relative;
       left: -20px;
+    }
+    .op:nth-of-type(4) {
+      text-align: center;
+      position: relative;
+      left: -30px;
+    }
+    .op:nth-of-type(5) {
+      text-align: center;
+      position: relative;
+      left: -30px;
+    }
+    .special {
+      width: 150px;
     }
   }
   .status01 {

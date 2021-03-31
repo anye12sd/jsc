@@ -1,6 +1,6 @@
 <template>
-  <div class="pcCockpit">
-    <div class="tit">PC驾驶舱</div>
+  <div class="process">
+    <div class="tit">流程审批</div>
     <div class="option">
       <div
         v-for="k in options"
@@ -10,77 +10,68 @@
       >
         {{ k.name }}
       </div>
-      <!-- <div :class="'op '+(current==0?'status02':'status01')" @click="chose(0)">页面展示</div>
-      <div :class="'op '+(current==1?'status12':'status11')" @click="chose(1)">页面管理</div>
-      <div :class="'op '+(current==2?'status12':'status11')" @click="chose(2)">页面订阅</div> -->
     </div>
     <router-view></router-view>
-    <!-- <div v-if="current == 0"></div>
-    <approval v-else-if="current== 1"></approval>
-    <subscribe v-else></subscribe> -->
   </div>
 </template>
 
 <script>
+// 流程审批
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-// import approval from './approval'
-// import subscribe from "./subscribe"
 export default {
-  name: "pcCockpit",
+  name: "process",
   data() {
     return {
       current: 0,
       options: [
         {
           id: 0,
-          routerpath: "/pcCockpit/pageShow",
-          name: "页面展示",
+          routerpath: "/process/hasDoing",
+          name: "待办事项",
           classname1: "status02",
           classname2: "status01",
         },
         {
           id: 1,
-          routerpath: "/pcCockpit/approval",
-          name: "页面管理",
+          routerpath: "/process/iStarted",
+          name: "已办事项",
           classname1: "status12",
           classname2: "status11",
         },
         {
           id: 2,
-          routerpath: "/pcCockpit/subScribe",
-          name: "页面订阅",
+          routerpath: "/process/waitDoing",
+          name: "我发起的",
           classname1: "status12",
           classname2: "status11",
         },
       ],
     };
   },
-  components: {
-    // approval,subscribe
-  },
-  computed: {
-    ...mapState("config", ["currentRouterPath"]),
-  },
+  mounted() {},
   methods: {
     chose(item) {
       this.current = item.id;
       this.$router.push(item.routerpath);
     },
   },
-  watch: {
-    currentRouterPath(newValue, oldValue) {
-      this.options.forEach((item) => {
-        if (newValue.includes(item.routerpath)) {
+  computed:{
+    ...mapState("config",["currentRouterPath"])
+  },
+   watch: {
+    currentRouterPath(newValue,oldValue) {
+      this.options.forEach(item=>{
+        if(newValue.includes(item.routerpath)){
           this.current = item.id;
         }
-      });
+      })
     },
-  },
+  }
 };
 </script>
 
 <style scoped lang="less">
-.pcCockpit {
+.process {
   margin: 1% auto 0 auto;
   width: 91%;
   // height: 89%;

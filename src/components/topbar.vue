@@ -2,12 +2,12 @@
   <div class="topbar">
     <div class="tit">长兴驾驶舱PC端后台管理系统</div>
     <div
-      v-for="(p) in option"
+      v-for="p in option"
       :key="p.txt"
       :class="'item ' + (p.id == current ? 'active' : '')"
       @click="chose(p.id, p.path)"
     >
-      <img :src="p.img" alt="图片缺失" style="width:30px;" />
+      <img :src="p.img" alt="图片缺失" style="width: 30px" />
       <p>{{ p.txt }}</p>
     </div>
     <div class="user">
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-// import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
+import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 export default {
   name: "topbar",
   data() {
@@ -38,28 +38,40 @@ export default {
       },
       option: [
         {
-          id:0,
+          id: 0,
           img: require("@/assets/topBar/pccok.png"),
           txt: "PC驾驶舱",
           path: "/pcCockpit",
         },
         {
-          id:1,
+          id: 1,
           img: require("@/assets/topBar/modle.png"),
           txt: "应用成果超市",
           path: "/supermarket",
         },
         {
-          id:2,
+          id: 2,
           img: require("@/assets/topBar/introduce.png"),
           txt: "模型介绍",
           path: "/modelIntroduce",
         },
         {
-          id:3,
+          id: 3,
           img: require("@/assets/topBar/needs.png"),
           txt: "需求管理",
-          path: "/",
+          path: "/demand",
+        },
+        {
+          id: 4,
+          img: require("@/assets/topBar/users.png"),
+          txt: "用户授权管理",
+          path: "/userAuthorization",
+        },
+        {
+          id: 5,
+          img: require("@/assets/topBar/process.png"),
+          txt: "流程审批",
+          path: "/process",
         },
       ],
     };
@@ -86,17 +98,13 @@ export default {
   },
   watch: {
     $route(to, from) {
-      switch (this.$route.path) {
-        case "/pcCockpit":
-          this.current = 0;
-          break;
-        case "/supermarket":
-          this.current = 1;
-          break;
-        case "/modelIntroduce":
-          this.current = 2;
-          break;
-      }
+      let path = document.location.hash;
+      this.$store.commit("config/setPath",path)
+      this.option.forEach(item=>{
+        if(path.includes(item.path)) {
+          this.current = item.id
+        }
+      })
     },
   },
 };
@@ -107,6 +115,7 @@ export default {
   background: #016cf0;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   height: 7.4%;
   .tit {
     font-family: MicrosoftYaHei-Bold;
@@ -114,7 +123,7 @@ export default {
     color: #ffffff;
     text-align: center;
     margin-left: 2.5%;
-    margin-right: 11.2%;
+    // margin-right: 11.2%;
   }
   .item {
     // width: 6.5%;
@@ -125,7 +134,7 @@ export default {
     font-size: 16px;
     color: #ffffff;
     text-align: center;
-    margin-left: 6%;
+    // margin-left: 6%;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -141,8 +150,8 @@ export default {
     background-image: linear-gradient(0deg, #004bdb 0%, #175ceb 100%);
   }
   .user {
-    position: absolute;
-    right: 16px;
+    // position: absolute;
+    // right: 16px;
     display: flex;
     align-items: center;
     .userName {
