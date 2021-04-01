@@ -23,24 +23,25 @@ export default {
   data() {
     return {
       current: 0,
+      // usingOption:[],
       options: [
         {
           id: 0,
-          routerpath: "/process/hasDoing",
+          routerpath: "/process/waitDoing",
           name: "待办事项",
           classname1: "status02",
           classname2: "status01",
         },
         {
           id: 1,
-          routerpath: "/process/iStarted",
+          routerpath: "/process/hasDoing",
           name: "已办事项",
           classname1: "status12",
           classname2: "status11",
         },
         {
           id: 2,
-          routerpath: "/process/waitDoing",
+          routerpath: "/process/iStarted",
           name: "我发起的",
           classname1: "status12",
           classname2: "status11",
@@ -48,12 +49,26 @@ export default {
       ],
     };
   },
-  mounted() {},
+  mounted() {
+    // this.change()
+  },
   methods: {
     chose(item) {
       this.current = item.id;
       this.$router.push(item.routerpath);
     },
+    change(){
+      if(this[5].items){
+        this.options.forEach(item=>{
+        this[5].items.forEach(p=>{
+          if(item.id == p.id) {
+            item.name = p.name
+            this.usingOption.push(item)
+          }
+        })
+      })
+      }
+    }
   },
   computed:{
     ...mapState("config",["currentRouterPath"])
@@ -66,6 +81,9 @@ export default {
         }
       })
     },
+    // 5(){
+    //   this.change()
+    // }
   }
 };
 </script>

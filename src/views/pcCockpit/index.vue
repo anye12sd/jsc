@@ -3,7 +3,7 @@
     <div class="tit">PC驾驶舱</div>
     <div class="option">
       <div
-        v-for="k in options"
+        v-for="k in usingOption"
         :key="k.name"
         :class="'op ' + (current == k.id ? k.classname1 : k.classname2)"
         @click="chose(k)"
@@ -30,23 +30,24 @@ export default {
   data() {
     return {
       current: 0,
+      usingOption: [],
       options: [
         {
-          id: 0,
+          id: 7,
           routerpath: "/pcCockpit/pageShow",
           name: "页面展示",
           classname1: "status02",
           classname2: "status01",
         },
         {
-          id: 1,
+          id: 9,
           routerpath: "/pcCockpit/approval",
           name: "页面管理",
           classname1: "status12",
           classname2: "status11",
         },
         {
-          id: 2,
+          id: 8,
           routerpath: "/pcCockpit/subScribe",
           name: "页面订阅",
           classname1: "status12",
@@ -59,12 +60,27 @@ export default {
     // approval,subscribe
   },
   computed: {
-    ...mapState("config", ["currentRouterPath"]),
+    ...mapState("config", ["currentRouterPath", "1"]),
+  },
+  mounted() {
+    this.change();
   },
   methods: {
     chose(item) {
       this.current = item.id;
       this.$router.push(item.routerpath);
+    },
+    change() {
+      if (this[1].items) {
+        this.options.forEach((item) => {
+          this[1].items.forEach((p) => {
+            if (item.id == p.id) {
+              item.name = p.name;
+              this.usingOption.push(item);
+            }
+          });
+        });
+      }
     },
   },
   watch: {
@@ -74,6 +90,10 @@ export default {
           this.current = item.id;
         }
       });
+    },
+    1() {
+      // console.log(this[1])
+      this.change();
     },
   },
 };

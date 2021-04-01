@@ -3,7 +3,7 @@
     <div class="tit">需求管理</div>
     <div class="option">
       <div
-        v-for="k in options"
+        v-for="k in usingOption"
         :key="k.name"
         :class="'op ' + (current == k.id ? k.classname1 : k.classname2)"
         @click="chose(k)"
@@ -25,63 +25,84 @@ export default {
   name: "demand",
   data() {
     return {
-        current:0,
-        options:[
-          {
-            id:0,
-            routerpath:"/demand/addNewDemand",
-            name:"新增需求",
-            classname1:"status02",
-            classname2:"status01"
-          },
-          {
-            id:1,
-            routerpath:"/demand/demandHandle",
-            name:"需求处理",
-            classname1:"status12",
-            classname2:"status11"
-          },
-          {
-            id:2,
-            routerpath:"/demand/waitDemand",
-            name:"待办事项",
-            classname1:"status12",
-            classname2:"status11"
-          },
-          {
-            id:3,
-            routerpath:"/demand/hasDoneDemand",
-            name:"已办事项",
-            classname1:"status12",
-            classname2:"status11"
-          }
-        ]
+      current: 0,
+      usingOption:[],
+      options: [
+        {
+          id: 18,
+          routerpath: "/demand/addNewDemand",
+          name: "新增需求",
+          classname1: "status02",
+          classname2: "status01",
+        },
+        {
+          id: 19,
+          routerpath: "/demand/demandHandle",
+          name: "需求处理",
+          classname1: "status12",
+          classname2: "status11",
+        },
+        {
+          id: 2,
+          routerpath: "/demand/waitDemand",
+          name: "待办事项",
+          classname1: "status12",
+          classname2: "status11",
+        },
+        {
+          id: 3,
+          routerpath: "/demand/hasDoneDemand",
+          name: "已办事项",
+          classname1: "status12",
+          classname2: "status11",
+        },
+      ],
     };
   },
-  mounted() {},
-  methods: {
-      chose(item){
-          this.current = item.id;
-          this.$router.push(item.routerpath)
-      }
+  mounted() {
+    this.change();
   },
-  computed:{
-    ...mapState("config",["currentRouterPath"])
+  methods: {
+    chose(item) {
+      this.current = item.id;
+      this.$router.push(item.routerpath);
+    },
+    change() {
+      console.log("333333333",this[4],this.usingOption)
+      if (this[4]) {
+        
+        this.options.forEach((item) => {
+          this[4].items.forEach((p) => {
+            if (item.id == p.id) {
+              item.name = p.name;
+              this.usingOption.push(item);
+            }
+          });
+        });
+        console.log("333333333",this[4],this.usingOption)
+      }
+    },
+  },
+  computed: {
+    ...mapState("config", ["currentRouterPath", "4"]),
   },
   watch: {
-    currentRouterPath(newValue,oldValue) {
-      this.options.forEach(item=>{
-        if(newValue.includes(item.routerpath)){
+    currentRouterPath(newValue, oldValue) {
+      this.options.forEach((item) => {
+        if (newValue.includes(item.routerpath)) {
           this.current = item.id;
         }
-      })
+      });
     },
-  }
+    4() {
+      this.change();
+    },
+  },
 };
 </script>
 
 <style scoped lang="less">
-.demand{
+.demand {
   margin: 1% auto 0 auto;
   width: 91%;
   // height: 89%;

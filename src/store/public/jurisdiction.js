@@ -51,7 +51,7 @@ export default {
     process: [
       {
         path: "",
-        redirect: "hasDoing"
+        redirect: "waitDoing"
       },
       {
         path: "hasDoing",

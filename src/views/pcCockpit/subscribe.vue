@@ -1,9 +1,11 @@
 <template>
   <div class="subscribe">
-    four="所属单位"
+    <searchdemo
+      four="所属单位"
       one="页面名称"
       two="请输入页面名称"
       three="请输入所属单位"
+    ></searchdemo>
     <div class="list">
       <div class="line topline">
         <div class="person">页面名称</div>
@@ -35,13 +37,13 @@
 <script>
 // 页面订阅
 import searchdemo from "@/components/searchdemo.vue";
-import subsc from "@/assets/listlogo/subscribe.png"
+import subsc from "@/assets/listlogo/subscribe.png";
 export default {
   name: "subscribe",
   data() {
     return {
-        subsc,
-        currentPage:1,
+      subsc,
+      currentPage: 1,
       list: [
         {
           name: "幼儿园入学人数预测",
@@ -152,7 +154,6 @@ export default {
         margin-left: 5px;
         color: #fd6969;
       }
-      
     }
     .topline {
       background: #f5f6f9;

@@ -3,32 +3,15 @@
     <div class="tit">用户授权管理</div>
     <div class="option">
       <div
-        v-for="k in options"
+        v-for="k in usingOption"
         :key="k.name"
-        :class="'op ' + (current ==k.id ? k.classname1: k.classname2)"
+        :class="'op ' + (current == k.id ? k.classname1 : k.classname2)"
         @click="chose(k)"
       >
         {{ k.name }}
       </div>
-      <!-- <div
-        :class="'op ' + (current == 0 ? 'status02' : 'status01')"
-        @click="chose(0)"
-      >
-        用户管理
-      </div>
-      <div
-        :class="'op ' + (current == 1 ? 'status12' : 'status11')"
-        @click="chose(1)"
-      >
-        角色管理
-      </div>
-      <div
-        :class="'op ' + (current == 2 ? 'status12' : 'status11')"
-        @click="chose(2)"
-      >
-        角色分配
-      </div> -->
     </div>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -39,9 +22,10 @@ export default {
   data() {
     return {
       current: 0,
+      usingOption: [],
       options: [
         {
-          id: 0,
+          id: 16,
           routerpath: "/userAuthorization/userManaga",
           name: "用户管理",
           classname1: "status02",
@@ -55,7 +39,7 @@ export default {
           classname2: "status11",
         },
         {
-          id: 2,
+          id: 17,
           routerpath: "/userAuthorization/roleAssignment",
           name: "角色分配",
           classname1: "status12",
@@ -64,26 +48,44 @@ export default {
       ],
     };
   },
-  mounted() {},
-  computed:{
-    ...mapState("config",["currentRouterPath"])
+  mounted() {
+    this.change();
+  },
+  computed: {
+    ...mapState("config", ["currentRouterPath","6"]),
   },
   methods: {
     chose(item) {
-      if(this.current == item.id) return
+      if (this.current == item.id) return;
       this.current = item.id;
       this.$router.push(item.routerpath);
     },
+    change() {
+      if (this[6].items) {
+        this.options.forEach((item) => {
+          this[6].items.forEach((p) => {
+            if (item.id == p.id) {
+              item.name = p.name;
+              this.usingOption.push(item);
+            }
+          });
+        });
+      }
+      // console.log(555555,this[6],this.usingOption)
+    },
   },
   watch: {
-    currentRouterPath(newValue,oldValue) {
-      this.options.forEach(item=>{
-        if(newValue.includes(item.routerpath)){
+    currentRouterPath(newValue, oldValue) {
+      this.options.forEach((item) => {
+        if (newValue.includes(item.routerpath)) {
           this.current = item.id;
         }
-      })
+      });
     },
-  }
+    6() {
+      this.change();
+    },
+  },
 };
 </script>
 

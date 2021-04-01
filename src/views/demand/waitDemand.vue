@@ -1,26 +1,28 @@
 <template>
   <div class="waitDemand">
     <searchdemo
-      four="所属单位"
-      one="页面名称"
-      two="请输入页面名称"
-      three="请输入所属单位"
+      four="流程名称"
+      one="类型"
+      two="请输入类型"
+      three="请输入流程名称"
     ></searchdemo>
     <div class="list">
       <div class="line topline">
-        <div class="num">需求编号</div>
-        <div class="name">需求名称</div>
-        <div class="company">需求单位</div>
-        <div class="describe">需求描述</div>
+        <div class="num">序号</div>
+        <div class="type">类型</div>
+        <div class="tit">标题</div>
+        <div class="name">流程名称</div>
+        <div class="time">申请时间</div>
         <div class="actions">操作</div>
       </div>
       <div v-for="(k, index) in list" :key="index" class="line">
         <div class="num">{{ index }}</div>
+        <div class="type" :title="k.type">{{ k.type }}</div>
+        <div class="tit" :title="k.tit">{{ k.tit }}</div>
         <div class="name" :title="k.name">{{ k.name }}</div>
-        <div class="company" :title="k.company">{{ k.company }}</div>
-        <div class="describe" :title="k.describe">{{ k.describe }}</div>
+        <div class="time" :title="k.time">{{ k.time }}</div>
         <div class="actions">
-          <span @click="addnew(k)">新增模型</span>
+          <span @click="develop">模型开发</span>
         </div>
       </div>
     </div>
@@ -35,6 +37,33 @@
       class="pagination"
     >
     </el-pagination>
+    <div class="develop" v-show="showDevelop">
+      <div class="mask"></div>
+      <div class="main">
+        <div>
+          <span>模型类型</span>
+          <el-select v-model="type" placeholder="请选择类型">
+            <el-option
+              v-for="(item,index) in options"
+              :key="index"
+              :label="item.label"
+              :value="item.value"
+              :disabled="item.disabled"
+            >
+            </el-option>
+          </el-select>
+        </div>
+        <div>
+          <span class="top">脚本内容</span>
+          <textarea cols="70" rows="14" v-model="content"></textarea>
+        </div>
+        <div class="actions">
+          <span class="confirm" @click="goPreview">数据预览</span>
+          <span class="confirm">确定</span>
+          <span class="cancel" @click="cancel">取消</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -45,12 +74,113 @@ export default {
   name: "waitDemand",
   data() {
     return {
-        currentPage:1,
+      currentPage: 1,
+      showDevelop: false,
+      type: "",
+      content: "",
+      options: [
+        {
+          value: "SQL脚本",
+          label: "SQL脚本",
+        },
+        {
+          value: "SQL脚本",
+          label: "SQL脚本",
+        },
+        {
+          value: "SQL脚本",
+          label: "SQL脚本",
+        },
+        {
+          value: "SQL脚本",
+          label: "SQL脚本",
+        },
+        {
+          value: "SQL脚本",
+          label: "SQL脚本",
+        },
+      ],
+      list: [
+        {
+          type: "待办",
+          tit: "热线投诉模型数据使用申请",
+          name: "模型数据开发",
+          time: "2021年01月29日 12:38:14",
+        },
+        {
+          type: "待办",
+          tit: "热线投诉模型数据使用申请",
+          name: "模型数据开发",
+          time: "2021年01月29日 12:38:14",
+        },
+        {
+          type: "待办",
+          tit: "热线投诉模型数据使用申请",
+          name: "模型数据开发",
+          time: "2021年01月29日 12:38:14",
+        },
+        {
+          type: "待办",
+          tit: "热线投诉模型数据使用申请",
+          name: "模型数据开发",
+          time: "2021年01月29日 12:38:14",
+        },
+        {
+          type: "待办",
+          tit: "热线投诉模型数据使用申请",
+          name: "模型数据开发",
+          time: "2021年01月29日 12:38:14",
+        },
+        {
+          type: "待办",
+          tit: "热线投诉模型数据使用申请",
+          name: "模型数据开发",
+          time: "2021年01月29日 12:38:14",
+        },
+        {
+          type: "待办",
+          tit: "热线投诉模型数据使用申请",
+          name: "模型数据开发",
+          time: "2021年01月29日 12:38:14",
+        },
+        {
+          type: "待办",
+          tit: "热线投诉模型数据使用申请",
+          name: "模型数据开发",
+          time: "2021年01月29日 12:38:14",
+        },
+        {
+          type: "待办",
+          tit: "热线投诉模型数据使用申请",
+          name: "模型数据开发",
+          time: "2021年01月29日 12:38:14",
+        },
+        {
+          type: "待办",
+          tit: "热线投诉模型数据使用申请",
+          name: "模型数据开发",
+          time: "2021年01月29日 12:38:14",
+        },
+      ],
     };
+  },
+  components: {
+    searchdemo,
   },
   mounted() {},
   methods: {
-      handleSizeChange(val) {
+    develop() {
+      this.showDevelop = true;
+    },
+    cancel() {
+      this.showDevelop = false;
+      this.type = "";
+      this.content = "";
+    },
+    goPreview() {
+      this.$router.push("/sqlPreview")
+    },
+    handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
@@ -64,7 +194,7 @@ export default {
 .waitDemand {
   height: 91%;
   .list {
-    height: 86%;
+    height: 85%;
     .line {
       // margin: 0.1% 0;
       margin-top: 0.1%;
@@ -81,14 +211,13 @@ export default {
         font-size: 14px;
         color: #666f8e;
         text-align: center;
+        flex: 2;
       }
-      .person,
-      .actions,
-      .pagename {
+      .num {
         flex: 1;
-        p {
-          // display: flex;
-          // align-items: center;
+      }
+      .actions {
+        span {
           display: inline-block;
           vertical-align: middle;
           width: 70px;
@@ -99,19 +228,8 @@ export default {
           font-family: MicrosoftYaHei;
           font-size: 14px;
           cursor: pointer;
-          * {
-            vertical-align: middle;
-          }
         }
       }
-      .actions > p:nth-of-type(1) {
-        color: #017cf8;
-      }
-      .actions > p:nth-of-type(2) {
-        margin-left: 5px;
-        color: #fd6969;
-      }
-      
     }
     .topline {
       background: #f5f6f9;
@@ -119,6 +237,99 @@ export default {
       div {
         padding: 0.5% 0;
       }
+    }
+  }
+}
+.develop {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  .mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 10;
+  }
+  .main {
+    width: 880px;
+    height: 500px;
+    background-image: url("../../assets/bg.png");
+    background-size: cover;
+    overflow: hidden;
+    position: absolute;
+    top: 100px;
+    left: calc(50% - 440px);
+    background-color: #fff;
+    z-index: 20;
+    font-family: MicrosoftYaHei;
+    font-size: 16px;
+    color: #000000;
+    box-sizing: border-box;
+    padding-top: 50px;
+    textarea {
+      resize: none;
+      border-radius: 4px;
+      border: 1px solid #dcdfe6;
+      box-sizing: border-box;
+      color: #606266;
+      display: inline-block;
+      padding: 0 15px;
+      outline: 0;
+      width: 500px;
+    }
+    .el-select {
+      width: 500px;
+    }
+    input:focus,
+    textarea:focus {
+      border: 1px solid #409eff;
+    }
+  }
+  .main > div {
+    padding-left: 150px;
+    margin-top: 20px;
+    span {
+      margin-right: 10px;
+    }
+    .top {
+      vertical-align: top;
+    }
+  }
+  .main > .actions {
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    font-family: SourceHanSansCN-Regular;
+    font-size: 18px;
+    color: #ffffff;
+    text-align: center;
+    .cancel {
+      width: 148px;
+      height: 36px;
+      background: #ffffff;
+      box-sizing: border-box;
+      line-height: 36px;
+      border: 1px solid #cccfd7;
+      box-shadow: 0 0 6px 0 rgba(38, 91, 218, 0.04);
+      border-radius: 4px;
+      color: #384155;
+      text-align: center;
+      cursor: pointer;
+    }
+    .confirm {
+      width: 148px;
+      height: 36px;
+      box-sizing: border-box;
+      line-height: 36px;
+      background: #017cf8;
+      border-radius: 4px;
+      margin-left: 10px;
+      cursor: pointer;
     }
   }
 }

@@ -2,13 +2,13 @@
   <div class="topbar">
     <div class="tit">长兴驾驶舱PC端后台管理系统</div>
     <div
-      v-for="p in option"
-      :key="p.txt"
+      v-for="p in usingOption"
+      :key="p.id"
       :class="'item ' + (p.id == current ? 'active' : '')"
       @click="chose(p.id, p.path)"
     >
       <img :src="p.img" alt="图片缺失" style="width: 30px" />
-      <p>{{ p.txt }}</p>
+      <p>{{ p.name }}</p>
     </div>
     <div class="user">
       <img src="" alt="暂无头像" />
@@ -25,6 +25,7 @@
 
 <script>
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
+import { getMenu } from "@/api/user.js";
 export default {
   name: "topbar",
   data() {
@@ -36,41 +37,42 @@ export default {
         name: "王晓明",
         identity: "单位管理员",
       },
+      usingOption: [],
       option: [
         {
-          id: 0,
+          id: 1,
           img: require("@/assets/topBar/pccok.png"),
-          txt: "PC驾驶舱",
+          name: "PC驾驶舱",
           path: "/pcCockpit",
         },
         {
-          id: 1,
+          id: 2,
           img: require("@/assets/topBar/modle.png"),
-          txt: "应用成果超市",
+          name: "应用成果超市",
           path: "/supermarket",
         },
         {
-          id: 2,
+          id: 3,
           img: require("@/assets/topBar/introduce.png"),
-          txt: "模型介绍",
+          name: "模型介绍",
           path: "/modelIntroduce",
         },
         {
-          id: 3,
+          id: 4,
           img: require("@/assets/topBar/needs.png"),
-          txt: "需求管理",
+          name: "需求管理",
           path: "/demand",
         },
         {
-          id: 4,
+          id: 6,
           img: require("@/assets/topBar/users.png"),
-          txt: "用户授权管理",
+          name: "用户授权管理",
           path: "/userAuthorization",
         },
         {
           id: 5,
           img: require("@/assets/topBar/process.png"),
-          txt: "流程审批",
+          name: "流程审批",
           path: "/process",
         },
       ],
@@ -84,8 +86,42 @@ export default {
     setInterval(() => {
       this.getTime();
     }, 5000);
+    this.init();
   },
   methods: {
+    init() {
+      getMenu().then((res) => {
+        console.log("aaaa", res);
+        let op = JSON.parse(JSON.stringify(res.data.data));
+        op.forEach((item, index) => {
+          if (item.id == 1) {
+            console.log("kkkkk", item);
+            this.$store.commit("config/setpcCockpit", res.data.data[index]);
+          } else if (item.id == 2) {
+            this.$store.commit("config/setsupermarket", res.data.data[index]);
+          } else if (item.id == 3) {
+            this.$store.commit("config/setmodelIntroduce", res.data.data[index]);
+          } else if (item.id == 4) {
+            this.$store.commit("config/setdemand", res.data.data[index]);
+          } else if (item.id == 5) {
+            this.$store.commit("config/setprocess", res.data.data[index]);
+          } else if (item.id == 6) {
+            this.$store.commit(
+              "config/setuserAuthorization",
+              res.data.data[index]
+            );
+          }
+          this.option.forEach((k) => {
+            if (item.id == k.id) {
+              item.img = k.img;
+              item.path = k.path;
+            }
+          });
+        });
+        this.usingOption = op;
+        // this.$store.commit()
+      });
+    },
     chose(index, path) {
       this.current = index;
       this.$router.push(path);
@@ -99,12 +135,17 @@ export default {
   watch: {
     $route(to, from) {
       let path = document.location.hash;
-      this.$store.commit("config/setPath",path)
-      this.option.forEach(item=>{
-        if(path.includes(item.path)) {
-          this.current = item.id
+      this.$store.commit("config/setPath", path);
+      let flag = true;
+      this.option.forEach((item) => {
+        if (path.includes(item.path)) {
+          flag = false;
+          this.current = item.id;
         }
-      })
+      });
+      if (flag) {
+        this.current = -1;
+      }
     },
   },
 };
@@ -136,9 +177,13 @@ export default {
     text-align: center;
     // margin-left: 6%;
     display: flex;
-    align-items: center;
+    // align-items: center;
+    align-content: center;
     flex-wrap: wrap;
     justify-content: center;
+    img {
+      margin-bottom: 5px;
+    }
     p {
       width: 100%;
     }

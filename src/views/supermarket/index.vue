@@ -3,7 +3,7 @@
     <div class="tit">模型超市</div>
     <div class="option">
       <div
-        v-for="k in options"
+        v-for="k in usingOption"
         :key="k.name"
         :class="'op ' + (current == k.id ? k.classname1 : k.classname2)"
         @click="chose(k)"
@@ -22,30 +22,31 @@ export default {
   data() {
     return {
       current: 0,
+      usingOption:[],
       options: [
         {
-          id: 0,
+          id: 10,
           routerpath: "/supermarket/modelManaga",
           name: "模型管理",
           classname1: "status02",
           classname2: "status01",
         },
         {
-          id: 1,
+          id: 11,
           routerpath: "/supermarket/modelPuton",
           name: "模型上架",
           classname1: "status12",
           classname2: "status11",
         },
         {
-          id: 2,
+          id: 12,
           routerpath: "/supermarket/modelSubsc",
           name: "模型订阅",
           classname1: "status12",
           classname2: "status11",
         },
         {
-          id: 3,
+          id: 13,
           routerpath: "/supermarket/modelDownload",
           name: "模型数据下载",
           classname1: "status12",
@@ -56,7 +57,10 @@ export default {
   },
   components: {},
   computed:{
-    ...mapState("config",["currentRouterPath"])
+    ...mapState("config",["currentRouterPath","2"])
+  },
+  mounted(){
+    this.change()
   },
   methods: {
     chose(item) {
@@ -70,6 +74,21 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
     },
+    change(){
+      console.log(this[2])
+      if(this[2]){
+        
+        this.options.forEach(item=>{
+        this[2].items.forEach(p=>{
+          if(item.id == p.id) {
+            item.name = p.name
+            this.usingOption.push(item)
+          }
+        })
+      })
+      }
+      console.log(this.usingOption)
+    }
   },
   watch: {
     currentRouterPath(newValue,oldValue) {
@@ -79,6 +98,9 @@ export default {
         }
       })
     },
+    2(){
+      this.change()
+    }
   }
 };
 </script>

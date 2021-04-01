@@ -8,7 +8,7 @@
 <script>
 import topbar from '@/components/topbar.vue';
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import {aaaa,bbbb,cccc,dddd} from "@/api/user.js"
+
 export default {
   name:"app",
   data(){
@@ -17,10 +17,10 @@ export default {
     }
   },
   mounted(){
+    console.log(location.href)
+    console.log(location)
     // console.log(this.isLogin)
-    // aaaa().then(res=>{
-    //   console.log("aaaa",res)
-    // })
+    
     // bbbb().then(res=>{
     //   console.log("bbbb",res)
     // })

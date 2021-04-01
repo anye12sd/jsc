@@ -142,6 +142,11 @@ const routes = [
     //   }
     // ]
   },
+  {
+    path:"/sqlPreview",
+    name:"SqlPreview",
+    component:()=>import("../views/demand/sqlPreview")
+  }
 
 ]
 

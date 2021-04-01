@@ -77,7 +77,7 @@ export default {
   height: 9%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   font-family: MicrosoftYaHei;
   font-size: 16px;
   color: #292929;
@@ -124,14 +124,14 @@ export default {
   }
   #people,
   #time {
-    width: 20%;
+    width: 25%;
     height: 38%;
   }
   #people {
     margin-right: 3%;
   }
   .goSearch {
-    width: 25%;
+    width: 28%;
     height: 38%;
     border-top-right-radius: 0;
     border-top-left-radius: 0;
@@ -149,7 +149,7 @@ export default {
   }
 }
 .search > div {
-  width: 50%;
+  width: 40%;
   height: 100%;
   display: flex;
   align-items: center;

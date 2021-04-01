@@ -2,7 +2,7 @@
   <div class="modelIntroduce">
     <div class="page">
       <h1 class="bigtit">模型介绍管理</h1>
-      <div class="addnew" @click="addNew">新增模型</div>
+      <div class="addnew" @click="addNew" v-if="ismanaga">新增模型</div>
       <div class="in">
         <div>
           <label for="mm">模型名称</label>
@@ -31,7 +31,7 @@
         <div :class="'first ' + (index % 2 == 1 ? 'imgright' : '')">
           <div v-if="index % 2 == 0" class="itemtit">
             <span>{{ k.tit }}</span>
-            <span @click="changeModel(k)">编辑</span>
+            <span @click="changeModel(k)"  v-if="ismanaga">编辑</span>
           </div>
           <div v-if="index % 2 == 0" class="con">{{ k.con }}</div>
           <img v-else :src="k.img" />
@@ -39,29 +39,36 @@
         <div :class="'second ' + (index % 2 == 0 ? 'imgleft' : '')">
           <div v-if="index % 2 == 1" class="itemtit">
             <span>{{ k.tit }}</span>
-            <span @click="changeModel(k)">编辑</span>
+            <span @click="changeModel(k)"  v-if="ismanaga">编辑</span>
           </div>
           <div v-if="index % 2 == 1" class="con">{{ k.con }}</div>
           <img v-else :src="k.img" />
         </div>
       </div>
     </div>
-    <modify v-if="showModify" @justHide="justHide" :changeAble="waitchange" @changeConfirm="justHide"></modify>
+    <modify
+      v-if="showModify"
+      @justHide="justHide"
+      :changeAble="waitchange"
+      @changeConfirm="justHide"
+    ></modify>
   </div>
 </template>
 
 <script>
 import search from "@/assets/search.png";
 import modify from "./modify";
+import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 export default {
   name: "modelIntroduce",
   data() {
     return {
       search,
       type: ["分类1", "分类1", "分类1", "分类1", "分类1"],
+      ismanaga:false,
       current: 0,
-      showModify:false,
-      waitchange:false,
+      showModify: false,
+      waitchange: false,
       content: [
         {
           tit: "水电使用分析",
@@ -90,24 +97,34 @@ export default {
       ],
     };
   },
-  components:{
-    modify
+  components: {
+    modify,
+  },
+  computed: {
+    ...mapState("config", ["3"]),
+  },
+  watch:{
+    3(){
+      
+      this.ismanaga = this[3]
+      console.log(this[3],this.ismanaga)
+    }
   },
   methods: {
     chose(idx) {
       this.current = idx;
     },
-    addNew(){
+    addNew() {
       this.showModify = true;
     },
-    justHide(){
+    justHide() {
       this.showModify = false;
       this.waitchange = false;
     },
-    changeModel(k){
+    changeModel(k) {
       this.showModify = true;
-      this.waitchange = k; 
-    }
+      this.waitchange = k;
+    },
   },
 };
 </script>

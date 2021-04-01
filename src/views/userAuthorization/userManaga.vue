@@ -1,12 +1,117 @@
 <template>
-  <div class="userManaga"></div>
+  <div class="userManaga">
+    <searchdemo
+      four="所属单位"
+      one="页面名称"
+      two="请输入页面名称"
+      three="请输入所属单位"
+    ></searchdemo>
+    <div class="list">
+      <div class="line topline">
+        <div class="num">姓名</div>
+        <div class="account">账号</div>
+        <div class="company">手机号</div>
+        <div class="describe">状态</div>
+        <div class="actions">操作</div>
+      </div>
+      <div v-for="(k, index) in list" :key="index" class="line">
+        <div class="name" :title="k.name">{{ k.name }}</div>
+        <div class="account" :title="k.account">{{ k.account }}</div>
+        <div class="number" :title="k.number">{{ k.number }}</div>
+        <div class="state" :title="k.state">{{ k.state }}</div>
+        <div class="actions">
+          <span>修改</span>
+          <span>明细</span>
+        </div>
+      </div>
+    </div>
+    <el-pagination
+      background
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page.sync="currentPage"
+      :page-size="11"
+      layout="total, prev, pager, next, jumper"
+      :total="1000"
+      class="pagination"
+    >
+    </el-pagination>
+  </div>
 </template>
 
 <script>
+import searchdemo from "@/components/searchdemo.vue";
 export default {
   name: "userManaga",
   data() {
-    return {};
+    return {
+      currentPage: 1,
+      list: [
+        {
+          name: "余敏",
+          account: "139****4846",
+          number: "139****4846",
+          state: "正常",
+        },
+        {
+          name: "余敏",
+          account: "139****4846",
+          number: "139****4846",
+          state: "正常",
+        },
+        {
+          name: "余敏",
+          account: "139****4846",
+          number: "139****4846",
+          state: "正常",
+        },
+        {
+          name: "余敏",
+          account: "139****4846",
+          number: "139****4846",
+          state: "正常",
+        },
+        {
+          name: "余敏",
+          account: "139****4846",
+          number: "139****4846",
+          state: "正常",
+        },
+        {
+          name: "余敏",
+          account: "139****4846",
+          number: "139****4846",
+          state: "正常",
+        },
+        {
+          name: "余敏",
+          account: "139****4846",
+          number: "139****4846",
+          state: "正常",
+        },
+        {
+          name: "余敏",
+          account: "139****4846",
+          number: "139****4846",
+          state: "正常",
+        },
+        {
+          name: "余敏",
+          account: "139****4846",
+          number: "139****4846",
+          state: "正常",
+        },
+        {
+          name: "余敏",
+          account: "139****4846",
+          number: "139****4846",
+          state: "正常",
+        },
+      ],
+    };
+  },
+  components: {
+    searchdemo,
   },
   methods: {
     handleSizeChange(val) {
@@ -41,14 +146,11 @@ export default {
         font-size: 14px;
         color: #666f8e;
         text-align: center;
+        flex: 2;
       }
-      .person,
-      .actions,
-      .pagename {
-        flex: 1;
-        p {
-          // display: flex;
-          // align-items: center;
+      .actions {
+        flex: 3;
+        span {
           display: inline-block;
           vertical-align: middle;
           width: 70px;
@@ -59,17 +161,10 @@ export default {
           font-family: MicrosoftYaHei;
           font-size: 14px;
           cursor: pointer;
-          * {
-            vertical-align: middle;
-          }
         }
       }
-      .actions > p:nth-of-type(1) {
-        color: #017cf8;
-      }
-      .actions > p:nth-of-type(2) {
-        margin-left: 5px;
-        color: #fd6969;
+      .actions>span:nth-of-type(1){
+        margin-right: 10px;
       }
     }
     .topline {
