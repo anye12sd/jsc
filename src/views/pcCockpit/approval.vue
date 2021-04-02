@@ -14,14 +14,14 @@
         <div class="actions">操作</div>
       </div>
       <div v-for="(k, index) in list" :key="index" class="line">
-        <div class="pagename">{{ k.name }}</div>
-        <div class="company">{{ k.company }}</div>
-        <div class="sort">{{ k.sort }}</div>
+        <div class="pagename">{{ k.view_name }}</div>
+        <div class="company">{{ k.branch_id }}</div>
+        <div class="sort">{{ k.list_order }}</div>
         <div class="actions">
-          <p><img :src="adopt" alt="图片资源缺失" /> <span>上移</span></p>
-          <p><img :src="reject" alt="图片资源缺失" /> <span>下移</span></p>
-          <p>
-            <img :src="delelogo" alt="图片资源缺失" /> <span>删除页面</span>
+          <p @click="goup(k)"><img :src="adopt" alt="图片资源缺失" /> <span>上移</span></p>
+          <p @click="godown(k)"><img :src="reject" alt="图片资源缺失" /> <span>下移</span></p>
+          <p @click="deletepage(k,index)">
+            <img v-if="!k.deleted" :src="delelogo" alt="图片资源缺失" /> <span >{{k.deleted?"已删除":"删除页面"}}</span>
           </p>
         </div>
       </div>
@@ -31,9 +31,9 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-size="11"
+      :page-size="10"
       layout="total, prev, pager, next, jumper"
-      :total="1000"
+      :total="total"
       class="pagination"
     >
     </el-pagination>
@@ -46,6 +46,7 @@ import searchdemo from "@/components/searchdemo.vue";
 import adopt from "@/assets/listlogo/adopt.png";
 import reject from "@/assets/listlogo/reject.png";
 import delelogo from "@/assets/listlogo/delete.png";
+import { getorder,order,dele } from "@/api/list.js";
 export default {
   name: "Approval",
   data() {
@@ -53,70 +54,62 @@ export default {
       adopt,
       reject,
       delelogo,
-      list: [
-        {
-          name: "幼儿园入学人数预测",
-          company: "教育局",
-          sort: 1,
-        },
-        {
-          name: "升学排行",
-          company: "教育局",
-          sort: 2,
-        },
-        {
-          name: "人口变化趋势",
-          company: "民政局",
-          sort: 3,
-        },
-        {
-          name: "幼儿园入学人数预测",
-          company: "教育局",
-          sort: 1,
-        },
-        {
-          name: "升学排行",
-          company: "教育局",
-          sort: 2,
-        },
-        {
-          name: "人口变化趋势",
-          company: "民政局",
-          sort: 3,
-        },
-        {
-          name: "幼儿园入学人数预测",
-          company: "教育局",
-          sort: 1,
-        },
-        {
-          name: "升学排行",
-          company: "教育局",
-          sort: 2,
-        },
-        {
-          name: "人口变化趋势",
-          company: "民政局",
-          sort: 3,
-        },
-        {
-          name: "幼儿园入学人数预测",
-          company: "教育局",
-          sort: 1,
-        },
-      ],
+      total: 0,
+      list: [],
       currentPage: 1,
     };
   },
   components: {
     searchdemo,
   },
+  mounted() {
+    getorder(1).then((res) => {
+      console.log(res);
+      this.list = res.data.data.list;
+      this.list.forEach(item=>{
+        item.deleted = false
+      })
+      this.total = res.data.data.count;
+    });
+  },
   methods: {
+    goup(k){
+      let str = "id="+k.id+"&type="+ 1
+      order(str).then(res=>{
+        console.log(res)
+        if(res.status==200) {
+          k.list_order--
+        }
+      })
+    },
+    godown(k){
+      let str = "ids="+k.id+"&type="+ 2
+      order(str).then(res=>{
+        console.log(res)
+        if(res.status==200) {
+          k.list_order++
+        }
+      })
+    },
+    deletepage(k,index){
+      dele(k.id).then(res=>{
+        console.log(res)
+        if(res.data.data==true) {
+          k.deleted = true
+          this.list[index].deleted = true
+          this.$forceUpdate();
+        }
+      })
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+      getorder(val).then((res) => {
+        this.list = res.data.data.list;
+        this.total = res.data.data.count;
+      });
     },
   },
 };

@@ -8,18 +8,21 @@
     ></searchdemo>
     <div class="list">
       <div class="line topline">
-        <div class="name">页面名称</div>
+        <div class="name">模型名称</div>
         <div class="type">类型</div>
         <div class="company">所属单位</div>
         <div class="actions">操作</div>
       </div>
+      <div v-if="list.length == 0" style="text-align: center; height:50px;line-height:50px;color:gray">暂无数据</div>
       <div v-for="(k, index) in list" :key="index" class="line">
-        <div class="name">{{ k.name }}</div>
-        <div class="type">{{ k.type }}</div>
-        <div class="company">{{ k.company }}</div>
+        <div class="name">{{ k.modulename }}</div>
+        <div class="type">{{ k.module_type }}</div>
+        <div class="company">{{ k.branch_id }}</div>
         <div class="actions">
-          <p><img :src="subsc" alt="图片资源缺失" /> <span>订阅</span></p>
-          <p><img :src="subsc" alt="图片资源缺失" /> <span>取消订阅</span></p>
+          <p :class="k.type==0?'blue':'gray'" @click="gosubscribe(k)">
+            <img :src="subsc" alt="图片资源缺失" />
+            <span>{{ k.type == 0 ? "订阅" : "待审批" }}</span>
+          </p>
         </div>
       </div>
     </div>
@@ -30,7 +33,7 @@
       :current-page.sync="currentPage"
       :page-size="11"
       layout="total, prev, pager, next, jumper"
-      :total="1000"
+      :total="total"
       class="pagination"
     >
     </el-pagination>
@@ -40,12 +43,15 @@
 <script>
 import searchdemo from "@/components/searchdemo.vue";
 import subsc from "@/assets/listlogo/subscribe.png";
+import { appuser,demandadd } from "@/api/list.js";
+
 export default {
   name: "modelSubsc",
   data() {
     return {
       subsc,
-      currentPage:1,
+      currentPage: 1,
+      total: 0,
       list: [
         {
           name: "招商引资",
@@ -100,16 +106,37 @@ export default {
       ],
     };
   },
-  mounted() {},
+  mounted() {
+    appuser(1).then((res) => {
+      console.log(res);
+      this.list = res.data.data.list;
+      this.total = res.data.data.count;
+    });
+  },
   components: {
     searchdemo,
   },
   methods: {
+    gosubscribe(k){
+      demandadd({
+        demand_id:k.id,
+        type:2
+      }).then(res=>{
+        console.log(res)
+        if(res.data.status == 200) {
+          k.type = res.data.data.type
+        }
+      })
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+      appuser(val).then((res) => {
+        this.list = res.data.data.list;
+        this.total = res.data.data.count;
+      });
     },
   },
 };
@@ -157,15 +184,20 @@ export default {
           }
         }
       }
-      .actions > p:nth-of-type(1) {
+      .actions>.blue{
         color: #017cf8;
       }
-      .actions > p:nth-of-type(2) {
-        margin-left: 5px;
-        width: 85px;
-        color: #fd6969;
+      .actions>.gray{
+        color: gray;
       }
-      
+      // .actions > p:nth-of-type(1) {
+      //   color: #017cf8;
+      // }
+      // .actions > p:nth-of-type(2) {
+      //   margin-left: 5px;
+      //   width: 85px;
+      //   color: #fd6969;
+      // }
     }
     .topline {
       background: #f5f6f9;

@@ -57,9 +57,11 @@ export default {
   },
   components: {},
   computed:{
-    ...mapState("config",["currentRouterPath","2"])
+    ...mapState("config",["currentRouterPath","2"]),
+    ...mapState("jurisdiction",["supermarket"])
   },
   mounted(){
+    
     this.change()
   },
   methods: {
@@ -75,9 +77,8 @@ export default {
       console.log(`当前页: ${val}`);
     },
     change(){
-      console.log(this[2])
-      if(this[2]){
-        
+      // console.log(this[2])
+      if(this[2].items){
         this.options.forEach(item=>{
         this[2].items.forEach(p=>{
           if(item.id == p.id) {
@@ -86,8 +87,11 @@ export default {
           }
         })
       })
+      this.usingOption[0].classname1 = "status02";
+      this.usingOption[0].classname2 = "status01";
+      // this.$store.commit("jurisdiction/setsupermarket",this.usingOption[0].routerpath.split("/")[2])
       }
-      console.log(this.usingOption)
+      // console.log(this.usingOption)
     }
   },
   watch: {
@@ -96,10 +100,15 @@ export default {
         if(newValue.includes(item.routerpath)){
           this.current = item.id;
         }
+        // if(newValue.includes(item.routerpath))
       })
     },
     2(){
       this.change()
+    },
+    usingOption(){
+      if(location.hash == "#"+this.usingOption[0].routerpath) return
+      this.$router.push(this.usingOption[0].routerpath)
     }
   }
 };

@@ -52,7 +52,7 @@ export default {
     this.change();
   },
   computed: {
-    ...mapState("config", ["currentRouterPath","6"]),
+    ...mapState("config", ["currentRouterPath", "6"]),
   },
   methods: {
     chose(item) {
@@ -70,6 +70,9 @@ export default {
             }
           });
         });
+        this.usingOption[0].classname1 = "status02";
+        this.usingOption[0].classname2 = "status01";
+        // this.$store.commit("jurisdiction/setuserAuthorization",this.usingOption[0].routerpath.split("/")[2])
       }
       // console.log(555555,this[6],this.usingOption)
     },
@@ -85,6 +88,10 @@ export default {
     6() {
       this.change();
     },
+    usingOption(){
+      if(location.hash == "#"+this.usingOption[0].routerpath) return
+      this.$router.push(this.usingOption[0].routerpath)
+    }
   },
 };
 </script>

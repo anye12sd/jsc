@@ -2,9 +2,9 @@ import request from "@/request.js"
 
 export function submit(formdata){
     return request({
-        method:'post',
+        method:"post",
         headers: {'Content-Type': 'multipart/form-data'},
-        url:'',
+        url:"/Introduce/add",
         data:formdata
     })
 }

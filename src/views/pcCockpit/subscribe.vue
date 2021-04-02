@@ -13,21 +13,20 @@
         <div class="actions">操作</div>
       </div>
       <div v-for="(k, index) in list" :key="index" class="line">
-        <div class="person">{{ k.name }}</div>
-        <div class="pagename">{{ k.company }}</div>
+        <div class="person">{{ k.branch_id }} </div>
+        <div class="pagename">{{ k.view_name }} </div>
         <div class="actions">
-          <p><img :src="subsc" alt="图片资源缺失" /> <span>订阅</span></p>
+          <p :class="k.type==0?'blue':'gray'" @click="gosunscribe(k)"><img :src="subsc" alt="图片资源缺失" /> <span>{{k.type==0?"订阅":"待审批"}}</span></p>
         </div>
       </div>
     </div>
     <el-pagination
       background
-      @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-size="11"
+      :page-size="10"
       layout="total, prev, pager, next, jumper"
-      :total="1000"
+      :total="total"
       class="pagination"
     >
     </el-pagination>
@@ -38,66 +37,51 @@
 // 页面订阅
 import searchdemo from "@/components/searchdemo.vue";
 import subsc from "@/assets/listlogo/subscribe.png";
+import { getsubscribe,demandadd } from "@/api/list.js";
+
 export default {
   name: "subscribe",
   data() {
     return {
       subsc,
       currentPage: 1,
-      list: [
-        {
-          name: "幼儿园入学人数预测",
-          company: "教育局",
-        },
-        {
-          name: "升学排行",
-          company: "教育局",
-        },
-        {
-          name: "幼儿园入学人数预测",
-          company: "教育局",
-        },
-        {
-          name: "升学排行",
-          company: "教育局",
-        },
-        {
-          name: "幼儿园入学人数预测",
-          company: "教育局",
-        },
-        {
-          name: "升学排行",
-          company: "教育局",
-        },
-        {
-          name: "幼儿园入学人数预测",
-          company: "教育局",
-        },
-        {
-          name: "升学排行",
-          company: "教育局",
-        },
-        {
-          name: "幼儿园入学人数预测",
-          company: "教育局",
-        },
-        {
-          name: "升学排行",
-          company: "教育局",
-        },
-      ],
+      total: 0,
+      list: [],
     };
   },
   components: {
     searchdemo,
   },
-  mounted() {},
+  mounted() {
+    getsubscribe(1).then((res) => {
+      console.log(res)
+      this.list = res.data.data.list;
+      this.total - res.data.data.count;
+    });
+  },
   methods: {
+    gosunscribe(k){
+      // =0才能订阅
+      if(k.type != 0) return
+      demandadd({
+        demand_id:k.id,
+        type:1
+      }).then(res=>{
+        if(res.status == 200) {
+          k.type = 1
+        }
+      })
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+      getsubscribe(val).then((res) => {
+        // console.log(res)
+        this.list = res.data.data.list;
+        this.total - res.data.data.count;
+      });
     },
   },
 };
@@ -147,12 +131,11 @@ export default {
           }
         }
       }
-      .actions > p:nth-of-type(1) {
+      .actions>.blue{
         color: #017cf8;
       }
-      .actions > p:nth-of-type(2) {
-        margin-left: 5px;
-        color: #fd6969;
+      .actions>.gray{
+        color: gray;
       }
     }
     .topline {

@@ -3,7 +3,7 @@
     <searchdemo :four="true" one="模型编号" two="请输入模型编号"></searchdemo>
     <div class="list">
       <div class="line topline">
-        <div>模型编号</div>
+        <!-- <div>模型编号</div> -->
         <div>模型名称</div>
         <div>类型</div>
         <div>所属单位</div>
@@ -11,11 +11,11 @@
         <div class="actions">操作</div>
       </div>
       <div v-for="(k, index) in list" :key="index" class="line">
-        <div>{{ k.num }}</div>
-        <div>{{ k.name }}</div>
-        <div>{{ k.type }}</div>
-        <div>{{ k.address }}</div>
-        <div>{{ k.time }}</div>
+        <!-- <div :title="year+'000'+k.id">{{year+"000"+k.id }} </div> -->
+        <div :title="k.modulename">{{ k.modulename }} </div>
+        <div :title="k.module_type">{{ k.module_type }} </div>
+        <div :title="k.branch_id">{{ k.branch_id }} </div>
+        <div :title="k.update_time">{{ k.update_time }} </div>
         <div class="actions">
           <p><img :src="change" alt="图片资源缺失" /> <span>上架</span></p>
           <p><img :src="off" alt="图片资源缺失" /> <span>修改</span></p>
@@ -28,9 +28,9 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-size="11"
+      :page-size="10"
       layout="total, prev, pager, next, jumper"
-      :total="1000"
+      :total="total"
       class="pagination"
     >
     </el-pagination>
@@ -43,14 +43,30 @@ import change from "@/assets/listlogo/channge.png";
 import off from "@/assets/listlogo/off.png";
 import puton from "@/assets/listlogo/puton.png";
 import searchdemo from "@/components/searchdemo.vue";
+import { getlist } from "@/api/list.js";
 export default {
   name: "modelManaga",
   data() {
-    return { list: ll, change, off, puton, currentPage: 1 };
+    return {
+      list: ll,
+      year:0,
+      change,
+      off,
+      puton,
+      currentPage: 1,
+      total: 0,
+    };
   },
-  mounted() {},
-  components:{
-      searchdemo,
+  mounted() {
+    this.year = new Date().getFullYear();
+    getlist(1).then((res) => {
+      console.log(res);
+      this.list = res.data.data.list;
+      this.total = res.data.data.count;
+    });
+  },
+  components: {
+    searchdemo,
   },
   methods: {
     handleSizeChange(val) {
@@ -58,6 +74,10 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+      getlist(val).then((res) => {
+        this.list = res.data.data.list;
+        this.total = res.data.data.count;
+      });
     },
   },
 };
@@ -84,6 +104,8 @@ export default {
         color: #666f8e;
         text-align: center;
         flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       .actions {
         flex: 2;

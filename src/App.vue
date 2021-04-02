@@ -17,8 +17,6 @@ export default {
     }
   },
   mounted(){
-    console.log(location.href)
-    console.log(location)
     // console.log(this.isLogin)
     
     // bbbb().then(res=>{

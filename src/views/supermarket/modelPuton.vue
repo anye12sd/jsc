@@ -5,7 +5,12 @@
       <div class="item">
         <label for="modelName" style="width: 50%">模型名称</label>
         <div style="width: 50%">
-          <input type="text" id="modelName" placeholder="请输入名称" />
+          <input
+            type="text"
+            id="modelName"
+            placeholder="请输入名称"
+            v-model="name"
+          />
         </div>
       </div>
       <div class="item">
@@ -26,7 +31,7 @@
         <div style="width: 50%"></div>
         <div style="width: 50%">
           <div class="cancel">取消</div>
-          <div class="confirm">确定</div>
+          <div class="confirm" @click="confirm">确定</div>
         </div>
       </div>
     </div>
@@ -34,6 +39,8 @@
 </template>
 
 <script>
+import { demandadd } from "@/api/list.js";
+
 export default {
   name: "modelPuton",
   data() {
@@ -61,9 +68,27 @@ export default {
         },
       ],
       value: "",
+      name: "",
+      execute_id:null
     };
   },
   methods: {
+    confirm() {
+      if (this.name.length < 4) {
+        this.$message({
+          message: "模型名称长度不能小于4",
+          type: "warning",
+        });
+        return;
+      }
+      demandadd({
+        demand_name:this.name,
+        execute_id:this.execute_id,
+        type:3
+      }).then(res=>{
+        console.log(res)
+      })
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },

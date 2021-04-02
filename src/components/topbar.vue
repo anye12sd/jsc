@@ -95,10 +95,11 @@ export default {
         let op = JSON.parse(JSON.stringify(res.data.data));
         op.forEach((item, index) => {
           if (item.id == 1) {
-            console.log("kkkkk", item);
+            // console.log("kkkkk", item);
             this.$store.commit("config/setpcCockpit", res.data.data[index]);
           } else if (item.id == 2) {
             this.$store.commit("config/setsupermarket", res.data.data[index]);
+            this.$store.commit("jurisdiction/setsupermarket", res.data.data[index]);
           } else if (item.id == 3) {
             this.$store.commit("config/setmodelIntroduce", res.data.data[index]);
           } else if (item.id == 4) {

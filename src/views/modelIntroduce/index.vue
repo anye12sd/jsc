@@ -16,33 +16,53 @@
         </div>
       </div>
     </div>
-    <div class="type">
+    <div class="type" v-if="identity != 2">
+      <img
+        :src="left"
+        alt="图片缺失"
+        class="img1"
+        v-if="alltype.length > 5"
+        @click="toleft"
+      />
+      <img
+        :src="left"
+        alt="图片缺失"
+        class="img2"
+        v-if="alltype.length > 5"
+        @click="toright"
+      />
       <div
         v-for="(k, index) in type"
         :key="index"
         :class="current == index ? 'active' : ''"
-        @click="chose(index)"
+        @click="chose(k, index)"
       >
-        {{ k }}
+        {{ k.modulename }}
       </div>
     </div>
     <div v-for="(k, index) in content" :key="index" class="item">
       <div class="inside">
         <div :class="'first ' + (index % 2 == 1 ? 'imgright' : '')">
           <div v-if="index % 2 == 0" class="itemtit">
-            <span>{{ k.tit }}</span>
-            <span @click="changeModel(k)"  v-if="ismanaga">编辑</span>
+            <div>{{ k.modulename }}</div>
+            <div class="managa">
+              <span @click="changeModel(k)" v-if="ismanaga">编辑</span>
+              <span @click="dele(k)" v-if="ismanaga">{{k.deleted?"已删除":"删除"}}</span>
+            </div>
           </div>
-          <div v-if="index % 2 == 0" class="con">{{ k.con }}</div>
-          <img v-else :src="k.img" />
+          <div v-if="index % 2 == 0" class="con">{{ k.introduce }}</div>
+          <img v-else :src="'http://10.21.197.237' + k.img_url" />
         </div>
         <div :class="'second ' + (index % 2 == 0 ? 'imgleft' : '')">
           <div v-if="index % 2 == 1" class="itemtit">
-            <span>{{ k.tit }}</span>
-            <span @click="changeModel(k)"  v-if="ismanaga">编辑</span>
+            <div>{{ k.modulename }}</div>
+            <div class="managa">
+              <span @click="changeModel(k)" v-if="ismanaga">编辑</span>
+              <span @click="dele(k)" v-if="ismanaga">{{k.deleted?"已删除":"删除"}}</span>
+            </div>
           </div>
-          <div v-if="index % 2 == 1" class="con">{{ k.con }}</div>
-          <img v-else :src="k.img" />
+          <div v-if="index % 2 == 1" class="con">{{ k.introduce }}</div>
+          <img v-else :src="'http://10.21.197.237' + k.img_url" />
         </div>
       </div>
     </div>
@@ -59,13 +79,25 @@
 import search from "@/assets/search.png";
 import modify from "./modify";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
+import {
+  introducelist,
+  introduce,
+  introducecurdlist,
+  introducedel,
+} from "@/api/list.js";
+import left from "@/assets/modelIntro/left.png";
+
 export default {
   name: "modelIntroduce",
   data() {
     return {
       search,
+      left,
       type: ["分类1", "分类1", "分类1", "分类1", "分类1"],
-      ismanaga:false,
+      alltype: [],
+      total: 0,
+      page: 1,
+      ismanaga: false,
       current: 0,
       showModify: false,
       waitchange: false,
@@ -101,18 +133,74 @@ export default {
     modify,
   },
   computed: {
-    ...mapState("config", ["3"]),
+    ...mapState("config", ["3", "identity"]),
   },
-  watch:{
-    3(){
-      
-      this.ismanaga = this[3]
-      console.log(this[3],this.ismanaga)
+  mounted() {
+    console.log(this.identity);
+    if (this.identity == 1 || this.identity == 2) {
+      this.ismanaga = true;
+    }
+    // 单位管理员
+    if (this.identity == 2) {
+      introducecurdlist().then((res) => {
+        console.log(res);
+        this.content = res.data.data.list;
+        this.content.forEach((it) => {
+          it.deleted = false;
+        });
+      });
+      // 其他人员
+    } else {
+      introducelist().then((res) => {
+        console.log(res);
+        if (res.data.data.length > 5) {
+          this.alltype = res.data.data;
+          this.type = res.data.data.slice(0, 5);
+          this.total = res.data.data.length / 5;
+        } else {
+          this.type = res.data.data;
+        }
+        introduce(this.type[0].id).then((res) => {
+          console.log(res);
+          this.content = [res.data.data];
+          this.content.forEach((it) => {
+            it.deleted = false;
+          });
+        });
+      });
     }
   },
+  watch: {
+    3() {
+      this.ismanaga = this[3];
+      console.log(this[3], this.ismanaga);
+    },
+  },
   methods: {
-    chose(idx) {
+    dele(k) {
+      if(k.deleted) return
+      introducedel(k.id).then((res) => {
+        console.log(res);
+        k.deleted = true
+        this.$forceUpdate();
+        console.log(this.content)
+      });
+    },
+    chose(k, idx) {
       this.current = idx;
+      introduce(k.id).then((res) => {
+        this.content = [res.data.data];
+      });
+    },
+    toright() {
+      if (this.page == this.total) return;
+      this.page++;
+      this.type = this.alltype.slice((this.page - 1) * 5, this.page * 5);
+    },
+    toleft() {
+      if (this.page == 1) return;
+      this.page--;
+      this.type = this.alltype.slice((this.page - 1) * 5, this.page * 5);
     },
     addNew() {
       this.showModify = true;
@@ -232,8 +320,24 @@ export default {
     width: 1000px;
     margin: 10px auto 0 auto;
     display: flex;
+    position: relative;
     justify-content: space-around;
     border-bottom: 1px solid #cacaca;
+    .img1 {
+      position: absolute;
+      top: 20%;
+      left: 0;
+      height: 60%;
+      cursor: pointer;
+    }
+    .img2 {
+      position: absolute;
+      top: 20%;
+      right: 0;
+      height: 60%;
+      transform: rotate(180deg);
+      cursor: pointer;
+    }
     div {
       font-family: MicrosoftYaHei;
       font-size: 14px;
@@ -271,17 +375,22 @@ export default {
         align-items: flex-end;
         margin-bottom: 20px;
       }
-      .itemtit > span:nth-of-type(1) {
+      .itemtit > div:nth-of-type(1) {
         font-family: MicrosoftYaHei-Bold;
         font-size: 24px;
         color: #000000;
       }
-      .itemtit > span:nth-of-type(2) {
-        cursor: pointer;
+      .itemtit > div:nth-of-type(2) {
         text-align: right;
         font-family: MicrosoftYaHei;
         font-size: 14px;
         color: #016cf0;
+        span {
+          cursor: pointer;
+        }
+      }
+      .itemtit > div:nth-of-type(2) > span:nth-of-type(2) {
+        margin-left: 5px;
       }
       .con {
         font-family: MicrosoftYaHei;

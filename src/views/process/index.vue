@@ -67,6 +67,9 @@ export default {
           }
         })
       })
+      this.usingOption[0].classname1 = "status02";
+      this.usingOption[0].classname2 = "status01";
+      this.$store.commit("jurisdiction/setprocess",this.usingOption[0].routerpath.split("/")[2])
       }
     }
   },

@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import PcCokpit from "@/views/pcCockpit"
 import store from "../store"
 
-console.log(store.state.jurisdiction)
+// console.log(store.state.jurisdiction,store.state.jurisdiction.supermarket)
 
 
 Vue.use(VueRouter)

@@ -81,6 +81,7 @@ export default {
     },
   },
   mounted() {
+    console.log(this.changeAble);
     if (typeof FileReader === "undefined") {
       this.$message({
         message: "抱歉，你的浏览器不支持 FileReader，请使用现代浏览器操作！",
@@ -91,6 +92,9 @@ export default {
     if (this.changeAble) {
       // this.userImg = ...
       this.hasImg = true;
+      this.titname = this.changeAble.modulename;
+      this.area = this.changeAble.introduce;
+      this.userImg = "http://10.21.197.237" + this.changeAble.img_url;
     }
   },
   methods: {
@@ -120,7 +124,7 @@ export default {
     },
     readFile() {
       // 'Content-Type':'multipart/form-data'
-    //   console.log(this.$refs.upfile.files[0]);
+      //   console.log(this.$refs.upfile.files[0]);
       this.canUpimg = false;
       let file = this.$refs.upfile.files[0];
       if (!/image\/\w+/.test(file.type)) {
@@ -140,7 +144,7 @@ export default {
       };
     },
     reup() {
-        this.$refs.upfile.click();
+      this.$refs.upfile.click();
     },
     confirm() {
       if (
@@ -155,12 +159,44 @@ export default {
         return;
       }
       let data = new FormData();
-      data.append("file", this.$refs.upfile.files[0]);
-      data.append("", this.titname);
-      data.append("", this.area);
-      submit(data).then((res) => {
-        console.log(res);
-      });
+      data.append("image", this.$refs.upfile.files[0]);
+      data.append("modulename", this.titname);
+      data.append("introduce", this.area);
+      data.append("introduce", this.area);
+      data.append("access_token", location.search.split("=")[1]);
+      let url;
+      if (process.env.NODE_ENV == "development") {
+        url = "/api";
+      }
+      if (process.env.NODE_ENV == "production") {
+        url = "http://10.21.197.237";
+      }
+      // 修改
+      if (this.changeAble) {
+        data.append("id", this.changeAble.id);
+        this.$axios({
+          method: "post",
+          headers: { "Content-Type": "multipart/form-data" },
+          url: url + "/Introduce/edit",
+          data: data,
+        }).then((res) => {
+          console.log(res);
+        });
+      } else {
+        // 新增
+        this.$axios({
+          method: "post",
+          headers: { "Content-Type": "multipart/form-data" },
+          url: url + "/Introduce/add",
+          data: data,
+        }).then((res) => {
+          console.log(res);
+        });
+      }
+
+      // submit(data).then((res) => {
+      //   console.log(res);
+      // });
     },
   },
   watch: {

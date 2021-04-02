@@ -108,7 +108,22 @@ export default {
   },
   //修改state
   mutations: {
-
+    // 设置默认路由
+    setpcCockpit(state,payload){
+      state.pcCockpit[0].redirect = payload
+    },
+    setprocess(state,payload){
+      state.process[0].redirect = payload
+    },
+    setsupermarket(state,payload){
+      state.supermarket[0].redirect = payload
+    },
+    setuserAuthorization(state,payload){
+      state.userAuthorization[0].redirect = payload
+    },
+    setdemand(state,payload){
+      state.userAuthorization[0].redirect = payload
+    },
   },
   // actions:store下的异步操作;组件中通过dispatch action触发action操作;
   // 但是action中不能更新state，需要通过commit mutation触发mutation操作，更新状态。

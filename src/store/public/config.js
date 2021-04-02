@@ -4,6 +4,7 @@ export default {
         currentRouterPath: "",
         isLogin: false,
         access_token: null,
+        identity:1,
         // PC驾驶舱
         1: [],
         // 应用成果超市
@@ -25,11 +26,11 @@ export default {
         setpcCockpit(state, payload) {
             let p = 1;
             state[p] = payload
-            console.log(state[p])
+            // console.log(state[p])
         },
         setsupermarket(state, payload) {
             let p = 2;
-            console.log(2222, payload)
+            // console.log(2222, payload)
             state[p] = payload
         },
         setmodelIntroduce(state, payload) {

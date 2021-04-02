@@ -14,6 +14,7 @@
         <div class="describe">需求描述</div>
         <div class="actions">操作</div>
       </div>
+      <div v-if="list.length == 0" style="text-align: center; height:50px;line-height:50px;color:gray">暂无数据</div>
       <div v-for="(k, index) in list" :key="index" class="line">
         <div class="num">{{ index }}</div>
         <div class="name" :title="k.name">{{ k.name }}</div>

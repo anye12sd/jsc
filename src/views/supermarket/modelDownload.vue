@@ -8,18 +8,24 @@
     ></searchdemo>
     <div class="list">
       <div class="line topline">
-        <div class="name">页面名称</div>
+        <div class="name">模型名称</div>
         <div class="type">类型</div>
         <div class="company">所属单位</div>
         <div class="actions">操作</div>
       </div>
+      <div v-if="list.length == 0" style="text-align: center; height:50px;line-height:50px;color:gray">暂无数据</div>
       <div v-for="(k, index) in list" :key="index" class="line">
-        <div class="name">{{ k.name }}</div>
-        <div class="type">{{ k.type }}</div>
-        <div class="company">{{ k.company }}</div>
+        <div class="name">{{ k.modulename }}</div>
+        <div class="type">{{ k.module_type }}</div>
+        <div class="company">{{ k.branch_id }}</div>
         <div class="actions">
-          <p><img :src="datapreview" alt="图片资源缺失" /> <span>数据预览</span></p>
-          <p><img :src="dataexport" alt="图片资源缺失" /> <span>数据导出</span></p>
+          <p>
+            <img :src="datapreview" alt="图片资源缺失" /> <span>数据预览</span>
+          </p>
+          <p>
+            <img :src="dataexport" alt="图片资源缺失" /> <span>数据导出</span>
+          </p>
+          <p @click="cancelsub(k)" :class="k.type==0?'blue':'gray'"><img :src="subsc" alt="图片资源缺失" /> <span>{{k.type==0?"取消订阅":"已取消"}}</span></p>
         </div>
       </div>
     </div>
@@ -30,7 +36,7 @@
       :current-page.sync="currentPage"
       :page-size="11"
       layout="total, prev, pager, next, jumper"
-      :total="1000"
+      :total="total"
       class="pagination"
     >
     </el-pagination>
@@ -39,14 +45,20 @@
 
 <script>
 import searchdemo from "@/components/searchdemo.vue";
-import datapreview from "@/assets/listlogo/datapreview.png"
-import dataexport from "@/assets/listlogo/dataexport.png"
+import datapreview from "@/assets/listlogo/datapreview.png";
+import dataexport from "@/assets/listlogo/dataexport.png";
+import subsc from "@/assets/listlogo/subscribe.png";
+import { appuserlist,dele } from "@/api/list.js";
+
 export default {
   name: "modelDownload",
   data() {
     return {
-      datapreview,dataexport,
-      currentPage:1,
+      datapreview,
+      dataexport,
+      subsc,
+      total: 0,
+      currentPage: 1,
       list: [
         {
           name: "招商引资",
@@ -101,12 +113,27 @@ export default {
       ],
     };
   },
-  methods:{
+  mounted() {
+    appuserlist(1).then((res) => {
+      // console.log(res);
+      this.list = res.data.data.list;
+      this.total = res.data.data.count;
+    });
+  },
+  methods: {
+    cancelsub(k){
+      dele(k.id).then(res=>{
+        console.log(res)
+      })
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      appuserlist(val).then((res) => {
+        this.list = res.data.data.list;
+        this.total = res.data.data.count;
+      });
     },
   },
   components: {
@@ -135,6 +162,9 @@ export default {
         font-size: 14px;
         color: #666f8e;
         text-align: center;
+        flex: 2;
+      }
+      .type {
         flex: 1;
       }
       .actions {
@@ -162,10 +192,17 @@ export default {
       }
       .actions > p:nth-of-type(2) {
         margin-left: 5px;
-        
         color: #fd6969;
       }
-      
+      .actions > p:nth-of-type(3) {
+        margin-left: 5px;
+      }
+      .actions>.blue{
+        color: #017cf8;
+      }
+      .actions>.gray{
+        color: gray;
+      }
     }
     .topline {
       background: #f5f6f9;

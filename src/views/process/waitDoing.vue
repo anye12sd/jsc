@@ -28,6 +28,7 @@
         <div class="time">申请时间</div>
         <div class="actions">模型审批</div>
       </div>
+      <div v-if="list.length == 0" style="text-align: center; height:50px;line-height:50px;color:gray">暂无数据</div>
       <div v-for="(k, index) in list" :key="index" class="line">
         <div class="choise">
           <img

@@ -14,14 +14,17 @@ const request = axios.create({
 	baseURL
 	// timeout:5000
 })
-
+// console.log(location)
+let access_token = location.search.split("=")[1]
+// console.log(access_token)
 request.interceptors.request.use(
 	config => {
 		// console.log("请求拦截器")
 		// console.log(config)
 		// if(config.params)
-		let access_token = "bbbb";
+		// let access_token = "cccc";
 		if (config.data) {
+			console.log(typeof config.data)
 			config.data.access_token = access_token
 		} else {
 			// console.log(access_token)

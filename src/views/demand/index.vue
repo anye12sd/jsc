@@ -42,20 +42,20 @@ export default {
           classname1: "status12",
           classname2: "status11",
         },
-        {
-          id: 2,
-          routerpath: "/demand/waitDemand",
-          name: "待办事项",
-          classname1: "status12",
-          classname2: "status11",
-        },
-        {
-          id: 3,
-          routerpath: "/demand/hasDoneDemand",
-          name: "已办事项",
-          classname1: "status12",
-          classname2: "status11",
-        },
+        // {
+        //   id: 2,
+        //   routerpath: "/demand/waitDemand",
+        //   name: "待办事项",
+        //   classname1: "status12",
+        //   classname2: "status11",
+        // },
+        // {
+        //   id: 3,
+        //   routerpath: "/demand/hasDoneDemand",
+        //   name: "已办事项",
+        //   classname1: "status12",
+        //   classname2: "status11",
+        // },
       ],
     };
   },
@@ -68,9 +68,9 @@ export default {
       this.$router.push(item.routerpath);
     },
     change() {
-      console.log("333333333",this[4],this.usingOption)
-      if (this[4]) {
-        
+      // console.log("333333333",this[4],this.usingOption)
+      if (this[4].items) {
+        // console.log("333333333",this[4],this.usingOption)
         this.options.forEach((item) => {
           this[4].items.forEach((p) => {
             if (item.id == p.id) {
@@ -79,7 +79,10 @@ export default {
             }
           });
         });
-        console.log("333333333",this[4],this.usingOption)
+        this.usingOption[0].classname1 = "status02";
+        this.usingOption[0].classname2 = "status01";
+        // this.$store.commit("jurisdiction/setdemand",this.usingOption[0].routerpath.split("/")[2])
+        // console.log("333333333",this[4],this.usingOption)
       }
     },
   },
@@ -97,6 +100,10 @@ export default {
     4() {
       this.change();
     },
+    usingOption(){
+      if(location.hash == "#"+this.usingOption[0].routerpath) return
+      this.$router.push(this.usingOption[0].routerpath)
+    }
   },
 };
 </script>
