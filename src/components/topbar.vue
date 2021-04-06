@@ -99,7 +99,7 @@ export default {
             this.$store.commit("config/setpcCockpit", res.data.data[index]);
           } else if (item.id == 2) {
             this.$store.commit("config/setsupermarket", res.data.data[index]);
-            this.$store.commit("jurisdiction/setsupermarket", res.data.data[index]);
+            // this.$store.commit("jurisdiction/setsupermarket", res.data.data[index]);
           } else if (item.id == 3) {
             this.$store.commit("config/setmodelIntroduce", res.data.data[index]);
           } else if (item.id == 4) {
@@ -148,6 +148,18 @@ export default {
         this.current = -1;
       }
     },
+    usingOption(){
+      let flag = false;
+      this.usingOption.forEach(item=>{
+        if(location.hash.includes(item.path)) {
+          flag = true
+        }
+      })
+      if(flag) return
+      this.$router.push(this.usingOption[0].path)
+      // if("/"+location.hash.split("/")[1] == this.usingOption[0].path) return
+      // this.$router.push(this.usingOption[0].path)
+    }
   },
 };
 </script>

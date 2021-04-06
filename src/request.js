@@ -16,7 +16,7 @@ const request = axios.create({
 })
 // console.log(location)
 let access_token = location.search.split("=")[1]
-// console.log(access_token)
+// console.log(location,access_token)
 request.interceptors.request.use(
 	config => {
 		// console.log("请求拦截器")
@@ -32,17 +32,6 @@ request.interceptors.request.use(
 				access_token
 			}
 		}
-		// if(process.env.NODE_ENV == "development") {
-		// 	let access_token = "aaaa";
-		// 	if(config.data) {
-		// 		config.data.access_token = access_token
-		// 	} else {
-		// 		// console.log(access_token)
-		// 		config.params = {
-		// 			access_token
-		// 		}
-		// 	}
-		// }
 		return config
 	},
 	err => {

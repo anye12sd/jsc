@@ -8,3 +8,10 @@ export function submit(formdata){
         data:formdata
     })
 }
+
+export function demanduser(){
+    return request({
+        method:"get",
+        url:"/demand/user"
+    })
+}

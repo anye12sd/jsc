@@ -6,7 +6,7 @@
       two="请输入页面名称"
       three="请输入所属单位"
     ></searchdemo>
-    <div class="add" @click="showWrite = true">新增需求</div>
+    <div class="add" @click="addNew">新增需求</div>
     <div class="list">
       <div class="line topline">
         <div class="num">需求编号</div>
@@ -46,7 +46,7 @@
           <el-select v-model="form.company" placeholder="选择需求单位">
             <el-option
               v-for="item in options"
-              :key="item.value"
+              :key="item.id"
               :label="item.label"
               :value="item.value"
             >
@@ -74,8 +74,7 @@
 <script>
 // 新增需求
 import searchdemo from "@/components/searchdemo.vue";
-import {demanduser} from "@/api/list.js"
-
+import {demanduser} from "@/api/managa.js"
 export default {
   name: "addNewDemand",
   data() {
@@ -87,28 +86,7 @@ export default {
         company: null,
         describe: null,
       },
-      options: [
-        {
-          value: "选项1",
-          label: "黄金糕",
-        },
-        {
-          value: "选项2",
-          label: "双皮奶",
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项4",
-          label: "龙须面",
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭",
-        },
-      ],
+      options: [],
       list: [
         {
           num: 1,
@@ -184,14 +162,19 @@ export default {
     };
   },
   mounted() {
-    demanduser().then(res=>{
-      console.log(res)
-    })
+    
   },
   components: {
     searchdemo,
   },
   methods: {
+    addNew(){
+      this.showWrite = true;
+      demanduser().then(res=>{
+        console.log(res)
+        this.options = res.data.data
+      })
+    },
     cancel() {
       this.form = {
         demandName: null,

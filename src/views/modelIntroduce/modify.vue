@@ -73,6 +73,7 @@ export default {
       titname: "",
       area: "",
       canUpimg: true,
+      changeImge: false,
     };
   },
   props: {
@@ -126,6 +127,7 @@ export default {
       // 'Content-Type':'multipart/form-data'
       //   console.log(this.$refs.upfile.files[0]);
       this.canUpimg = false;
+      this.changeImge = true;
       let file = this.$refs.upfile.files[0];
       if (!/image\/\w+/.test(file.type)) {
         this.$message({
@@ -146,6 +148,65 @@ export default {
     reup() {
       this.$refs.upfile.click();
     },
+    edit(url) {
+      let data = new FormData();
+      if (this.changeImge) {
+        data.append("image", this.$refs.upfile.files[0]);
+      } else {
+        data.append("img_url", this.changeAble.img_url);
+      }
+      data.append("modulename", this.titname);
+      data.append("introduce", this.area);
+      data.append("access_token", location.search.split("=")[1]);
+      data.append("id", this.changeAble.id);
+        this.$axios({
+          method: "post",
+          headers: { "Content-Type": "multipart/form-data" },
+          url: url + "/Introduce/edit",
+          data: data,
+        }).then((res) => {
+          console.log(res);
+          if (res.data.status == 400) {
+            this.$message({
+              message: res.data.message,
+              type: "warning",
+            });
+          }
+          if(res.data.status == 200) {
+            // this.$router.go(0);
+            this.$emit("subok")
+          }
+        });
+    },
+    addnew(url) {
+      let data = new FormData();
+      if(!this.changeImge) {
+        this.$message({
+          message: "请上传图片",
+          type: "warning",
+        });
+      }
+      data.append("modulename", this.titname);
+      data.append("introduce", this.area);
+      data.append("access_token", location.search.split("=")[1]);
+      this.$axios({
+          method: "post",
+          headers: { "Content-Type": "multipart/form-data" },
+          url: url + "/Introduce/add",
+          data: data,
+        }).then((res) => {
+          console.log(res);
+          if (res.data.status == 400) {
+            this.$message({
+              message: res.data.message,
+              type: "warning",
+            });
+          }
+          if(res.data.status == 200) {
+            this.$emit("subok")
+          }
+        });
+    },
     confirm() {
       if (
         this.titname.length > 12 ||
@@ -158,12 +219,6 @@ export default {
         });
         return;
       }
-      let data = new FormData();
-      data.append("image", this.$refs.upfile.files[0]);
-      data.append("modulename", this.titname);
-      data.append("introduce", this.area);
-      data.append("introduce", this.area);
-      data.append("access_token", location.search.split("=")[1]);
       let url;
       if (process.env.NODE_ENV == "development") {
         url = "/api";
@@ -171,32 +226,11 @@ export default {
       if (process.env.NODE_ENV == "production") {
         url = "http://10.21.197.237";
       }
-      // 修改
       if (this.changeAble) {
-        data.append("id", this.changeAble.id);
-        this.$axios({
-          method: "post",
-          headers: { "Content-Type": "multipart/form-data" },
-          url: url + "/Introduce/edit",
-          data: data,
-        }).then((res) => {
-          console.log(res);
-        });
+        this.edit(url);
       } else {
-        // 新增
-        this.$axios({
-          method: "post",
-          headers: { "Content-Type": "multipart/form-data" },
-          url: url + "/Introduce/add",
-          data: data,
-        }).then((res) => {
-          console.log(res);
-        });
+        this.addnew(url);
       }
-
-      // submit(data).then((res) => {
-      //   console.log(res);
-      // });
     },
   },
   watch: {

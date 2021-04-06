@@ -87,9 +87,3 @@ export function introducedel(){
     })
 }
 
-export function demanduser(){
-    return request({
-        method:"get",
-        url:"/demand/user"
-    })
-}

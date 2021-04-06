@@ -47,7 +47,9 @@
             <div>{{ k.modulename }}</div>
             <div class="managa">
               <span @click="changeModel(k)" v-if="ismanaga">编辑</span>
-              <span @click="dele(k)" v-if="ismanaga">{{k.deleted?"已删除":"删除"}}</span>
+              <span @click="dele(k)" v-if="ismanaga">{{
+                k.deleted ? "已删除" : "删除"
+              }}</span>
             </div>
           </div>
           <div v-if="index % 2 == 0" class="con">{{ k.introduce }}</div>
@@ -58,7 +60,9 @@
             <div>{{ k.modulename }}</div>
             <div class="managa">
               <span @click="changeModel(k)" v-if="ismanaga">编辑</span>
-              <span @click="dele(k)" v-if="ismanaga">{{k.deleted?"已删除":"删除"}}</span>
+              <span @click="dele(k)" v-if="ismanaga">{{
+                k.deleted ? "已删除" : "删除"
+              }}</span>
             </div>
           </div>
           <div v-if="index % 2 == 1" class="con">{{ k.introduce }}</div>
@@ -71,6 +75,7 @@
       @justHide="justHide"
       :changeAble="waitchange"
       @changeConfirm="justHide"
+      @subok="subok"
     ></modify>
   </div>
 </template>
@@ -102,30 +107,6 @@ export default {
       showModify: false,
       waitchange: false,
       content: [
-        {
-          tit: "水电使用分析",
-          con:
-            "结合水气数据统计并分析全县月、季度、年度的使用量趋势。结合水气数据、地理信息数据统计并分析各区域水气使用量及整体趋势。",
-          img: require("../../assets/modelIntro/ok.png"),
-        },
-        {
-          tit: "水电使用分析",
-          con:
-            "结合水气数据统计并分析全县月、季度、年度的使用量趋势。结合水气数据、地理信息数据统计并分析各区域水气使用量及整体趋势。",
-          img: require("../../assets/modelIntro/ok.png"),
-        },
-        {
-          tit: "水电使用分析",
-          con:
-            "结合水气数据统计并分析全县月、季度、年度的使用量趋势。结合水气数据、地理信息数据统计并分析各区域水气使用量及整体趋势。",
-          img: require("../../assets/modelIntro/ok.png"),
-        },
-        {
-          tit: "水电使用分析",
-          con:
-            "结合水气数据统计并分析全县月、季度、年度的使用量趋势。结合水气数据、地理信息数据统计并分析各区域水气使用量及整体趋势。",
-          img: require("../../assets/modelIntro/ok.png"),
-        },
       ],
     };
   },
@@ -137,38 +118,7 @@ export default {
   },
   mounted() {
     console.log(this.identity);
-    if (this.identity == 1 || this.identity == 2) {
-      this.ismanaga = true;
-    }
-    // 单位管理员
-    if (this.identity == 2) {
-      introducecurdlist().then((res) => {
-        console.log(res);
-        this.content = res.data.data.list;
-        this.content.forEach((it) => {
-          it.deleted = false;
-        });
-      });
-      // 其他人员
-    } else {
-      introducelist().then((res) => {
-        console.log(res);
-        if (res.data.data.length > 5) {
-          this.alltype = res.data.data;
-          this.type = res.data.data.slice(0, 5);
-          this.total = res.data.data.length / 5;
-        } else {
-          this.type = res.data.data;
-        }
-        introduce(this.type[0].id).then((res) => {
-          console.log(res);
-          this.content = [res.data.data];
-          this.content.forEach((it) => {
-            it.deleted = false;
-          });
-        });
-      });
-    }
+    this.init()
   },
   watch: {
     3() {
@@ -177,13 +127,47 @@ export default {
     },
   },
   methods: {
+    init() {
+      if (this.identity == 1 || this.identity == 2) {
+        this.ismanaga = true;
+      }
+      // 单位管理员
+      if (this.identity == 2) {
+        introducecurdlist().then((res) => {
+          console.log(res);
+          this.content = res.data.data.list;
+          this.content.forEach((it) => {
+            it.deleted = false;
+          });
+        });
+        // 其他人员
+      } else {
+        introducelist().then((res) => {
+          console.log(res);
+          if (res.data.data.length > 5) {
+            this.alltype = res.data.data;
+            this.type = res.data.data.slice(0, 5);
+            this.total = res.data.data.length / 5;
+          } else {
+            this.type = res.data.data;
+          }
+          introduce(this.type[0].id).then((res) => {
+            console.log(res);
+            this.content = [res.data.data];
+            this.content.forEach((it) => {
+              it.deleted = false;
+            });
+          });
+        });
+      }
+    },
     dele(k) {
-      if(k.deleted) return
+      if (k.deleted) return;
       introducedel(k.id).then((res) => {
         console.log(res);
-        k.deleted = true
+        k.deleted = true;
         this.$forceUpdate();
-        console.log(this.content)
+        console.log(this.content);
       });
     },
     chose(k, idx) {
@@ -208,6 +192,11 @@ export default {
     justHide() {
       this.showModify = false;
       this.waitchange = false;
+    },
+    subok() {
+      this.showModify = false;
+      this.waitchange = false;
+      this.init()
     },
     changeModel(k) {
       this.showModify = true;
