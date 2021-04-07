@@ -189,6 +189,7 @@ export default {
       data.append("modulename", this.titname);
       data.append("introduce", this.area);
       data.append("access_token", location.search.split("=")[1]);
+      data.append("image", this.$refs.upfile.files[0]);
       this.$axios({
           method: "post",
           headers: { "Content-Type": "multipart/form-data" },

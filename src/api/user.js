@@ -7,3 +7,9 @@ export function getMenu(){
     })
 }
 
+export function tologin(){
+    return request({
+        method:'get',
+        url:'/login'
+    })
+}

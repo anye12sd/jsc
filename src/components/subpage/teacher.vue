@@ -25,7 +25,7 @@ export default {
       })
         .then((res) => {
           let optionsdata = res.data;
-          console.log(res)
+          // console.log(res)
           if (optionsdata.code == 200) {
             this.qnzt_szpb = optionsdata.data;
             this.drawing();

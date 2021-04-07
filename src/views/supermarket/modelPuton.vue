@@ -18,10 +18,11 @@
         <div style="width: 50%">
           <el-select v-model="value" clearable placeholder="请选择">
             <el-option
-              v-for="item in options"
+              v-for="(item, index) in options"
               :key="item.id"
               :label="item.nickname"
-              :value="item.nickname"
+              :value="index"
+              @click="chose(item)"
             >
             </el-option>
           </el-select>
@@ -40,25 +41,27 @@
 
 <script>
 import { demandadd } from "@/api/list.js";
-import {demanduser} from "@/api/managa.js"
+import { demanduser } from "@/api/managa.js";
 export default {
   name: "modelPuton",
   data() {
     return {
       options: [],
-      value: "",
+      value: 0,
       name: "",
-      execute_id:null
     };
   },
-  mounted(){
-    console.log("www")
-    demanduser().then(res=>{
-      this.options = res.data.data
-      console.log(this.options)
-    })
+  mounted() {
+    console.log("www");
+    demanduser().then((res) => {
+      this.options = res.data.data;
+      console.log(this.options);
+    });
   },
   methods: {
+    chose(item) {
+      console.log(item);
+    },
     confirm() {
       if (this.name.length < 4) {
         this.$message({
@@ -68,12 +71,22 @@ export default {
         return;
       }
       demandadd({
-        demand_name:this.name,
-        execute_id:this.execute_id,
-        type:3
-      }).then(res=>{
-        console.log(res)
-      })
+        demand_name: this.name,
+        execute_id: this.execute_id,
+        type: 3,
+        status:3,
+        branch_id: this.options[this.value].branch_id,
+      }).then((res) => {
+        console.log(res);
+        if (res.data.status == 200) {
+          this.name = ''
+          this.$message({
+            message:
+              "添加成功",
+            type: "success",
+          });
+        }
+      });
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);

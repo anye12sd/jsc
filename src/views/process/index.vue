@@ -3,7 +3,7 @@
     <div class="tit">流程审批</div>
     <div class="option">
       <div
-        v-for="k in options"
+        v-for="k in usingOption"
         :key="k.name"
         :class="'op ' + (current == k.id ? k.classname1 : k.classname2)"
         @click="chose(k)"
@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       current: 0,
-      // usingOption:[],
+      usingOption:[],
       options: [
         {
           id: 0,
@@ -51,8 +51,27 @@ export default {
   },
   mounted() {
     // this.change()
+    this.init()
+    console.log(this.usingOption)
   },
   methods: {
+    init(){
+      // 系统管理员
+      if(this.identity == 1) {
+        this.usingOption = [this.options[0],this.options[1]]
+      }
+      // 普通用户
+      if(this.identity == 3) {
+        this.usingOption = [this.options[1],this.options[2]]
+      }
+      // 单位管理员
+      if(this.identity == 2) {
+        this.usingOption = this.options
+      }
+      console.log(this.usingOption)
+      this.usingOption[0].classname1 = "status02"
+      this.usingOption[0].classname2 = "status01"
+    },
     chose(item) {
       this.current = item.id;
       this.$router.push(item.routerpath);
@@ -74,16 +93,20 @@ export default {
     }
   },
   computed:{
-    ...mapState("config",["currentRouterPath"])
+    ...mapState("config",["currentRouterPath","identity"])
   },
    watch: {
     currentRouterPath(newValue,oldValue) {
-      this.options.forEach(item=>{
+      this.usingOption.forEach(item=>{
         if(newValue.includes(item.routerpath)){
           this.current = item.id;
         }
       })
     },
+    usingOption(){
+      if(location.hash == "#"+this.usingOption[0].routerpath) return
+      this.$router.push(this.usingOption[0].routerpath)
+    }
     // 5(){
     //   this.change()
     // }

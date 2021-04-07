@@ -9,19 +9,23 @@
 <script>
 // import echarts from "echarts";
 // import industrialChange from "@/components/subpage/industrialChange";
-const modulesFiles = require.context('../../components/subpage', true, /\.vue$/);
-let allpage = {}
- modulesFiles.keys().forEach((path) => {
-    let name = path.split("/")[1].split(".")[0]; //组件名称
-    let c = modulesFiles(path) //组件实例
-    allpage[name] = c.default
-},{});
+const modulesFiles = require.context(
+  "../../components/subpage",
+  true,
+  /\.vue$/
+);
+let allpage = {};
+modulesFiles.keys().forEach((path) => {
+  let name = path.split("/")[1].split(".")[0]; //组件名称
+  let c = modulesFiles(path); //组件实例
+  allpage[name] = c.default;
+}, {});
 
 // import * as all from "@/components/subpage";
 export default {
   name: "pageshow",
   components: {
-    ...allpage
+    ...allpage,
   },
   data() {
     return {
@@ -30,37 +34,41 @@ export default {
         {
           eleId: "one",
           type: "one",
-          componentName:"industrialChange"
+          componentName: "industrialChange",
         },
         // 义务教育
         {
           eleId: "two",
           type: "two",
-          componentName:"comEducation"
+          componentName: "comEducation",
         },
         // 出生
         {
           eleId: "three",
           type: "three",
-          componentName:"birth"
+          componentName: "birth",
         },
         // 历年师资配比变化情况
         {
           eleId: "four",
           type: "four",
-          componentName:"teacher"
+          componentName: "teacher",
         },
+        // 升学
         {
           eleId: "five",
           type: "five",
+          componentName: "further",
         },
         {
           eleId: "six",
           type: "six",
+          componentName: "learn",
         },
         {
           eleId: "seven",
           type: "seven",
+          componentName:'kindGarden'
         },
         {
           eleId: "eight",
@@ -73,31 +81,50 @@ export default {
       ],
     };
   },
+  beforeDestroy(){
+    // document.querySelector(".pcCockpit").classList.remove("ck")
+  },
   mounted() {
     this.init();
+    // document.querySelector(".pcCockpit").classList.add("ck")
   },
+  
   methods: {
     init() {},
   },
 };
 </script>
+<style>
+/* .ck {
+  padding: 20px 0 0 0 !important;
+} */
+</style>
 
 <style scoped lang="less">
 .pageshow {
-  height: 91%;
+  // height: 91%;
+  height: 88%;
+  // min-height: 88%;
+  padding: 0 30px 20px 30px;
   overflow-y: scroll;
+   overflow: overlay;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
+  background-color: #011c2f;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  box-sizing: border-box;
 }
-.pageshow>div{
-    width: 49.4%;
-    height: 350px;
-    margin-top: 10px;
-    border-radius: 5px;
-    background-color: rgba(0, 0, 0, 1);
+.pageshow > div {
+  width: 49.4%;
+  height: 350px;
+  margin-top: 10px;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 1);
 }
-.pageshow>div:nth-of-type(2n){
-    margin-left: 0.5%;
+.pageshow > div:nth-of-type(2n) {
+  margin-left: 0.5%;
 }
 </style>

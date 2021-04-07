@@ -17,13 +17,6 @@
         v-if="four == true"
       >
       </el-date-picker>
-      <!-- <input
-        type="time"
-        name="time"
-        id="time"
-        v-if="four == true"
-        placeholder="请选择时间范围"
-      /> -->
       <input type="text" id="time" v-else :placeholder="three" />
     </div>
     <div>
@@ -69,7 +62,12 @@ export default {
       default: "请选择时间范围",
     },
   },
-  mmethods: {},
+  mmethods: {
+    confirm(){
+      // this.$emit("")
+      console.log("sss")
+    }
+  },
 };
 </script>
 <style scoped lang="less">

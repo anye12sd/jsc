@@ -23,7 +23,7 @@
             <img :src="datapreview" alt="图片资源缺失" /> <span>数据预览</span>
           </p>
           <p>
-            <img :src="dataexport" alt="图片资源缺失" /> <span>数据导出</span>
+            <img :src="dataexport" alt="图片资源缺失" @click="expo(k.id)" /> <span>数据导出</span>
           </p>
           <p @click="cancelsub(k)" :class="k.type==0?'blue':'gray'"><img :src="subsc" alt="图片资源缺失" /> <span>{{k.type==0?"取消订阅":"已取消"}}</span></p>
         </div>
@@ -48,7 +48,7 @@ import searchdemo from "@/components/searchdemo.vue";
 import datapreview from "@/assets/listlogo/datapreview.png";
 import dataexport from "@/assets/listlogo/dataexport.png";
 import subsc from "@/assets/listlogo/subscribe.png";
-import { appuserlist,dele } from "@/api/list.js";
+import { appuserlist,dele,appsql } from "@/api/list.js";
 
 export default {
   name: "modelDownload",
@@ -114,6 +114,7 @@ export default {
     };
   },
   mounted() {
+    
     appuserlist(1).then((res) => {
       // console.log(res);
       this.list = res.data.data.list;
@@ -121,6 +122,11 @@ export default {
     });
   },
   methods: {
+    expo(id){
+        appsql(id).then(res=>{
+          console.log(res)
+        })
+    },
     cancelsub(k){
       dele(k.id).then(res=>{
         console.log(res)

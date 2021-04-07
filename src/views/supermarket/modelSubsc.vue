@@ -13,15 +13,20 @@
         <div class="company">所属单位</div>
         <div class="actions">操作</div>
       </div>
-      <div v-if="list.length == 0" style="text-align: center; height:50px;line-height:50px;color:gray">暂无数据</div>
+      <div
+        v-if="list.length == 0"
+        style="text-align: center; height: 50px; line-height: 50px; color: gray"
+      >
+        暂无数据
+      </div>
       <div v-for="(k, index) in list" :key="index" class="line">
         <div class="name">{{ k.modulename }}</div>
         <div class="type">{{ k.module_type }}</div>
         <div class="company">{{ k.branch_id }}</div>
         <div class="actions">
-          <p :class="k.type==0?'blue':'gray'" @click="gosubscribe(k)">
+          <p :class="k.type == 0 ? 'blue' : 'gray'" @click="gosubscribe(k)">
             <img :src="subsc" alt="图片资源缺失" />
-            <span>{{ k.type == 0 ? "订阅" : "待审批" }}</span>
+            <span>{{ k.type == 0 ? "订阅" : "已订阅" }}</span>
           </p>
         </div>
       </div>
@@ -43,8 +48,8 @@
 <script>
 import searchdemo from "@/components/searchdemo.vue";
 import subsc from "@/assets/listlogo/subscribe.png";
-import { appuser,demandadd } from "@/api/list.js";
-
+import { appuser, demandadd } from "@/api/list.js";
+import { mapState } from "vuex";
 export default {
   name: "modelSubsc",
   data() {
@@ -52,6 +57,7 @@ export default {
       subsc,
       currentPage: 1,
       total: 0,
+      status: {},
       list: [
         {
           name: "招商引资",
@@ -116,17 +122,25 @@ export default {
   components: {
     searchdemo,
   },
+  computed: {
+    ...mapState("config", ["identity"]),
+  },
   methods: {
-    gosubscribe(k){
-      demandadd({
-        demand_id:k.id,
-        type:2
-      }).then(res=>{
-        console.log(res)
-        if(res.data.status == 200) {
-          k.type = res.data.data.type
-        }
-      })
+    gosubscribe(k) {
+      // 普通用户
+      if (this.identity == 3) {
+        demandadd({
+          demand_id: k.id,
+          type: 2,
+          demand_name: k.modulename,
+          branch_id:k.branch_id
+        }).then((res) => {
+          console.log(res);
+          if (res.data.status == 200) {
+            k.type = res.data.data.type;
+          }
+        });
+      }
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
@@ -184,10 +198,10 @@ export default {
           }
         }
       }
-      .actions>.blue{
+      .actions > .blue {
         color: #017cf8;
       }
-      .actions>.gray{
+      .actions > .gray {
         color: gray;
       }
       // .actions > p:nth-of-type(1) {

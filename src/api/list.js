@@ -71,10 +71,10 @@ export function introduce(id){
     })
 }
 //单位管理员
-export function introducecurdlist(){
+export function introducecurdlist(page){
     return request({
         method:"get",
-        url:"/introduce/curd/list"
+        url:"/introduce/curd/list?page="+page
     })
 }
 
@@ -87,3 +87,37 @@ export function introducedel(){
     })
 }
 
+export function demandlist(str){
+    return request({
+        method:"get",
+        url:"/demand/list?"+str
+    })
+}
+
+export function demandstatus(str){
+    return request({
+        method:"get",
+        url:"/demand/status?"+str
+    })
+}
+
+export function appsql(str){
+    return request({
+        method:"get",
+        url:"/app/sql?id="+str
+    })
+}
+
+export function appload(str){
+    return request({
+        method:"get",
+        url:"/app/load?"+str
+    })
+}
+
+export function appbranch(){
+    return request({
+        method:"get",
+        url:"/app/branch"
+    })
+}

@@ -54,12 +54,13 @@
             </el-option>
           </el-select>
         </div>
+        <div class="tip">请勿查询数据超过20000条，防止程序执行超时，无法得到结果</div>
         <div>
           <span class="top">脚本内容</span>
           <textarea cols="70" rows="14" v-model="content"></textarea>
         </div>
         <div class="actions">
-          <span class="confirm" @click="goPreview">数据预览</span>
+          <!-- <span class="confirm" @click="goPreview">数据预览</span> -->
           <span class="confirm">确定</span>
           <span class="cancel" @click="cancel">取消</span>
         </div>
@@ -291,6 +292,7 @@ export default {
       border: 1px solid #409eff;
     }
   }
+  
   .main > div {
     padding-left: 150px;
     margin-top: 20px;
@@ -300,6 +302,12 @@ export default {
     .top {
       vertical-align: top;
     }
+  }
+  .main>.tip{
+    text-align: center;
+    width: 100%;
+    color: gray;
+    padding: 0;
   }
   .main > .actions {
     padding: 0;
@@ -333,5 +341,6 @@ export default {
       cursor: pointer;
     }
   }
+  
 }
 </style>

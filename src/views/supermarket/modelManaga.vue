@@ -17,9 +17,9 @@
         <div :title="k.branch_id">{{ k.branch_id }} </div>
         <div :title="k.update_time">{{ k.update_time }} </div>
         <div class="actions">
-          <p><img :src="change" alt="图片资源缺失" /> <span>上架</span></p>
+          <p @click="goup(k.id)" v-if="k.load == 2 || k.load == 3"><img :src="change" alt="图片资源缺失" /> <span>上架</span></p>
           <p><img :src="off" alt="图片资源缺失" /> <span>修改</span></p>
-          <p><img :src="puton" alt="图片资源缺失" /> <span>下架</span></p>
+          <p @click="godown(k.id)" v-if="k.load == 1 || k.load == 3"><img :src="puton" alt="图片资源缺失" /> <span>下架</span></p>
         </div>
       </div>
     </div>
@@ -38,17 +38,16 @@
 </template>
 
 <script>
-import ll from "./data.json";
 import change from "@/assets/listlogo/channge.png";
 import off from "@/assets/listlogo/off.png";
 import puton from "@/assets/listlogo/puton.png";
 import searchdemo from "@/components/searchdemo.vue";
-import { getlist } from "@/api/list.js";
+import { getlist,appload } from "@/api/list.js";
 export default {
   name: "modelManaga",
   data() {
     return {
-      list: ll,
+      list: [],
       year:0,
       change,
       off,
@@ -69,6 +68,16 @@ export default {
     searchdemo,
   },
   methods: {
+    goup(id){
+      appload("load=1&id="+id).then(res=>{
+        console.log(res)
+      })
+    },
+    godown(id){
+      appload("load=2&id="+id).then(res=>{
+        console.log(res)
+      })
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },

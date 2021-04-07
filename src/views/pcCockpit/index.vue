@@ -121,6 +121,7 @@ export default {
   border-radius: 4px;
   padding: 20px 30px;
   box-sizing: border-box;
+  position: relative;
   .tit {
     font-family: MicrosoftYaHei-Bold;
     font-size: 16px;

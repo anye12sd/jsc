@@ -9,17 +9,22 @@
     <div class="add" @click="addNew">新增需求</div>
     <div class="list">
       <div class="line topline">
-        <div class="num">需求编号</div>
-        <div class="name">需求名称</div>
-        <div class="company">需求单位</div>
-        <div class="describe">需求描述</div>
+        <div class="num">序号</div>
+        <div class="name">流程名称</div>
+        <div class="time">处理时间</div>
+        <div class="status">状态</div>
       </div>
-      <div v-if="list.length == 0" style="text-align: center; height:50px;line-height:50px;color:gray">暂无数据</div>
+      <div
+        v-if="list.length == 0"
+        style="text-align: center; height: 50px; line-height: 50px; color: gray"
+      >
+        暂无数据
+      </div>
       <div v-for="(k, index) in list" :key="index" class="line">
-        <div class="num">{{ index }}</div>
-        <div class="name" :title="k.name">{{ k.name }}</div>
-        <div class="company" :title="k.company">{{ k.company }}</div>
-        <div class="describe" :title="k.describe">{{ k.describe }}</div>
+        <div class="num">{{ k.id }}</div>
+        <div class="name" :title="k.demand_name">{{ k.demand_name }}</div>
+        <div class="time" :title="k.create_time">{{ k.create_time }}</div>
+        <div class="status" :title="k.tit">{{ st[k.status - 1] }}</div>
       </div>
     </div>
     <el-pagination
@@ -29,7 +34,7 @@
       :current-page.sync="currentPage"
       :page-size="11"
       layout="total, prev, pager, next, jumper"
-      :total="1000"
+      :total="total"
       class="pagination"
     >
     </el-pagination>
@@ -47,8 +52,8 @@
             <el-option
               v-for="item in options"
               :key="item.id"
-              :label="item.label"
-              :value="item.value"
+              :label="item.branchname"
+              :value="item.id"
             >
             </el-option>
           </el-select>
@@ -64,7 +69,7 @@
         </div>
         <div class="actions">
           <div class="cancel" @click="cancel">取消</div>
-          <div class="confirm">确定</div>
+          <div class="confirm" @click="confirm">确定</div>
         </div>
       </div>
     </div>
@@ -74,106 +79,73 @@
 <script>
 // 新增需求
 import searchdemo from "@/components/searchdemo.vue";
-import {demanduser} from "@/api/managa.js"
+import { demanduser } from "@/api/managa.js";
+import { demandlist, appbranch, demandadd } from "@/api/list.js";
 export default {
   name: "addNewDemand",
   data() {
     return {
       showWrite: false,
       currentPage: 1,
+      total: 1,
+      st: ["通过", "驳回", "无状态", "单位分配", "开发中"],
       form: {
         demandName: null,
         company: null,
         describe: null,
       },
       options: [],
-      list: [
-        {
-          num: 1,
-          name: "XXX需求开发模型",
-          company: "委办局A",
-          describe: "开发XXXXXXXXXX",
-          actionPeople: null,
-        },
-        {
-          num: 1,
-          name: "XXX需求开发模型",
-          company: "委办局A",
-          describe: "开发XXXXXXXXXX",
-          actionPeople: null,
-        },
-        {
-          num: 1,
-          name: "XXX需求开发模型",
-          company: "委办局A",
-          describe: "开发XXXXXXXXXX",
-          actionPeople: null,
-        },
-        {
-          num: 1,
-          name: "XXX需求开发模型",
-          company: "委办局A",
-          describe: "开发XXXXXXXXXX",
-          actionPeople: null,
-        },
-        {
-          num: 1,
-          name: "XXX需求开发模型",
-          company: "委办局A",
-          describe: "开发XXXXXXXXXX",
-          actionPeople: null,
-        },
-        {
-          num: 1,
-          name: "XXX需求开发模型",
-          company: "委办局A",
-          describe: "开发XXXXXXXXXX",
-          actionPeople: null,
-        },
-        {
-          num: 1,
-          name: "XXX需求开发模型",
-          company: "委办局A",
-          describe: "开发XXXXXXXXXX",
-          actionPeople: null,
-        },
-        {
-          num: 1,
-          name: "XXX需求开发模型",
-          company: "委办局A",
-          describe: "开发XXXXXXXXXX",
-          actionPeople: null,
-        },
-        {
-          num: 1,
-          name: "XXX需求开发模型",
-          company: "委办局A",
-          describe: "开发XXXXXXXXXX",
-          actionPeople: null,
-        },
-        {
-          num: 1,
-          name: "XXX需求开发模型",
-          company: "委办局A",
-          describe: "开发XXXXXXXXXX",
-          actionPeople: null,
-        },
-      ],
+      list: [],
     };
   },
   mounted() {
-    
+    this.getdata();
   },
   components: {
     searchdemo,
   },
   methods: {
-    addNew(){
+    confirm() {
+      if (this.form.demandName.length < 4) {
+        this.$message({
+          message: "需求名称长度不能小于4",
+          type: "warning",
+        });
+        return;
+      }
+      demandadd({
+        demand_name: this.form.demandName,
+        branch_id: this.form.company,
+        demand_describe:this.form.describe,
+        type: 3,
+        status: 3
+      }).then((res) => {
+        console.log(res);
+        if (res.data.status == 200) {
+          this.name = "";
+          this.$message({
+            message: "添加成功",
+            type: "success",
+          });
+          this.showWrite = false;
+        }
+      });
+    },
+    getdata() {
+      demandlist("page=1&type=1").then((res) => {
+        console.log("我发起的", res);
+        if (res.data.status == 200) {
+          this.total = res.data.data.count;
+          this.list = res.data.data.list;
+        }
+      });
+    },
+    addNew() {
       this.showWrite = true;
-      demanduser().then(res=>{
-        console.log(res)
-        this.options = res.data.data
-      })
+      appbranch().then((res) => {
+        console.log("单位", res);
+        this.options = res.data.data;
+      });
     },
     cancel() {
       this.form = {
@@ -188,6 +160,12 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+      demandlist("type=3&page=" + val).then((res) => {
+        if (res.data.status == 200) {
+          this.total = res.data.data.count;
+          this.list = res.data.data.list;
+        }
+      });
     },
   },
 };
@@ -320,7 +298,7 @@ export default {
         vertical-align: top;
       }
       .el-select {
-       width: 500px;
+        width: 500px;
       }
       label {
         margin-right: 10px;

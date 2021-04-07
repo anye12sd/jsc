@@ -11,15 +11,20 @@
         <div class="num">需求编号</div>
         <div class="name">需求名称</div>
         <div class="company">需求单位</div>
-        <div class="describe">需求描述</div>
+        <div class="status">状态</div>
         <div class="actions">操作</div>
       </div>
-      <div v-if="list.length == 0" style="text-align: center; height:50px;line-height:50px;color:gray">暂无数据</div>
+      <div
+        v-if="list.length == 0"
+        style="text-align: center; height: 50px; line-height: 50px; color: gray"
+      >
+        暂无数据
+      </div>
       <div v-for="(k, index) in list" :key="index" class="line">
         <div class="num">{{ index }}</div>
-        <div class="name" :title="k.name">{{ k.name }}</div>
-        <div class="company" :title="k.company">{{ k.company }}</div>
-        <div class="describe" :title="k.describe">{{ k.describe }}</div>
+        <div class="name" :title="k.demand_name">{{ k.demand_name }}</div>
+        <div class="company" :title="k.branch_id">{{ k.branch_id }}</div>
+        <div class="status" :title="st[k.status - 1]">{{ st[k.status - 1] }}</div>
         <div class="actions">
           <span @click="selectPerson(index)">{{
             k.actionPeople == null ? "选择开发人员" : k.actionPeople
@@ -64,6 +69,7 @@
 <script>
 // 需求处理
 import searchdemo from "@/components/searchdemo.vue";
+import { demandlist } from "@/api/list.js";
 export default {
   name: "demandHandle",
   data() {
@@ -73,91 +79,38 @@ export default {
       showtip2: false,
       activeNum: -1,
       waitconfirmperson: null,
-      list: [
-        {
-          num: 1,
-          name: "XXX需求开发模型",
-          company: "委办局A",
-          describe: "开发XXXXXXXXXX",
-          actionPeople: null,
-        },
-        {
-          num: 1,
-          name: "XXX需求开发模型",
-          company: "委办局A",
-          describe: "开发XXXXXXXXXX",
-          actionPeople: null,
-        },
-        {
-          num: 1,
-          name: "XXX需求开发模型",
-          company: "委办局A",
-          describe: "开发XXXXXXXXXX",
-          actionPeople: null,
-        },
-        {
-          num: 1,
-          name: "XXX需求开发模型",
-          company: "委办局A",
-          describe: "开发XXXXXXXXXX",
-          actionPeople: null,
-        },
-        {
-          num: 1,
-          name: "XXX需求开发模型",
-          company: "委办局A",
-          describe: "开发XXXXXXXXXX",
-          actionPeople: null,
-        },
-        {
-          num: 1,
-          name: "XXX需求开发模型",
-          company: "委办局A",
-          describe: "开发XXXXXXXXXX",
-          actionPeople: null,
-        },
-        {
-          num: 1,
-          name: "XXX需求开发模型",
-          company: "委办局A",
-          describe: "开发XXXXXXXXXX",
-          actionPeople: null,
-        },
-        {
-          num: 1,
-          name: "XXX需求开发模型",
-          company: "委办局A",
-          describe: "开发XXXXXXXXXX",
-          actionPeople: null,
-        },
-        {
-          num: 1,
-          name: "XXX需求开发模型",
-          company: "委办局A",
-          describe: "开发XXXXXXXXXX",
-          actionPeople: null,
-        },
-        {
-          num: 1,
-          name: "XXX需求开发模型",
-          company: "委办局A",
-          describe: "开发XXXXXXXXXX",
-          actionPeople: null,
-        },
-      ],
+      st: ["通过", "驳回", "无状态", "单位分配", "开发中"],
+      list: [],
       actionPeoples: ["张三1212", "李四2222", "王五", "赵六222222"],
     };
   },
-  mounted() {},
+  mounted() {
+    this.getdata()
+  },
   components: {
     searchdemo,
   },
   methods: {
+    getdata() {
+      demandlist("page=1&type=3&status=4").then((res) => {
+        console.log("需求处理",res)
+        if (res.data.status == 200) {
+          this.total = res.data.data.count;
+          this.list = res.data.data.list;
+        }
+      });
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+      demandlist("status=4&type=3&page=" + val).then((res) => {
+        if (res.data.status == 200) {
+          this.total = res.data.data.count;
+          this.list = res.data.data.list;
+        }
+      });
     },
     selectPerson(idx) {
       this.showtip = true;

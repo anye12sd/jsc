@@ -70,6 +70,7 @@
         </div>
       </div>
     </div>
+    <div v-if="identity == 2" class="loadmore" @click="loadmore">{{nomore?"没有更多":"加载更多"}}</div>
     <modify
       v-if="showModify"
       @justHide="justHide"
@@ -106,6 +107,7 @@ export default {
       current: 0,
       showModify: false,
       waitchange: false,
+      nomore:false,
       content: [
       ],
     };
@@ -127,13 +129,28 @@ export default {
     },
   },
   methods: {
+    loadmore(){
+      if(this.nomore) return
+      introducecurdlist(this.page+1).then(res=>{
+        console.log(res)
+        if(res.data.status == 200) {
+          this.page++
+          if(res.data.data.list.length == 0) {
+            this.nomore = true
+            return
+          }
+          this.content = this.content.concat(res.data.data.list)
+        }
+
+      })
+    },
     init() {
       if (this.identity == 1 || this.identity == 2) {
         this.ismanaga = true;
       }
-      // 单位管理员
+      // 单位管理员introducecurdlist
       if (this.identity == 2) {
-        introducecurdlist().then((res) => {
+        introducecurdlist(1).then((res) => {
           console.log(res);
           this.content = res.data.data.list;
           this.content.forEach((it) => {
@@ -410,6 +427,14 @@ export default {
   }
   .item:nth-of-type(2n + 1) {
     background-color: #f7f9fb;
+  }
+  .loadmore{
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    cursor: pointer;
+    background-color: lightgray;
   }
 }
 </style>

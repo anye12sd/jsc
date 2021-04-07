@@ -20,6 +20,9 @@ export default {
     },
     //修改state
     mutations: {
+        setidentity(state, payload){
+            state.identity = payload
+        },
         setPath(state, payload) {
             state.currentRouterPath = payload
         },

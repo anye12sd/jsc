@@ -13,10 +13,13 @@
         <div class="actions">操作</div>
       </div>
       <div v-for="(k, index) in list" :key="index" class="line">
-        <div class="person">{{ k.branch_id }} </div>
-        <div class="pagename">{{ k.view_name }} </div>
+        <div class="person">{{ k.branch_id }}</div>
+        <div class="pagename">{{ k.view_name }}</div>
         <div class="actions">
-          <p :class="k.type==0?'blue':'gray'" @click="gosunscribe(k)"><img :src="subsc" alt="图片资源缺失" /> <span>{{k.type==0?"订阅":"待审批"}}</span></p>
+          <p :class="k.type == 0 ? 'blue' : 'gray'" @click="gosunscribe(k)">
+            <img :src="subsc" alt="图片资源缺失" />
+            <span>{{ k.type == 0 ? "订阅" : "已订阅" }}</span>
+          </p>
         </div>
       </div>
     </div>
@@ -37,8 +40,8 @@
 // 页面订阅
 import searchdemo from "@/components/searchdemo.vue";
 import subsc from "@/assets/listlogo/subscribe.png";
-import { getsubscribe,demandadd } from "@/api/list.js";
-
+import { getsubscribe, demandadd } from "@/api/list.js";
+import { mapState } from "vuex";
 export default {
   name: "subscribe",
   data() {
@@ -52,25 +55,33 @@ export default {
   components: {
     searchdemo,
   },
+  computed: {
+    ...mapState("config", ["identity"]),
+  },
   mounted() {
     getsubscribe(1).then((res) => {
-      console.log(res)
+      console.log(res);
       this.list = res.data.data.list;
-      this.total - res.data.data.count;
+      this.total = res.data.data.count;
+      // console.log(this.total)
     });
   },
   methods: {
-    gosunscribe(k){
+    gosunscribe(k) {
       // =0才能订阅
-      if(k.type != 0) return
-      demandadd({
-        demand_id:k.id,
-        type:1
-      }).then(res=>{
-        if(res.status == 200) {
-          k.type = 1
-        }
-      })
+      if (k.type != 0) return;
+      if (this.identity == 3) {
+        demandadd({
+          demand_id: k.id,
+          type: 1,
+          demand_name: k.view_name,
+          branch_id: k.branch_id,
+        }).then((res) => {
+          if (res.status == 200) {
+            k.type = 1;
+          }
+        });
+      }
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
@@ -131,10 +142,10 @@ export default {
           }
         }
       }
-      .actions>.blue{
+      .actions > .blue {
         color: #017cf8;
       }
-      .actions>.gray{
+      .actions > .gray {
         color: gray;
       }
     }

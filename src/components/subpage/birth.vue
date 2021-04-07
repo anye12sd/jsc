@@ -8,7 +8,7 @@
       </div>
       <div>
         <div>较上年增长</div>
-        <div class="bg">{{ yezt_cs ? yezt_cs.sntb : "" }}</div>
+        <div v-if="yezt_cs" :class="yezt_cs.sntb.slice(0, 1) == '+' ? 'more' : 'reduce'">{{ yezt_cs ? yezt_cs.sntb : "" }}</div>
       </div>
     </div>
     <div id="udvgrj"></div>
@@ -39,7 +39,7 @@ export default {
         .then((res) => {
           let optionsdata = res.data;
           if (optionsdata.code == 200) {
-            console.log(optionsdata);
+            // console.log(optionsdata);
             this.yezt_cs = optionsdata.data[0][0];
             // console
             this.yezt_cs2 = optionsdata.data[1].reverse();
@@ -245,8 +245,13 @@ export default {
       margin-top: 5px;
   }
   .current > div:nth-of-type(2) {
-    .bg {
+    .more {
       background-image: url("../../assets/subpage/xj.png");
+      background-repeat: no-repeat;
+      background-position: center center;
+    }
+    .reduce{
+      background-image: url("../../assets/subpage/ss.png");
       background-repeat: no-repeat;
       background-position: center center;
     }
