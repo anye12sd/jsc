@@ -17,9 +17,9 @@
         <div :title="k.branch_id">{{ k.branch_id }} </div>
         <div :title="k.update_time">{{ k.update_time }} </div>
         <div class="actions">
-          <p @click="goup(k.id)" v-if="k.load == 2 || k.load == 3"><img :src="change" alt="图片资源缺失" /> <span>上架</span></p>
+          <p @click="goup(k.id,index)" v-if="k.load == 2 || k.load == 3"><img :src="change" alt="图片资源缺失" /> <span>上架</span></p>
           <p><img :src="off" alt="图片资源缺失" /> <span>修改</span></p>
-          <p @click="godown(k.id)" v-if="k.load == 1 || k.load == 3"><img :src="puton" alt="图片资源缺失" /> <span>下架</span></p>
+          <p @click="godown(k.id,index)" v-if="k.load == 1 || k.load == 3"><img :src="puton" alt="图片资源缺失" /> <span>下架</span></p>
         </div>
       </div>
     </div>
@@ -68,14 +68,20 @@ export default {
     searchdemo,
   },
   methods: {
-    goup(id){
+    goup(id,index){
       appload("load=1&id="+id).then(res=>{
-        console.log(res)
+        // console.log(res)
+        if(res.data.status == 200) {
+          this.list[index].load = res.data.data.load
+        }
       })
     },
-    godown(id){
+    godown(id,index){
       appload("load=2&id="+id).then(res=>{
-        console.log(res)
+        // console.log(res)
+        if(res.data.status == 200) {
+          this.list[index].load = res.data.data.load
+        }
       })
     },
     handleSizeChange(val) {

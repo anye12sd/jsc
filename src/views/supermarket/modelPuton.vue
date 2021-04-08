@@ -55,7 +55,7 @@ export default {
     console.log("www");
     demanduser().then((res) => {
       this.options = res.data.data;
-      console.log(this.options);
+      // console.log(this.options);
     });
   },
   methods: {

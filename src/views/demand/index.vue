@@ -60,7 +60,7 @@ export default {
     };
   },
   mounted() {
-    this.change();
+    // this.change();
   },
   methods: {
     chose(item) {
@@ -83,7 +83,23 @@ export default {
         this.usingOption[0].classname2 = "status01";
         // this.$store.commit("jurisdiction/setdemand",this.usingOption[0].routerpath.split("/")[2])
         // console.log("333333333",this[4],this.usingOption)
+      } else {
+        this.usingOption = [{
+          id: 2,
+          routerpath: "/demand/waitDemand",
+          name: "待办事项",
+          classname1: "status02",
+          classname2: "status01",
+        },
+        {
+          id: 3,
+          routerpath: "/demand/hasDoneDemand",
+          name: "已办事项",
+          classname1: "status12",
+          classname2: "status11",
+        }]
       }
+
     },
   },
   computed: {

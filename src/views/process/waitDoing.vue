@@ -7,8 +7,8 @@
       three="请输入流程名称"
     ></searchdemo>
     <div class="se">
-      <div class="go">批量审核通过</div>
-      <div class="back">批量申请驳回</div>
+      <div class="go" @click="manygoon">批量审核通过</div>
+      <div class="back" @click="manyrefuse">批量申请驳回</div>
     </div>
     <div class="list">
       <div class="line topline">
@@ -39,7 +39,6 @@
             alt="图标缺失"
             @click="chose(k)"
           />
-          <!-- <div :class="k.isSelect ? 'selected' : 'notselect'"></div> -->
         </div>
         <div class="num">{{ k.id }}</div>
         <div class="name" :name="k.name">{{ k.demand_name }}</div>
@@ -74,7 +73,9 @@ import adopt from "@/assets/listlogo/adopt.png";
 import reject from "@/assets/listlogo/reject.png";
 import checked from "@/assets/listlogo/checked.png";
 import notcheck from "@/assets/listlogo/notcheck.png";
-import { demandlist, demandstatus } from "@/api/list.js";
+import { demandlist, demandstatus, demandstatusall } from "@/api/list.js";
+import {mapState} from "vuex"
+
 export default {
   name: "waitDoing",
   data() {
@@ -99,13 +100,16 @@ export default {
   },
   watch: {
     selectedNumber(newValue, oldValue) {
-      if (newValue == 10) {
+      if (newValue == this.list.length) {
         this.isAll = true;
       }
-      if (newValue < 10) {
+      if (newValue < this.list.length) {
         this.isAll = false;
       }
     },
+  },
+  computed:{
+    ...mapState("config", ["identity"]),
   },
   methods: {
     goon(id, index) {
@@ -121,6 +125,71 @@ export default {
         console.log(res);
         if (res.data.status == 200) {
           this.list.splice(index, 1);
+        }
+      });
+    },
+    manygoon() {
+      let ids = "";
+      let status = 1;
+      this.list.forEach((item, index) => {
+        if (item.isSelect) {
+          ids += item.id + ",";
+        }
+      });
+      ids = ids.slice(0, ids.length - 1);
+      console.log(ids);
+      if(this.identity == 1) {
+        status = 4
+      }
+      demandstatusall("status="+status+"&ids=" + ids).then((res) => {
+        console.log(res);
+        if (res.data.data == true) {
+          this.$message({
+            message: "审核成功",
+            type: "success",
+          });
+          let arr = []
+          this.list.forEach((item, index) => {
+            if (!item.isSelect) {
+              arr.push(item)
+            }
+          });
+          this.list = arr;
+        } else {
+          this.$message({
+            message: "审核失败",
+            type: "success",
+          });
+        }
+      });
+    },
+    manyrefuse() {
+      let ids = "";
+      this.list.forEach((item, index) => {
+        if (item.isSelect) {
+          ids += item.id + ",";
+        }
+      });
+      ids = ids.slice(0, ids.length - 1);
+      demandstatusall("status=2&ids=" + ids).then((res) => {
+        console.log(res);
+        if (res.data.data == true) {
+          this.$message({
+            message: "驳回成功",
+            type: "success",
+          });
+          let arr = []
+          this.list.forEach((item, index) => {
+            if (!item.isSelect) {
+              arr.push(item)
+            }
+          });
+          this.list = arr;
+        } else {
+          this.$message({
+            message: "驳回失败",
+            type: "success",
+          });
         }
       });
     },
@@ -148,8 +217,10 @@ export default {
         });
         this.selectedNumber = 10;
       }
+      this.$forceUpdate();
     },
     chose(item) {
+      console.log(item);
       if (item.isSelect) {
         item.isSelect = false;
         this.selectedNumber--;
@@ -157,6 +228,7 @@ export default {
         item.isSelect = true;
         this.selectedNumber++;
       }
+      this.$forceUpdate();
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
@@ -167,6 +239,7 @@ export default {
         if (res.data.status == 200) {
           this.total = res.data.data.count;
           this.list = res.data.data.list;
+          this.selectedNumber = 0;
         }
       });
     },

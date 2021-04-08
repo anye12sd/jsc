@@ -24,10 +24,12 @@
         <div class="num">{{ index }}</div>
         <div class="name" :title="k.demand_name">{{ k.demand_name }}</div>
         <div class="company" :title="k.branch_id">{{ k.branch_id }}</div>
-        <div class="status" :title="st[k.status - 1]">{{ st[k.status - 1] }}</div>
+        <div class="status" :title="st[k.status - 1]">
+          {{ st[k.status - 1] }}
+        </div>
         <div class="actions">
           <span @click="selectPerson(index)">{{
-            k.actionPeople == null ? "选择开发人员" : k.actionPeople
+            k.status == 5 ? "已选择" : "选择开发人员"
           }}</span>
         </div>
       </div>
@@ -39,7 +41,7 @@
       :current-page.sync="currentPage"
       :page-size="11"
       layout="total, prev, pager, next, jumper"
-      :total="1000"
+      :total="total"
       class="pagination"
     >
     </el-pagination>
@@ -50,9 +52,9 @@
           <span>开发人员</span>
           <span>操作</span>
         </div>
-        <div v-for="p in actionPeoples" :key="p" class="each">
-          <span>{{ p }}</span>
-          <span @click="confirmChose(p)">选择</span>
+        <div v-for="(p, index) in actionPeoples" :key="p.id" class="each">
+          <span>{{ p.nickname }}</span>
+          <span @click="confirmChose(index)">选择</span>
         </div>
       </div>
     </div>
@@ -69,7 +71,8 @@
 <script>
 // 需求处理
 import searchdemo from "@/components/searchdemo.vue";
-import { demandlist } from "@/api/list.js";
+import { demandlist, demandstatus } from "@/api/list.js";
+import { demanduser } from "@/api/managa.js";
 export default {
   name: "demandHandle",
   data() {
@@ -78,14 +81,15 @@ export default {
       showtip: false,
       showtip2: false,
       activeNum: -1,
-      waitconfirmperson: null,
+      total:1,
       st: ["通过", "驳回", "无状态", "单位分配", "开发中"],
       list: [],
-      actionPeoples: ["张三1212", "李四2222", "王五", "赵六222222"],
+      actionPeoples: [],
+      waitchosePerson: 0,
     };
   },
   mounted() {
-    this.getdata()
+    this.getdata();
   },
   components: {
     searchdemo,
@@ -93,7 +97,7 @@ export default {
   methods: {
     getdata() {
       demandlist("page=1&type=3&status=4").then((res) => {
-        console.log("需求处理",res)
+        console.log("需求处理", res);
         if (res.data.status == 200) {
           this.total = res.data.data.count;
           this.list = res.data.data.list;
@@ -113,23 +117,55 @@ export default {
       });
     },
     selectPerson(idx) {
+      if (this.list[idx].status == 5) {
+        this.$message({
+          message: "你已选择开发人员",
+          type: "success",
+        });
+        return;
+      }
       this.showtip = true;
       this.activeNum = idx;
+      demanduser().then((res) => {
+        console.log(res);
+        this.actionPeoples = res.data.data;
+      });
       // item.actionPeople = "张三"
     },
     justhide() {
       this.showtip = false;
       this.activeNum = -1;
     },
-    confirmChose(p) {
-      this.waitconfirmperson = p;
+    confirmChose(index) {
       this.showtip2 = true;
+      this.waitchosePerson = index;
     },
     confirm() {
-      this.list[this.activeNum].actionPeople = this.waitconfirmperson;
-      this.activeNum = -1;
-      this.showtip = false;
-      this.showtip2 = false;
+      // console.log(this.waitchosePerson);
+      demandstatus(
+        `id=${this.list[this.activeNum].id}&status=5&execute=${
+          this.actionPeoples[this.waitchosePerson].user_id
+        }`
+      ).then((res) => {
+        // console.log(res);
+        if (res.data.status == 200) {
+          this.list[this.activeNum].status = res.data.data.status;
+          // console.log(this.list[this.activeNum]);
+          this.activeNum = -1;
+          this.waitchosePerson = -1;
+          this.$message({
+            message: "选择成功",
+            type: "success",
+          });
+        } else {
+          this.$message({
+            message: "选择失败",
+            type: "warning",
+          });
+        }
+        this.showtip = false;
+        this.showtip2 = false;
+      });
     },
     cancel() {
       this.showtip2 = false;

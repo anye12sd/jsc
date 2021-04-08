@@ -64,6 +64,7 @@ export default {
       if(this.identity == 3) {
         this.usingOption = [this.options[1],this.options[2]]
       }
+      console.log(this.identity)
       // 单位管理员
       if(this.identity == 2) {
         this.usingOption = this.options

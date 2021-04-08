@@ -101,6 +101,13 @@ export function demandstatus(str){
     })
 }
 
+export function demandstatusall(str){
+    return request({
+        method:"get",
+        url:"/demand/status/all?"+str
+    })
+}
+
 export function appsql(str){
     return request({
         method:"get",
@@ -119,5 +126,56 @@ export function appbranch(){
     return request({
         method:"get",
         url:"/app/branch"
+    })
+}
+
+export function userList(page){
+    return request({
+        method:"get",
+        url:"/user/list?page="+page
+    })
+}
+
+export function user(id){
+    return request({
+        method:"get",
+        url:"/user?id="+id
+    })
+}
+
+export function userEdit(data){
+    return request({
+        method:"post",
+        url:"/user/edit",
+        data
+    })
+}
+
+export function userRloe(){
+    return request({
+        method:"get",
+        url:"/user/role"
+    })
+}
+
+export function userroleedit (str) {
+    return request({
+        method:"get",
+        url:"/user/role/edit"+str
+    })
+}
+
+export function demandexecute (str) {
+    return request({
+        method:"get",
+        url:"/demand/execute?"+str
+    })
+}
+
+export function appAdd(data) {
+    return request({
+        method:"post",
+        url:"/app/add",
+        data
     })
 }
