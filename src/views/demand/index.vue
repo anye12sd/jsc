@@ -60,7 +60,7 @@ export default {
     };
   },
   mounted() {
-    // this.change();
+    this.change();
   },
   methods: {
     chose(item) {
@@ -81,6 +81,7 @@ export default {
         });
         this.usingOption[0].classname1 = "status02";
         this.usingOption[0].classname2 = "status01";
+        this.current = this.usingOption[0].id
         // this.$store.commit("jurisdiction/setdemand",this.usingOption[0].routerpath.split("/")[2])
         // console.log("333333333",this[4],this.usingOption)
       } else {

@@ -1,41 +1,87 @@
 <template>
   <div id="app">
-      <topbar></topbar>
-      <router-view></router-view>
-    </div>
+    <topbar v-if="isLogin"></topbar>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
-import topbar from '@/components/topbar.vue';
+import topbar from "@/components/topbar.vue";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-
+import { tologin, getMenu } from "@/api/user.js";
 export default {
-  name:"app",
-  data(){
-    return{
-
-    }
+  name: "app",
+  data() {
+    return {
+      num:0
+    };
   },
-  mounted(){
-    // console.log(this.isLogin)
-    
-    // bbbb().then(res=>{
-    //   console.log("bbbb",res)
-    // })
-    // cccc().then(res=>{
-    //   console.log("cccc",res)
-    // })
-    // dddd().then(res=>{
-    //   console.log("dddd",res)
-    // })
+  mounted() {
+    this.init();
+  },
+  methods: {
+    init() {
+      let access_token = location.search.split("=")[1];
+      if (access_token) {
+        tologin().then((res) => {
+          console.log("user", res);
+          if (res.data.status == 200) {
+            this.$store.commit("config/setUsetInfo", res.data.data);
+            this.$store.commit("config/setidentity",res.data.data.role_id)
+          } else {
+            this.$message({
+              message: "获取信息失败请重新登录",
+              type: "warning",
+            });
+            this.$store.commit("config/setLogin", false);
+          }
+          // this.$store.commit("config/setLogin",true)
+        });
+        this.togetmenu()
+        // console.log(this.isLogin);
+      }
+    },
+    togetmenu() {
+      getMenu().then((res) => {
+        console.log("menu", res);
+        if (res.data.data == false) {
+          this.$store.commit("config/setLogin", false);
+          this.num++
+          if(this.num > 5) {
+            this.$message({
+              message: "获取菜单失败",
+              type: "warning",
+            });
+            return
+          }
+          this.togetmenu()
+          return;
+        }
+        this.$store.commit("config/settopbararr", res.data.data);
+        this.$store.commit("config/setLogin", true);
+      });
+    },
   },
   components: {
-    topbar
+    topbar,
   },
-  computed:{
-    ...mapState('config',['isLogin'])
-  }
-}
+  computed: {
+    ...mapState("config", ["isLogin"]),
+  },
+  watch: {
+    isLogin(newValue) {
+      if (newValue == false) {
+        // this.$router.push("/login");
+        if (process.env.NODE_ENV == "development") {
+          location.href = "http://localhost:8080";
+        }
+        if (process.env.NODE_ENV == "production") {
+          location.href = "http://10.21.197.237";
+        }
+      }
+    },
+  },
+};
 </script>
 
 
@@ -50,7 +96,6 @@ html {
   margin: 0;
   padding: 0;
 }
-
 </style>
 
 <style scoped lang="less">
@@ -61,13 +106,13 @@ html {
   // overflow: hidden;
   background-color: #f0f2f9;
 }
-@media screen and (max-height:720px) {
-  #app{
+@media screen and (max-height: 720px) {
+  #app {
     height: 1000px;
   }
 }
-@media screen and (max-width:1500px) {
-  #app{
+@media screen and (max-width: 1500px) {
+  #app {
     width: 1520px;
   }
 }

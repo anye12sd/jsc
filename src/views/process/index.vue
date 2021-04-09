@@ -52,10 +52,11 @@ export default {
   mounted() {
     // this.change()
     this.init()
-    console.log(this.usingOption)
+    // console.log(this.current)
   },
   methods: {
     init(){
+      // 这个页面固定格式
       // 系统管理员
       if(this.identity == 1) {
         this.usingOption = [this.options[0],this.options[1]]
@@ -64,12 +65,12 @@ export default {
       if(this.identity == 3) {
         this.usingOption = [this.options[1],this.options[2]]
       }
-      console.log(this.identity)
+      // console.log(this.identity)
       // 单位管理员
       if(this.identity == 2) {
         this.usingOption = this.options
       }
-      console.log(this.usingOption)
+      // console.log(this.usingOption)
       this.usingOption[0].classname1 = "status02"
       this.usingOption[0].classname2 = "status01"
     },
@@ -77,21 +78,22 @@ export default {
       this.current = item.id;
       this.$router.push(item.routerpath);
     },
-    change(){
-      if(this[5].items){
-        this.options.forEach(item=>{
-        this[5].items.forEach(p=>{
-          if(item.id == p.id) {
-            item.name = p.name
-            this.usingOption.push(item)
-          }
-        })
-      })
-      this.usingOption[0].classname1 = "status02";
-      this.usingOption[0].classname2 = "status01";
-      this.$store.commit("jurisdiction/setprocess",this.usingOption[0].routerpath.split("/")[2])
-      }
-    }
+    // change(){
+    //   if(this[5].items){
+    //     this.options.forEach(item=>{
+    //     this[5].items.forEach(p=>{
+    //       if(item.id == p.id) {
+    //         item.name = p.name
+    //         this.usingOption.push(item)
+    //       }
+    //     })
+    //   })
+    //   this.usingOption[0].classname1 = "status02";
+    //   this.usingOption[0].classname2 = "status01";
+    //   this.current = this.usingOption[0].id
+    //   this.$store.commit("jurisdiction/setprocess",this.usingOption[0].routerpath.split("/")[2])
+    //   }
+    // }
   },
   computed:{
     ...mapState("config",["currentRouterPath","identity"])

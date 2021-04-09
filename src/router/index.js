@@ -11,7 +11,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: "/pcCockpit",
+    redirect: "/login",
   },
   {
     path: "/login",
@@ -148,9 +148,9 @@ const routes = [
     // ]
   },
   {
-    path:"/sqlPreview",
+    path:"/sqlPreview/:id",
     name:"SqlPreview",
-    component:()=>import("../views/demand/sqlPreview")
+    component:()=>import("../components/sqlPreview")
   }
 
 ]

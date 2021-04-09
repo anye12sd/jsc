@@ -82,7 +82,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this.changeAble);
+    // console.log(this.changeAble);
     if (typeof FileReader === "undefined") {
       this.$message({
         message: "抱歉，你的浏览器不支持 FileReader，请使用现代浏览器操作！",
@@ -106,8 +106,8 @@ export default {
       console.log(file, fileList);
     },
     goup() {
-      console.log(this.$refs.upfile);
-      console.log(this);
+      // console.log(this.$refs.upfile);
+      // console.log(this);
       if (this.canUpimg) {
         this.$refs.upfile.click();
       }
@@ -165,7 +165,7 @@ export default {
           url: url + "/Introduce/edit",
           data: data,
         }).then((res) => {
-          console.log(res);
+          // console.log(res);
           if (res.data.status == 400) {
             this.$message({
               message: res.data.message,
@@ -196,7 +196,7 @@ export default {
           url: url + "/Introduce/add",
           data: data,
         }).then((res) => {
-          console.log(res);
+          // console.log(res);
           if (res.data.status == 400) {
             this.$message({
               message: res.data.message,

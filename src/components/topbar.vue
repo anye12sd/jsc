@@ -11,11 +11,11 @@
       <p>{{ p.name }}</p>
     </div>
     <div class="user">
-      <img src="" alt="暂无头像" />
+      <!-- <img src="" alt="暂无头像" /> -->
       <div class="right">
         <div>
-          <span class="userName">{{ userInfo.name }}</span>
-          <span class="identity">{{ userInfo.identity }}</span>
+          <span class="userName">{{ userInfo.userName }}</span>
+          <span class="identity">{{ identity[userInfo.role_id] }}</span>
         </div>
         <div class="time">{{ date1 }}&nbsp;&nbsp;{{ date2 }}</div>
       </div>
@@ -33,11 +33,13 @@ export default {
       date1: "2021-3-24",
       date2: "12:00",
       current: 0,
-      userInfo: {
-        name: "王晓明",
-        identity: "单位管理员",
-      },
       usingOption: [],
+      identity: {
+        1: "系统管理员",
+        2: "单位管理员",
+        3: "普通用户",
+        4: "模型开发人员",
+      },
       option: [
         {
           id: 1,
@@ -81,6 +83,9 @@ export default {
   components: {
     // HelloWorld
   },
+  computed:{
+    ...mapState('config',['isLogin',"topbararr","userInfo"])
+  },
   mounted() {
     let access_token = location.search.split("=")[1]
     if(access_token == "aaaa") {
@@ -100,26 +105,25 @@ export default {
   },
   methods: {
     init() {
-      getMenu().then((res) => {
-        console.log("aaaa", res);
-        let op = JSON.parse(JSON.stringify(res.data.data));
+        let op = JSON.parse(JSON.stringify(this.topbararr));
+        // console.log(op)
         op.forEach((item, index) => {
           if (item.id == 1) {
             // console.log("kkkkk", item);
-            this.$store.commit("config/setpcCockpit", res.data.data[index]);
+            this.$store.commit("config/setpcCockpit", op[index]);
           } else if (item.id == 2) {
-            this.$store.commit("config/setsupermarket", res.data.data[index]);
+            this.$store.commit("config/setsupermarket",op[index]);
             // this.$store.commit("jurisdiction/setsupermarket", res.data.data[index]);
           } else if (item.id == 3) {
-            this.$store.commit("config/setmodelIntroduce", res.data.data[index]);
+            this.$store.commit("config/setmodelIntroduce", op[index]);
           } else if (item.id == 4) {
-            this.$store.commit("config/setdemand", res.data.data[index]);
+            this.$store.commit("config/setdemand", op[index]);
           } else if (item.id == 5) {
-            this.$store.commit("config/setprocess", res.data.data[index]);
+            this.$store.commit("config/setprocess", op[index]);
           } else if (item.id == 6) {
             this.$store.commit(
               "config/setuserAuthorization",
-              res.data.data[index]
+              op[index]
             );
           }
           this.option.forEach((k) => {
@@ -130,8 +134,6 @@ export default {
           });
         });
         this.usingOption = op;
-        // this.$store.commit()
-      });
     },
     chose(index, path) {
       this.current = index;
@@ -159,13 +161,16 @@ export default {
       }
     },
     usingOption(){
+      // console.log("change")
       let flag = false;
       this.usingOption.forEach(item=>{
         if(location.hash.includes(item.path)) {
           flag = true
+          this.current = item.id
         }
       })
       if(flag) return
+      // console.log(this.usingOption)
       this.$router.push(this.usingOption[0].path)
       // if("/"+location.hash.split("/")[1] == this.usingOption[0].path) return
       // this.$router.push(this.usingOption[0].path)

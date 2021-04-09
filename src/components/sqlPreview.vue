@@ -26,81 +26,31 @@
 </template>
 
 <script>
+import { apppreview } from "@/api/list.js";
 export default {
   name: "sqlPrewiew",
   data() {
     return {
       currentPage: 1,
-      list: [
-        {
-          type: "待办",
-          tit: "热线投诉模型数据使用申请",
-          name: "模型数据开发",
-          time: "2021年01月29日 12:38:14",
-        },
-        {
-          type: "待办",
-          tit: "热线投诉模型数据使用申请",
-          name: "模型数据开发",
-          time: "2021年01月29日 12:38:14",
-        },
-        {
-          type: "待办",
-          tit: "热线投诉模型数据使用申请",
-          name: "模型数据开发",
-          time: "2021年01月29日 12:38:14",
-        },
-        {
-          type: "待办",
-          tit: "热线投诉模型数据使用申请",
-          name: "模型数据开发",
-          time: "2021年01月29日 12:38:14",
-        },
-        {
-          type: "待办",
-          tit: "热线投诉模型数据使用申请",
-          name: "模型数据开发",
-          time: "2021年01月29日 12:38:14",
-        },
-        {
-          type: "待办",
-          tit: "热线投诉模型数据使用申请",
-          name: "模型数据开发",
-          time: "2021年01月29日 12:38:14",
-        },
-        {
-          type: "待办",
-          tit: "热线投诉模型数据使用申请",
-          name: "模型数据开发",
-          time: "2021年01月29日 12:38:14",
-        },
-        {
-          type: "待办",
-          tit: "热线投诉模型数据使用申请",
-          name: "模型数据开发",
-          time: "2021年01月29日 12:38:14",
-        },
-        {
-          type: "待办",
-          tit: "热线投诉模型数据使用申请",
-          name: "模型数据开发",
-          time: "2021年01月29日 12:38:14",
-        },
-        {
-          type: "待办",
-          tit: "热线投诉模型数据使用申请",
-          name: "模型数据开发",
-          time: "2021年01月29日 12:38:14",
-        },
-      ],
+      list: [],
     };
   },
+  mounted(){
+    console.log(this.$route.params.id)
+    this.getdata()
+  },
   methods: {
+    getdata(){
+      apppreview(this.$route.params.id).then(res=>{
+        console.log(res)
+        this.list = res.data
+      })
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
     },
     back() {
       this.$router.go(-1);

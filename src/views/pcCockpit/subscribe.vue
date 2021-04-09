@@ -60,7 +60,7 @@ export default {
   },
   mounted() {
     getsubscribe(1).then((res) => {
-      console.log(res);
+      // console.log(res);
       this.list = res.data.data.list;
       this.total = res.data.data.count;
       // console.log(this.total)
@@ -84,10 +84,10 @@ export default {
       }
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
       getsubscribe(val).then((res) => {
         // console.log(res)
         this.list = res.data.data.list;

@@ -59,7 +59,7 @@ export default {
   mounted() {
     this.year = new Date().getFullYear();
     getlist(1).then((res) => {
-      console.log(res);
+      // console.log(res);
       this.list = res.data.data.list;
       this.total = res.data.data.count;
     });
@@ -85,10 +85,10 @@ export default {
       })
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
       getlist(val).then((res) => {
         this.list = res.data.data.list;
         this.total = res.data.data.count;

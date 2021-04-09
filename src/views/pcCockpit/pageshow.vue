@@ -54,25 +54,29 @@ export default {
           type: "four",
           componentName: "teacher",
         },
-        // 升学
+        // 学前
         {
           eleId: "five",
           type: "five",
           componentName: "further",
         },
+        // 升学
         {
           eleId: "six",
           type: "six",
           componentName: "learn",
         },
+        // 幼儿园预警
         {
           eleId: "seven",
           type: "seven",
           componentName:'kindGarden'
         },
+        // 就业
         {
           eleId: "eight",
           type: "eight",
+          componentName:"job"
         },
         {
           eleId: "ten",

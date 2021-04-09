@@ -5,6 +5,11 @@ export default {
         isLogin: false,
         access_token: null,
         identity:1,
+        userInfo:{
+            userName:"王",
+            role_id:3
+        },
+        topbararr:[],
         // PC驾驶舱
         1: [],
         // 应用成果超市
@@ -20,6 +25,15 @@ export default {
     },
     //修改state
     mutations: {
+        setLogin(state,payload){
+            state.isLogin = payload
+        },
+        setUsetInfo(state,payload){
+            state.userInfo = payload
+        },
+        settopbararr(state,payload){
+            state.topbararr = payload
+        },
         setidentity(state, payload){
             state.identity = payload
         },

@@ -62,7 +62,7 @@ export default {
   methods: {
     getdata(page){
       demandexecute("type=2&page="+page).then(res=>{
-        console.log(res)
+        // console.log(res)
         if(res.data.status == 200) {
           this.list = res.data.data.list
           this.total = res.data.data.count
@@ -73,7 +73,7 @@ export default {
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
     },
   },
 };

@@ -66,7 +66,7 @@ export default {
       })
         .then((res) => {
           let optionsdata = res.data;
-          console.log(optionsdata);
+          // console.log(optionsdata);
           if (optionsdata.code == 200) {
             this.sxdata = optionsdata.data[0][0];
             this.sxchart = optionsdata.data[1];

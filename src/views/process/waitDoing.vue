@@ -114,7 +114,7 @@ export default {
   methods: {
     goon(id, index) {
       demandstatus("status=1&id=" + id).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.status == 200) {
           this.list.splice(index, 1);
         }
@@ -122,7 +122,7 @@ export default {
     },
     refuse(id, index) {
       demandstatus("status=2&id=" + id).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.status == 200) {
           this.list.splice(index, 1);
         }
@@ -137,12 +137,12 @@ export default {
         }
       });
       ids = ids.slice(0, ids.length - 1);
-      console.log(ids);
+      // console.log(ids);
       if(this.identity == 1) {
         status = 4
       }
       demandstatusall("status="+status+"&ids=" + ids).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.data == true) {
           this.$message({
             message: "审核成功",
@@ -172,7 +172,7 @@ export default {
       });
       ids = ids.slice(0, ids.length - 1);
       demandstatusall("status=2&ids=" + ids).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.data == true) {
           this.$message({
             message: "驳回成功",
@@ -195,12 +195,12 @@ export default {
     },
     getdata() {
       demandlist("page=1&type=3").then((res) => {
-        console.log("待处理", res);
+        // console.log("待处理", res);
         if (res.data.status == 200) {
           this.total = res.data.data.count;
           this.list = res.data.data.list;
         }
-        console.log(this.total);
+        // console.log(this.total);
       });
     },
     choseAll() {
@@ -231,10 +231,10 @@ export default {
       this.$forceUpdate();
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
       demandlist("type=3&page=" + val).then((res) => {
         if (res.data.status == 200) {
           this.total = res.data.data.count;

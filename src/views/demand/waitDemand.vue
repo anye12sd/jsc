@@ -159,13 +159,12 @@ export default {
   },
   methods: {
     confirm(){
-      let sql = Base64.encode(this.content) 
-      console.log(sql)
+      let sql = Base64.encode(this.content)
       appAdd({
         id:this.active.id,
         sql
       }).then(res=>{
-        console.log(res)
+        // console.log(res)
         if(res.data.status == 200) {
           this.showDevelop = false;
           this.active = {};
@@ -174,7 +173,7 @@ export default {
     },
     getdata(page){
       demandexecute("type=3&page="+page).then(res=>{
-        console.log(res)
+        // console.log(res)
         if(res.data.status == 200) {
           this.list = res.data.data.list
           this.total = res.data.data.count

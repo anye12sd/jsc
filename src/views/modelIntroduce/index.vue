@@ -119,20 +119,20 @@ export default {
     ...mapState("config", ["3", "identity"]),
   },
   mounted() {
-    console.log(this.identity);
+    // console.log(this.identity);
     this.init()
   },
   watch: {
     3() {
       this.ismanaga = this[3];
-      console.log(this[3], this.ismanaga);
+      // console.log(this[3], this.ismanaga);
     },
   },
   methods: {
     loadmore(){
       if(this.nomore) return
       introducecurdlist(this.page+1).then(res=>{
-        console.log(res)
+        // console.log(res)
         if(res.data.status == 200) {
           this.page++
           if(res.data.data.list.length == 0) {
@@ -151,7 +151,7 @@ export default {
       // 单位管理员introducecurdlist
       if (this.identity == 2) {
         introducecurdlist(1).then((res) => {
-          console.log(res);
+          // console.log(res);
           this.content = res.data.data.list;
           this.content.forEach((it) => {
             it.deleted = false;
@@ -160,7 +160,7 @@ export default {
         // 其他人员
       } else {
         introducelist().then((res) => {
-          console.log(res);
+          // console.log(res);
           if (res.data.data.length > 5) {
             this.alltype = res.data.data;
             this.type = res.data.data.slice(0, 5);
@@ -169,7 +169,7 @@ export default {
             this.type = res.data.data;
           }
           introduce(this.type[0].id).then((res) => {
-            console.log(res);
+            // console.log(res);
             this.content = [res.data.data];
             this.content.forEach((it) => {
               it.deleted = false;
@@ -181,10 +181,10 @@ export default {
     dele(k) {
       if (k.deleted) return;
       introducedel(k.id).then((res) => {
-        console.log(res);
+        // console.log(res);
         k.deleted = true;
         this.$forceUpdate();
-        console.log(this.content);
+        // console.log(this.content);
       });
     },
     chose(k, idx) {

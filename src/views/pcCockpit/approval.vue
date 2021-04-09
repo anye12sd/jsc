@@ -64,7 +64,7 @@ export default {
   },
   mounted() {
     getorder(1).then((res) => {
-      console.log(res);
+      // console.log(res);
       this.list = res.data.data.list;
       this.list.forEach(item=>{
         item.deleted = false
@@ -76,7 +76,7 @@ export default {
     goup(k){
       let str = "id="+k.id+"&type="+ 1
       order(str).then(res=>{
-        console.log(res)
+        // console.log(res)
         if(res.status==200) {
           k.list_order--
         }
@@ -85,7 +85,7 @@ export default {
     godown(k){
       let str = "ids="+k.id+"&type="+ 2
       order(str).then(res=>{
-        console.log(res)
+        // console.log(res)
         if(res.status==200) {
           k.list_order++
         }
@@ -93,7 +93,7 @@ export default {
     },
     deletepage(k,index){
       dele(k.id).then(res=>{
-        console.log(res)
+        // console.log(res)
         if(res.data.data==true) {
           k.deleted = true
           this.list[index].deleted = true
@@ -102,10 +102,10 @@ export default {
       })
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
       getorder(val).then((res) => {
         this.list = res.data.data.list;
         this.total = res.data.data.count;

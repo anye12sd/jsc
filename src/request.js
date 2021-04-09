@@ -23,15 +23,18 @@ request.interceptors.request.use(
 		// console.log(config)
 		// if(config.params)
 		// let access_token = "cccc";
-		if (config.data) {
-			console.log(typeof config.data)
-			config.data.access_token = access_token
-		} else {
-			// console.log(access_token)
-			config.params = {
-				access_token
+		if (access_token) {
+			if (config.data) {
+				// console.log(typeof config.data)
+				config.data.access_token = access_token
+			} else {
+				// console.log(access_token)
+				config.params = {
+					access_token
+				}
 			}
 		}
+
 		return config
 	},
 	err => {

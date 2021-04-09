@@ -108,7 +108,7 @@ export default {
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
       demandlist("status=4&type=3&page=" + val).then((res) => {
         if (res.data.status == 200) {
           this.total = res.data.data.count;
@@ -127,7 +127,7 @@ export default {
       this.showtip = true;
       this.activeNum = idx;
       demanduser().then((res) => {
-        console.log(res);
+        // console.log(res);
         this.actionPeoples = res.data.data;
       });
       // item.actionPeople = "张三"

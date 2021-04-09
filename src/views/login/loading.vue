@@ -22,6 +22,7 @@ export default {
     // 获取身份
     tologin().then((res) => {
         console.log(res)
+        
     });
     
   },

@@ -24,38 +24,44 @@
       </div>
     </div>
     <div class="qyxx">
+      <div>
         <div>
-            <div>
-                <div>人才引进</div>
-                <div>{{ cnzt_jy.rcyj }}</div>
-            </div>
-            <div>
-                <div>较上年</div>
-                <div v-if="cnzt_jy.rcyjsn" :class="cnzt_jy.rcyjsn > 0 ? 'cyzj' : 'cyzj1'">
-                    {{ cnzt_jy.rcyjsn }}
-                </div>
-            </div>
-            <div>
-                <div>大学生本地就业</div>
-                <div>{{ cnzt_jy.dxsbdjy }}</div>
-            </div>
-            <div>
-                <div>较上年</div>
-                <div v-if="cnzt_jy.dxssn" :class="cnzt_jy.dxssn > 0 ? 'cyzj' : 'cyzj1'">
-                    {{ cnzt_jy.dxssn }}
-                </div>
-            </div>
+          <div>人才引进</div>
+          <div>{{ cnzt_jy.rcyj }}</div>
         </div>
         <div>
-            <div>
-                <div>公积金新增</div>
-                <div>{{ cnzt_jy1.gjjxz }}</div>
-            </div>
-            <div>
-                <div>社保新增</div>
-                <div></div>
-            </div>
+          <div>较上年</div>
+          <div
+            v-if="cnzt_jy.rcyjsn"
+            :class="cnzt_jy.rcyjsn > 0 ? 'cyzj' : 'cyzj1'"
+          >
+            {{ cnzt_jy.rcyjsn }}
+          </div>
         </div>
+        <div>
+          <div>大学生本地就业</div>
+          <div>{{ cnzt_jy.dxsbdjy }}</div>
+        </div>
+        <div>
+          <div>较上年</div>
+          <div
+            v-if="cnzt_jy.dxssn"
+            :class="cnzt_jy.dxssn > 0 ? 'cyzj' : 'cyzj1'"
+          >
+            {{ cnzt_jy.dxssn }}
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>
+          <div>公积金新增</div>
+          <div>{{ cnzt_jy1.gjjxz }}</div>
+        </div>
+        <div>
+          <div>社保新增</div>
+          <div>{{ cnzt_jy1.sbxz }}</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -65,10 +71,34 @@
 export default {
   name: "job",
   data() {
-    return {};
+    return {
+      baseUrl: "http://10.21.197.236:8080",
+      cnzt_jy: {},
+      cnzt_jy1: {},
+    };
   },
-  mounted() {},
-  methods: {},
+  mounted() {
+    this.getdata();
+  },
+  methods: {
+    getdata() {
+      this.$axios({
+        method: "post",
+        url: this.baseUrl + "/index/home/cnzt_jy",
+        // data: data
+      })
+        .then((res) => {
+          let optionsdata = res.data;
+          if (optionsdata.code == 200) {
+            this.cnzt_jy = optionsdata.data[0][0];
+            this.cnzt_jy1 = optionsdata.data[1][0];
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  },
 };
 </script>
 
@@ -85,13 +115,20 @@ export default {
     font-size: 16px;
     color: #ffffff;
   }
-  .cnztjy{
-      display: flex;
-      flex-wrap: wrap;
+  .cnztjy {
+    display: flex;
+    flex-wrap: wrap;
   }
-  .cnztjy>div{
-      flex: 1;
-      text-align: center;
+  .cnztjy > div {
+    width: 33.3%;
+    margin-top: 10px;
+    text-align: center;
+  }
+  .qyxx>div:nth-of-type(1){
+    display: flex;
+  }
+  .qyxx>div:nth-of-type(2){
+    display: flex;
   }
 }
 </style>

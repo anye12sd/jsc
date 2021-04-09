@@ -13,19 +13,27 @@
         <div class="company">所属单位</div>
         <div class="actions">操作</div>
       </div>
-      <div v-if="list.length == 0" style="text-align: center; height:50px;line-height:50px;color:gray">暂无数据</div>
+      <div
+        v-if="list.length == 0"
+        style="text-align: center; height: 50px; line-height: 50px; color: gray"
+      >
+        暂无数据
+      </div>
       <div v-for="(k, index) in list" :key="index" class="line">
         <div class="name">{{ k.modulename }}</div>
         <div class="type">{{ k.module_type }}</div>
         <div class="company">{{ k.branch_id }}</div>
         <div class="actions">
-          <p>
+          <p @click="topreview(k.id)">
             <img :src="datapreview" alt="图片资源缺失" /> <span>数据预览</span>
           </p>
-          <p>
-            <img :src="dataexport" alt="图片资源缺失" @click="expo(k.id)" /> <span>数据导出</span>
+          <p @click="expo(k.id)">
+            <img :src="dataexport" alt="图片资源缺失" /> <span>数据导出</span>
           </p>
-          <p @click="cancelsub(k)" :class="k.type==0?'blue':'gray'"><img :src="subsc" alt="图片资源缺失" /> <span>{{k.type==0?"取消订阅":"已取消"}}</span></p>
+          <p @click="cancelsub(k)" :class="k.type == 0 ? 'blue' : 'gray'">
+            <img :src="subsc" alt="图片资源缺失" />
+            <span>{{ k.type == 0 ? "取消订阅" : "已取消" }}</span>
+          </p>
         </div>
       </div>
     </div>
@@ -40,6 +48,14 @@
       class="pagination"
     >
     </el-pagination>
+    <div class="preview" v-show="showPreview">
+      <div class="mask" @click="hide"></div>
+      <div class="main">
+        <div v-for="(k, index) in previewList" :key="index" class="col">
+          <div v-for="(p, idx) in k" :key="index + idx" :title="p">{{ p }}</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -48,7 +64,7 @@ import searchdemo from "@/components/searchdemo.vue";
 import datapreview from "@/assets/listlogo/datapreview.png";
 import dataexport from "@/assets/listlogo/dataexport.png";
 import subsc from "@/assets/listlogo/subscribe.png";
-import { appuserlist,dele,appsql } from "@/api/list.js";
+import { appuserlist, dele, apppreview } from "@/api/list.js";
 
 export default {
   name: "modelDownload",
@@ -59,81 +75,49 @@ export default {
       subsc,
       total: 0,
       currentPage: 1,
-      list: [
-        {
-          name: "招商引资",
-          type: "SOL类型",
-          company: "质监局",
-        },
-        {
-          name: "招商引资",
-          type: "SOL类型",
-          company: "质监局",
-        },
-        {
-          name: "招商引资",
-          type: "SOL类型",
-          company: "质监局",
-        },
-        {
-          name: "招商引资",
-          type: "SOL类型",
-          company: "质监局",
-        },
-        {
-          name: "招商引资",
-          type: "SOL类型",
-          company: "质监局",
-        },
-        {
-          name: "招商引资",
-          type: "SOL类型",
-          company: "质监局",
-        },
-        {
-          name: "招商引资",
-          type: "SOL类型",
-          company: "质监局",
-        },
-        {
-          name: "招商引资",
-          type: "SOL类型",
-          company: "质监局",
-        },
-        {
-          name: "招商引资",
-          type: "SOL类型",
-          company: "质监局",
-        },
-        {
-          name: "招商引资",
-          type: "SOL类型",
-          company: "质监局",
-        },
-      ],
+      list: [],
+      previewList: [],
+      showPreview: false,
     };
   },
   mounted() {
-    
     appuserlist(1).then((res) => {
-      // console.log(res);
+      console.log(res);
       this.list = res.data.data.list;
       this.total = res.data.data.count;
     });
   },
   methods: {
-    expo(id){
-        appsql(id).then(res=>{
-          console.log(res)
-        })
+    expo(id) {
+      console.log("222");
+      window.open(
+        "http://10.21.197.237/app/sql?id=" +
+          id +
+          "&access_token=" +
+          location.search.split("=")[1]
+      );
+      // appsql(id).then(res=>{
+      //   console.log(res)
+      // })
     },
-    cancelsub(k){
-      dele(k.id).then(res=>{
-        console.log(res)
-      })
+    hide() {
+      this.showPreview = false;
+    },
+    topreview(id) {
+      // this.$router.push("/sqlPreview/"+id)
+      apppreview(id).then((res) => {
+        console.log("预览",res)
+        this.showPreview = true;
+        this.previewList = res.data.data;
+      });
+    },
+    cancelsub(k) {
+      dele(k.id).then((res) => {
+        // console.log(res)
+      });
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
       appuserlist(val).then((res) => {
@@ -203,10 +187,10 @@ export default {
       .actions > p:nth-of-type(3) {
         margin-left: 5px;
       }
-      .actions>.blue{
+      .actions > .blue {
         color: #017cf8;
       }
-      .actions>.gray{
+      .actions > .gray {
         color: gray;
       }
     }
@@ -216,6 +200,61 @@ export default {
       div {
         padding: 0.5% 0;
       }
+    }
+  }
+  .preview {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .mask {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+    .main{
+      position: relative;
+      padding: 30px;
+      width: 80%;
+      height: 80%;
+      z-index: 100;
+      background-color: #fff;
+      overflow: scroll;
+      border: 1px solid #000;
+    }
+    .main>div{
+      // display: flex;
+      // overflow: scroll;
+      white-space: nowrap;
+      // border-bottom: 1px solid #000;
+      // border-left: 1px solid #000;
+      // border-right: 1px solid #000;
+      font-size: 0;
+      div{
+        display: inline-block;
+        border-right: 1px solid #000;
+        border-bottom: 1px solid #000;
+        text-align: center;
+        width: 120px;
+        height: 30px;
+        line-height: 30px;
+        font-size: 15px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+    .main>div:nth-of-type(1){
+      div{
+        border-top: 1px solid #000;
+      }
+    }
+    .main>div>div:nth-of-type(1){
+      border-left: 1px solid #000;
     }
   }
 }

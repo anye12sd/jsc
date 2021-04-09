@@ -108,12 +108,6 @@ export function demandstatusall(str){
     })
 }
 
-export function appsql(str){
-    return request({
-        method:"get",
-        url:"/app/sql?id="+str
-    })
-}
 
 export function appload(str){
     return request({
@@ -177,5 +171,12 @@ export function appAdd(data) {
         method:"post",
         url:"/app/add",
         data
+    })
+}
+
+export function apppreview(id){
+    return request({
+        method:"get",
+        url:"/app/preview?id="+id
     })
 }

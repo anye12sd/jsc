@@ -73,6 +73,7 @@ export default {
     },
     change() {
       if (this[1].items) {
+        //  console.log("2222",this.current)
         this.options.forEach((item) => {
           this[1].items.forEach((p) => {
             if (item.id == p.id) {
@@ -83,6 +84,7 @@ export default {
         });
         this.usingOption[0].classname1 = "status02";
         this.usingOption[0].classname2 = "status01";
+        this.current = this.usingOption[0].id
         // this.$store.commit("jurisdiction/setpcCockpit",this.usingOption[0].routerpath.split("/")[2])
       }
     },

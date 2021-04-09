@@ -3,8 +3,8 @@
     <div class="tit">模型超市</div>
     <div class="option">
       <div
-        v-for="k in usingOption"
-        :key="k.name"
+        v-for="(k,index) in usingOption"
+        :key="index"
         :class="'op ' + (current == k.id ? k.classname1 : k.classname2)"
         @click="chose(k)"
       >
@@ -71,10 +71,10 @@ export default {
       this.$router.push(item.routerpath);
     },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
     },
     change(){
       // console.log(this[2])
@@ -89,6 +89,7 @@ export default {
       })
       this.usingOption[0].classname1 = "status02";
       this.usingOption[0].classname2 = "status01";
+      this.current = this.usingOption[0].id
       // this.$store.commit("jurisdiction/setsupermarket",this.usingOption[0].routerpath.split("/")[2])
       }
       // console.log(this.usingOption)
