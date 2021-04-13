@@ -13,7 +13,7 @@ export default {
   name: "app",
   data() {
     return {
-      num:0
+      num: 0,
     };
   },
   mounted() {
@@ -22,12 +22,32 @@ export default {
   methods: {
     init() {
       let access_token = location.search.split("=")[1];
+      if (access_token == "aaaa") {
+        this.$store.commit("config/setidentity", 1);
+        this.togetmenu();
+        return
+      } else if (access_token == "bbbb") {
+        this.$store.commit("config/setidentity", 2);
+        this.togetmenu();
+        return
+      } else if (access_token == "cccc") {
+        //普通用户
+        console.log(access_token);
+        this.$store.commit("config/setidentity", 3);
+        this.togetmenu();
+        return
+      } else if (access_token == "dddd") {
+        //模型开发人员
+        this.$store.commit("config/setidentity", 4);
+        this.togetmenu();
+        return
+      }
       if (access_token) {
         tologin().then((res) => {
           console.log("user", res);
           if (res.data.status == 200) {
             this.$store.commit("config/setUsetInfo", res.data.data);
-            this.$store.commit("config/setidentity",res.data.data.role_id)
+            this.$store.commit("config/setidentity", res.data.data.role_id);
           } else {
             this.$message({
               message: "获取信息失败请重新登录",
@@ -37,7 +57,7 @@ export default {
           }
           // this.$store.commit("config/setLogin",true)
         });
-        this.togetmenu()
+        this.togetmenu();
         // console.log(this.isLogin);
       }
     },
@@ -46,15 +66,15 @@ export default {
         console.log("menu", res);
         if (res.data.data == false) {
           this.$store.commit("config/setLogin", false);
-          this.num++
-          if(this.num > 5) {
+          this.num++;
+          if (this.num > 5) {
             this.$message({
               message: "获取菜单失败",
               type: "warning",
             });
-            return
+            return;
           }
-          this.togetmenu()
+          this.togetmenu();
           return;
         }
         this.$store.commit("config/settopbararr", res.data.data);
@@ -72,6 +92,7 @@ export default {
     isLogin(newValue) {
       if (newValue == false) {
         // this.$router.push("/login");
+        console.log("false");
         if (process.env.NODE_ENV == "development") {
           location.href = "http://localhost:8080";
         }

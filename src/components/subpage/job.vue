@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="qyxx">
-      <div>
+      <div class="up">
         <div>
           <div>人才引进</div>
           <div>{{ cnzt_jy.rcyj }}</div>
@@ -52,7 +52,7 @@
           </div>
         </div>
       </div>
-      <div>
+      <div class="down">
         <div>
           <div>公积金新增</div>
           <div>{{ cnzt_jy1.gjjxz }}</div>
@@ -118,16 +118,56 @@ export default {
   .cnztjy {
     display: flex;
     flex-wrap: wrap;
+    padding: 0 3%;
   }
   .cnztjy > div {
     width: 33.3%;
-    margin-top: 10px;
+    margin-top: 20px;
     text-align: center;
   }
-  .qyxx>div:nth-of-type(1){
+  .qyxx {
+    text-align: center;
+    margin-top: 40px;
+    padding: 0 3%;
+    .up {
+      display: flex;
+      justify-content: space-between;
+      .cyzj {
+        background-image: url("../../assets/subpage/ss.png");
+        background-repeat: no-repeat;
+        background-size: 74% 100%;
+        background-position: 35% 50%;
+      }
+      .cyzj1 {
+        background-image: url("../../assets/subpage/xj.png");
+        background-repeat: no-repeat;
+        background-size: 74% 100%;
+        background-position: 35% 50%;
+      }
+    }
+    .up > div {
+      width: 20%;
+    }
+    .up>div>div:nth-of-type(2){
+      padding: 2% 0;
+    }
+    .down {
+      padding: 0 3%;
+      margin-top: 20px;
+      display: flex;
+      justify-content: flex-start;
+    }
+    .down > div {
+      width: 20%;
+    }
+    .down>div:nth-of-type(2){
+      margin-left: 5.5%;
+    }
+  }
+  .qyxx > div:nth-of-type(1) {
     display: flex;
   }
-  .qyxx>div:nth-of-type(2){
+  .qyxx > div:nth-of-type(2) {
     display: flex;
   }
 }

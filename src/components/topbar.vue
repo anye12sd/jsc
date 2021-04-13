@@ -87,16 +87,6 @@ export default {
     ...mapState('config',['isLogin',"topbararr","userInfo"])
   },
   mounted() {
-    let access_token = location.search.split("=")[1]
-    if(access_token == "aaaa") {
-      this.$store.commit("config/setidentity",1)
-    } else if(access_token == "bbbb") {
-      this.$store.commit("config/setidentity",2)
-    }else if(access_token == "cccc") { //普通用户
-      this.$store.commit("config/setidentity",3)
-    }else if(access_token == "dddd") {  //模型开发人员
-      this.$store.commit("config/setidentity",4)
-    }
     this.getTime();
     setInterval(() => {
       this.getTime();

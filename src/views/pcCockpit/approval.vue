@@ -5,6 +5,7 @@
       one="页面名称"
       two="请输入页面名称"
       three="请输入所属单位"
+      @feedback="getsearch"
     ></searchdemo>
     <div class="list">
       <div class="line topline">
@@ -13,6 +14,7 @@
         <div class="sort">排序</div>
         <div class="actions">操作</div>
       </div>
+      <div v-if="list.length == 0" style="text-align: center; height:50px;line-height:50px;color:gray">暂无数据</div>
       <div v-for="(k, index) in list" :key="index" class="line">
         <div class="pagename">{{ k.view_name }}</div>
         <div class="company">{{ k.branch_id }}</div>
@@ -57,13 +59,17 @@ export default {
       total: 0,
       list: [],
       currentPage: 1,
+      searchParams: {
+        name1: null,
+        name2: null,
+      },
     };
   },
   components: {
     searchdemo,
   },
   mounted() {
-    getorder(1).then((res) => {
+    getorder("page=1").then((res) => {
       // console.log(res);
       this.list = res.data.data.list;
       this.list.forEach(item=>{
@@ -81,6 +87,15 @@ export default {
           k.list_order--
         }
       })
+    },
+    getsearch(name1, name2) {
+      this.searchParams.name1 = name1;
+      this.searchParams.name2 = name2;
+      getorder("page="+1+"&view_name="+this.searchParams.name1 + "&branch_id="+this.searchParams.name2).then((res) => {
+          // console.log(res)
+          this.list = res.data.data.list;
+          this.total = res.data.data.count;
+        });
     },
     godown(k){
       let str = "ids="+k.id+"&type="+ 2
@@ -105,11 +120,20 @@ export default {
       // console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      // console.log(`当前页: ${val}`);
-      getorder(val).then((res) => {
-        this.list = res.data.data.list;
-        this.total = res.data.data.count;
-      });
+      console.log(`当前页: ${val}`);
+      if (this.searchParams.name1 || this.searchParams.name2) {
+        getorder("page="+val+"&view_name="+this.searchParams.name1 + "&branch_id="+this.searchParams.name2).then((res) => {
+          // console.log(res)
+          this.list = res.data.data.list;
+          this.total = res.data.data.count;
+        });
+      } else {
+        getorder("page="+val).then((res) => {
+          // console.log(res)
+          this.list = res.data.data.list;
+          this.total = res.data.data.count;
+        });
+      }
     },
   },
 };

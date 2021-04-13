@@ -5,6 +5,7 @@
       one="页面名称"
       two="请输入页面名称"
       three="请输入所属单位"
+      @feedback="getsearch"
     ></searchdemo>
     <div class="list">
       <div class="line topline">
@@ -12,9 +13,15 @@
         <div class="pagename">所属单位</div>
         <div class="actions">操作</div>
       </div>
+      <div
+        v-if="list.length == 0"
+        style="text-align: center; height: 50px; line-height: 50px; color: gray"
+      >
+        暂无数据
+      </div>
       <div v-for="(k, index) in list" :key="index" class="line">
-        <div class="person">{{ k.branch_id }}</div>
         <div class="pagename">{{ k.view_name }}</div>
+        <div class="person">{{ k.branch_name }}</div>
         <div class="actions">
           <p :class="k.type == 0 ? 'blue' : 'gray'" @click="gosunscribe(k)">
             <img :src="subsc" alt="图片资源缺失" />
@@ -50,6 +57,10 @@ export default {
       currentPage: 1,
       total: 0,
       list: [],
+      searchParams: {
+        name1: null,
+        name2: null,
+      },
     };
   },
   components: {
@@ -59,8 +70,8 @@ export default {
     ...mapState("config", ["identity"]),
   },
   mounted() {
-    getsubscribe(1).then((res) => {
-      // console.log(res);
+    getsubscribe("page=1").then((res) => {
+      console.log(res);
       this.list = res.data.data.list;
       this.total = res.data.data.count;
       // console.log(this.total)
@@ -83,16 +94,33 @@ export default {
         });
       }
     },
+    getsearch(name1, name2) {
+      this.searchParams.name1 = name1;
+      this.searchParams.name2 = name2;
+      getsubscribe("page="+1+"&view_name="+this.searchParams.name1 + "&branch_id="+this.searchParams.name2).then((res) => {
+          // console.log(res)
+          this.list = res.data.data.list;
+          this.total = res.data.data.count;
+        });
+    },
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
-      getsubscribe(val).then((res) => {
-        // console.log(res)
-        this.list = res.data.data.list;
-        this.total - res.data.data.count;
-      });
+      if (this.searchParams.name1 || this.searchParams.name2) {
+        getsubscribe("page="+val+"&view_name="+this.searchParams.name1 + "&branch_id="+this.searchParams.name2).then((res) => {
+          // console.log(res)
+          this.list = res.data.data.list;
+          this.total = res.data.data.count;
+        });
+      } else {
+        getsubscribe("page="+val).then((res) => {
+          // console.log(res)
+          this.list = res.data.data.list;
+          this.total = res.data.data.count;
+        });
+      }
     },
   },
 };

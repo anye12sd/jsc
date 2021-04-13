@@ -1,25 +1,53 @@
 <template>
   <div class="modelManaga">
     <searchdemo :four="true" one="模型编号" two="请输入模型编号"></searchdemo>
-    <div class="list">
-      <div class="line topline">
-        <!-- <div>模型编号</div> -->
-        <div>模型名称</div>
-        <div>类型</div>
-        <div>所属单位</div>
-        <div>模型修改时间</div>
-        <div class="actions">操作</div>
+    <div class="listfolder">
+      <div class="folder">
+        <el-tree
+          :data="data"
+          show-checkbox
+          node-key="id"
+          :default-expanded-keys="[2, 3]"
+          :default-checked-keys="[5]"
+          :props="defaultProps"
+        >
+        </el-tree>
       </div>
-      <div v-for="(k, index) in list" :key="index" class="line">
-        <!-- <div :title="year+'000'+k.id">{{year+"000"+k.id }} </div> -->
-        <div :title="k.modulename">{{ k.modulename }} </div>
-        <div :title="k.module_type">{{ k.module_type }} </div>
-        <div :title="k.branch_id">{{ k.branch_id }} </div>
-        <div :title="k.update_time">{{ k.update_time }} </div>
-        <div class="actions">
-          <p @click="goup(k.id,index)" v-if="k.load == 2 || k.load == 3"><img :src="change" alt="图片资源缺失" /> <span>上架</span></p>
-          <p><img :src="off" alt="图片资源缺失" /> <span>修改</span></p>
-          <p @click="godown(k.id,index)" v-if="k.load == 1 || k.load == 3"><img :src="puton" alt="图片资源缺失" /> <span>下架</span></p>
+      <div class="list">
+        <div class="line topline">
+          <!-- <div>模型编号</div> -->
+          <div>模型名称</div>
+          <div>类型</div>
+          <div>所属单位</div>
+          <div>模型修改时间</div>
+          <div class="actions">操作</div>
+        </div>
+        <div
+          v-if="list.length == 0"
+          style="
+            text-align: center;
+            height: 50px;
+            line-height: 50px;
+            color: gray;
+          "
+        >
+          暂无数据
+        </div>
+        <div v-for="(k, index) in list" :key="index" class="line">
+          <!-- <div :title="year+'000'+k.id">{{year+"000"+k.id }} </div> -->
+          <div :title="k.modulename">{{ k.modulename }}</div>
+          <div :title="k.module_type">{{ k.module_type }}</div>
+          <div :title="k.branch_id">{{ k.branch_id }}</div>
+          <div :title="k.update_time">{{ k.update_time }}</div>
+          <div class="actions">
+            <p @click="goup(k.id, index)" v-if="k.load == 2 || k.load == 3">
+              <img :src="change" alt="图片资源缺失" /> <span>上架</span>
+            </p>
+            <p><img :src="off" alt="图片资源缺失" /> <span>修改</span></p>
+            <p @click="godown(k.id, index)" v-if="k.load == 1 || k.load == 3">
+              <img :src="puton" alt="图片资源缺失" /> <span>下架</span>
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -42,18 +70,72 @@ import change from "@/assets/listlogo/channge.png";
 import off from "@/assets/listlogo/off.png";
 import puton from "@/assets/listlogo/puton.png";
 import searchdemo from "@/components/searchdemo.vue";
-import { getlist,appload } from "@/api/list.js";
+import { getlist, appload } from "@/api/list.js";
 export default {
   name: "modelManaga",
   data() {
     return {
       list: [],
-      year:0,
+      year: 0,
       change,
       off,
       puton,
       currentPage: 1,
       total: 0,
+      data: [
+        {
+          id: 1,
+          label: "一级 1",
+          children: [
+            {
+              id: 4,
+              label: "二级 1-1",
+              children: [
+                {
+                  id: 9,
+                  label: "三级 1-1-1",
+                },
+                {
+                  id: 10,
+                  label: "三级 1-1-2",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: 2,
+          label: "一级 2",
+          children: [
+            {
+              id: 5,
+              label: "二级 2-1",
+            },
+            {
+              id: 6,
+              label: "二级 2-2",
+            },
+          ],
+        },
+        {
+          id: 3,
+          label: "一级 3",
+          children: [
+            {
+              id: 7,
+              label: "二级 3-1",
+            },
+            {
+              id: 8,
+              label: "二级 3-2",
+            },
+          ],
+        },
+      ],
+      defaultProps: {
+        children: "children",
+        label: "label",
+      },
     };
   },
   mounted() {
@@ -68,21 +150,21 @@ export default {
     searchdemo,
   },
   methods: {
-    goup(id,index){
-      appload("load=1&id="+id).then(res=>{
+    goup(id, index) {
+      appload("load=1&id=" + id).then((res) => {
         // console.log(res)
-        if(res.data.status == 200) {
-          this.list[index].load = res.data.data.load
+        if (res.data.status == 200) {
+          this.list[index].load = res.data.data.load;
         }
-      })
+      });
     },
-    godown(id,index){
-      appload("load=2&id="+id).then(res=>{
+    godown(id, index) {
+      appload("load=2&id=" + id).then((res) => {
         // console.log(res)
-        if(res.data.status == 200) {
-          this.list[index].load = res.data.data.load
+        if (res.data.status == 200) {
+          this.list[index].load = res.data.data.load;
         }
-      })
+      });
     },
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
@@ -101,6 +183,19 @@ export default {
 <style scoped lang="less">
 .modelManaga {
   height: 91%;
+  .listfolder {
+    display: flex;
+    height: 86%;
+    .folder {
+      width: 20%;
+    }
+    .list {
+      width: 80%;
+    }
+  }
+  .pagination {
+    padding-left: 47%;
+  }
   .list {
     height: 86%;
     .line {

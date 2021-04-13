@@ -35,6 +35,7 @@ export default {
             state.topbararr = payload
         },
         setidentity(state, payload){
+            console.log("setidentity",payload)
             state.identity = payload
         },
         setPath(state, payload) {

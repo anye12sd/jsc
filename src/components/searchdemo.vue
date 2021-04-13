@@ -6,10 +6,10 @@
         type="text"
         name="people"
         id="people"
-        v-model="people"
+        v-model="name"
         :placeholder="two"
       />
-      <label for="time">{{ four == true ? '修改时间':four }}</label>
+      <label for="time">{{ four == true ? '选择时间':four }}</label>
       <el-date-picker
         v-model="datetime"
         type="datetime"
@@ -17,17 +17,18 @@
         v-if="four == true"
       >
       </el-date-picker>
-      <input type="text" id="time" v-else :placeholder="three" />
+      <input type="text" id="time" v-else :placeholder="three" v-model="name2" />
     </div>
     <div>
-      <input
+      <!-- <input
         type="text"
         class="goSearch"
         v-model="searchcontent"
         placeholder="查询输入"
-      />
-      <div class="searchlogo">
-        <img :src="search" alt="图片丢失" />
+      /> -->
+      <div class="searchlogo" style="color:#fff;" @click="confirm">
+        搜索
+        <!-- <img :src="search" alt="图片丢失" /> -->
       </div>
     </div>
   </div>
@@ -41,7 +42,8 @@ export default {
     return {
       search,
       datetime: "",
-      people: "",
+      name: "",
+      name2:'',
       searchcontent: "",
     };
   },
@@ -62,10 +64,13 @@ export default {
       default: "请选择时间范围",
     },
   },
-  mmethods: {
+  methods: {
     confirm(){
-      // this.$emit("")
-      console.log("sss")
+      if(this.four == true) {
+        this.$emit("feedback",this.name,this.datetime)
+      } else {
+        this.$emit("feedback",this.name,this.name2)
+      }
     }
   },
 };

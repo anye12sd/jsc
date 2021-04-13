@@ -1,8 +1,8 @@
 <template>
   <div id="login">
-    <div v-if="!isLogin" id="scanCode">
+    <div v-if="!hasToken" id="scanCode">
     </div>
-    <!-- <div v-else class="loading">登录中</div> -->
+    <div v-else class="loading" v-loading="hasToken">登录中</div>
   </div>
 </template>
 
@@ -14,6 +14,7 @@ export default {
   data() {
     return {
       HZScan: null,
+      hasToken:false
     };
   },
   mounted() {
@@ -21,6 +22,12 @@ export default {
   },
   methods: {
     init() {
+      let access_token = location.search.split("=")[1];
+      console.log(access_token)
+      if (access_token) {
+        this.hasToken = true
+        return
+      }
       let str;
       if (process.env.NODE_ENV == "development") {
         str = "http://localhost:8080";
@@ -44,7 +51,7 @@ export default {
   },
   computed: {
     ...mapMutations("config", ["setUsetInfo"]),
-    ...mapState("config", ["isLogin"]),
+    // ...mapState("config", ["isLogin"]),
     // ...mapState("config", ["ddLoginFormal", "ddLoginTest"]),
   },
 };
@@ -69,8 +76,10 @@ export default {
     top: 0;
     background: #fff;
     text-align: center;
-    font-size: 20px;
+    font-size: 25px;
     font-weight: 500;
+    line-height: 300px;
+    font-weight: 600;
   }
 }
 </style>

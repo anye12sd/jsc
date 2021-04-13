@@ -99,6 +99,7 @@ export default {
           classname1: "status12",
           classname2: "status11",
         }]
+        this.current = this.usingOption[0].id
       }
 
     },

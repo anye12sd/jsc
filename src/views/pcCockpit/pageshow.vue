@@ -16,7 +16,8 @@ const modulesFiles = require.context(
 );
 let allpage = {};
 modulesFiles.keys().forEach((path) => {
-  let name = path.split("/")[1].split(".")[0]; //组件名称
+  let arr = path.split("/");
+  let name = arr[arr.length - 1].split(".")[0]; //组件名称
   let c = modulesFiles(path); //组件实例
   allpage[name] = c.default;
 }, {});
@@ -31,57 +32,105 @@ export default {
     return {
       eles: [
         //   工业产值历年变化
+        // {
+        //   eleId: "one",
+        //   type: "one",
+        //   componentName: "industrialChange",
+        // },
+        // // 义务教育
+        // {
+        //   eleId: "two",
+        //   type: "two",
+        //   componentName: "comEducation",
+        // },
+        // // 出生
+        // {
+        //   eleId: "three",
+        //   type: "three",
+        //   componentName: "birth",
+        // },
+        // // 历年师资配比变化情况
+        // {
+        //   eleId: "four",
+        //   type: "four",
+        //   componentName: "teacher",
+        // },
+        // // 学前
+        // {
+        //   eleId: "five",
+        //   type: "five",
+        //   componentName: "further",
+        // },
+        // // 升学
+        // {
+        //   eleId: "six",
+        //   type: "six",
+        //   componentName: "learn",
+        // },
+        // // 幼儿园预警
+        // {
+        //   eleId: "seven",
+        //   type: "seven",
+        //   componentName:'kindGarden'
+        // },
+        // // 就业
+        // {
+        //   eleId: "eight",
+        //   type: "eight",
+        //   componentName:"job"
+        // },
+        // {
+        //   eleId:"nine",
+        //   type:"nine",
+        //   componentName:"marriage"
+        // },
+        // {
+        //   eleId: "ten",
+        //   type: "ten",
+        //   componentName:"peopleLiving"
+        // },
+        // // 热词
+        // {
+        //   eleId:"eleven",
+        //   type:"eleven",
+        //   componentName:"hotword"
+        // },
+        // // 疾病
+        // {
+        //   eleId:"twelve",
+        //   type:"twelve",
+        //   componentName:"disease"
+        // },
+        // // 三高
+        // {
+        //   eleId:"thirteen",
+        //   type:"thirteen",
+        //   componentName:"threeHigh"
+        // },
+        // // 社会保障，低收入人群保障
+        // {
+        //   eleId:"fourteen",
+        //   type:'fourteen',
+        //   componentName:"social"
+        // },
+        // // 寿命
+        // {
+        //   eleId:"fifteen",
+        //   type:"fifteen",
+        //   componentName:"life"
+        // },
+        // 产业比重情况
         {
-          eleId: "one",
-          type: "one",
-          componentName: "industrialChange",
+          eleId:"sixteen",
+          type:"sixteen",
+          componentName:"industryShare"
         },
-        // 义务教育
+        // 招商引资
         {
-          eleId: "two",
-          type: "two",
-          componentName: "comEducation",
-        },
-        // 出生
-        {
-          eleId: "three",
-          type: "three",
-          componentName: "birth",
-        },
-        // 历年师资配比变化情况
-        {
-          eleId: "four",
-          type: "four",
-          componentName: "teacher",
-        },
-        // 学前
-        {
-          eleId: "five",
-          type: "five",
-          componentName: "further",
-        },
-        // 升学
-        {
-          eleId: "six",
-          type: "six",
-          componentName: "learn",
-        },
-        // 幼儿园预警
-        {
-          eleId: "seven",
-          type: "seven",
-          componentName:'kindGarden'
-        },
-        // 就业
-        {
-          eleId: "eight",
-          type: "eight",
-          componentName:"job"
-        },
-        {
-          eleId: "ten",
-          type: "ten",
-        },
+          eleId:"seventeen",
+          type:"seventeen",
+          componentName:"attractInvestment"
+        }
       ],
     };
   },

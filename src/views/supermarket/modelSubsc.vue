@@ -6,28 +6,46 @@
       two="请输入模型名称"
       three="请输入所属单位"
     ></searchdemo>
-    <div class="list">
-      <div class="line topline">
-        <div class="name">模型名称</div>
-        <div class="type">类型</div>
-        <div class="company">所属单位</div>
-        <div class="actions">操作</div>
+    <div class="listfolder">
+      <div class="folder">
+        <el-tree
+          :data="data"
+          show-checkbox
+          node-key="id"
+          :default-expanded-keys="[2, 3]"
+          :default-checked-keys="[5]"
+          :props="defaultProps"
+        >
+        </el-tree>
       </div>
-      <div
-        v-if="list.length == 0"
-        style="text-align: center; height: 50px; line-height: 50px; color: gray"
-      >
-        暂无数据
-      </div>
-      <div v-for="(k, index) in list" :key="index" class="line">
-        <div class="name">{{ k.modulename }}</div>
-        <div class="type">{{ k.module_type }}</div>
-        <div class="company">{{ k.branch_id }}</div>
-        <div class="actions">
-          <p :class="k.type == 0 ? 'blue' : 'gray'" @click="gosubscribe(k)">
-            <img :src="subsc" alt="图片资源缺失" />
-            <span>{{ k.type == 0 ? "订阅" : "已订阅" }}</span>
-          </p>
+      <div class="list">
+        <div class="line topline">
+          <div class="name">模型名称</div>
+          <div class="type">类型</div>
+          <div class="company">所属单位</div>
+          <div class="actions">操作</div>
+        </div>
+        <div
+          v-if="list.length == 0"
+          style="
+            text-align: center;
+            height: 50px;
+            line-height: 50px;
+            color: gray;
+          "
+        >
+          暂无数据
+        </div>
+        <div v-for="(k, index) in list" :key="index" class="line">
+          <div class="name">{{ k.modulename }}</div>
+          <div class="type">{{ k.module_type }}</div>
+          <div class="company">{{ k.branch_id }}</div>
+          <div class="actions">
+            <p :class="k.type == 0 ? 'blue' : 'gray'" @click="gosubscribe(k)">
+              <img :src="subsc" alt="图片资源缺失" />
+              <span>{{ k.type == 0 ? "订阅" : "已订阅" }}</span>
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -58,58 +76,61 @@ export default {
       currentPage: 1,
       total: 0,
       status: {},
-      list: [
+      list: [],
+      data: [
         {
-          name: "招商引资",
-          type: "SOL类型",
-          company: "质监局",
+          id: 1,
+          label: "一级 1",
+          children: [
+            {
+              id: 4,
+              label: "二级 1-1",
+              children: [
+                {
+                  id: 9,
+                  label: "三级 1-1-1",
+                },
+                {
+                  id: 10,
+                  label: "三级 1-1-2",
+                },
+              ],
+            },
+          ],
         },
         {
-          name: "招商引资",
-          type: "SOL类型",
-          company: "质监局",
+          id: 2,
+          label: "一级 2",
+          children: [
+            {
+              id: 5,
+              label: "二级 2-1",
+            },
+            {
+              id: 6,
+              label: "二级 2-2",
+            },
+          ],
         },
         {
-          name: "招商引资",
-          type: "SOL类型",
-          company: "质监局",
-        },
-        {
-          name: "招商引资",
-          type: "SOL类型",
-          company: "质监局",
-        },
-        {
-          name: "招商引资",
-          type: "SOL类型",
-          company: "质监局",
-        },
-        {
-          name: "招商引资",
-          type: "SOL类型",
-          company: "质监局",
-        },
-        {
-          name: "招商引资",
-          type: "SOL类型",
-          company: "质监局",
-        },
-        {
-          name: "招商引资",
-          type: "SOL类型",
-          company: "质监局",
-        },
-        {
-          name: "招商引资",
-          type: "SOL类型",
-          company: "质监局",
-        },
-        {
-          name: "招商引资",
-          type: "SOL类型",
-          company: "质监局",
+          id: 3,
+          label: "一级 3",
+          children: [
+            {
+              id: 7,
+              label: "二级 3-1",
+            },
+            {
+              id: 8,
+              label: "二级 3-2",
+            },
+          ],
         },
       ],
+      defaultProps: {
+        children: "children",
+        label: "label",
+      },
     };
   },
   mounted() {
@@ -126,6 +147,9 @@ export default {
     ...mapState("config", ["identity"]),
   },
   methods: {
+    handleNodeClick(data) {
+      console.log(data);
+    },
     gosubscribe(k) {
       // 普通用户
       if (this.identity == 3) {
@@ -133,7 +157,7 @@ export default {
           demand_id: k.id,
           type: 2,
           demand_name: k.modulename,
-          branch_id:k.branch_id
+          branch_id: k.branch_id,
         }).then((res) => {
           console.log(res);
           if (res.data.status == 200) {
@@ -146,7 +170,7 @@ export default {
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
       appuser(val).then((res) => {
         this.list = res.data.data.list;
         this.total = res.data.data.count;
@@ -159,8 +183,21 @@ export default {
 <style scoped lang="less">
 .modelSubsc {
   height: 91%;
-  .list {
+  .pagination {
+    padding-left: 47%;
+  }
+  .listfolder {
+    display: flex;
     height: 86%;
+    .folder {
+      width: 20%;
+    }
+    .list {
+      width: 80%;
+    }
+  }
+  .list {
+    height: 100%;
     .line {
       // margin: 0.1% 0;
       margin-top: 0.1%;

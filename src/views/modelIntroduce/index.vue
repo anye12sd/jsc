@@ -4,7 +4,7 @@
       <h1 class="bigtit">模型介绍管理</h1>
       <div class="addnew" @click="addNew" v-if="ismanaga">新增模型</div>
       <div class="in">
-        <div>
+        <!-- <div>
           <label for="mm">模型名称</label>
           <input type="text" id="mm" placeholder="请输入模型名称" />
         </div>
@@ -13,7 +13,7 @@
           <div class="searchlogo">
             <img :src="search" alt="图片丢失" />
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="type" v-if="identity != 2">
@@ -121,12 +121,16 @@ export default {
   mounted() {
     // console.log(this.identity);
     this.init()
+    console.log(this.identity)
   },
   watch: {
     3() {
       this.ismanaga = this[3];
       // console.log(this[3], this.ismanaga);
     },
+    identity(newvalue){
+      console.log(newvalue)
+    }
   },
   methods: {
     loadmore(){

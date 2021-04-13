@@ -1,16 +1,16 @@
 import request from "@/request.js"
 
-export function getsubscribe(page){
+export function getsubscribe(str){
     return request({
         method:'get',
-        url:'/subscribe/user?page=' +page
+        url:'/subscribe/user?' +str
     })
 }
 
-export function getorder(page) {
+export function getorder(str) {
     return request({
         method:"get",
-        url:"/portal/order?page="+page
+        url:"/portal/order?"+str
     })
 }
 
