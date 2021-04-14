@@ -5,13 +5,9 @@
       <div class="folder">
         <el-tree
           :data="data"
-          show-checkbox
-          node-key="id"
-          :default-expanded-keys="[2, 3]"
-          :default-checked-keys="[5]"
           :props="defaultProps"
-        >
-        </el-tree>
+          @node-click="handleNodeClick"
+        ></el-tree>
       </div>
       <div class="list">
         <div class="line topline">
@@ -70,7 +66,7 @@ import change from "@/assets/listlogo/channge.png";
 import off from "@/assets/listlogo/off.png";
 import puton from "@/assets/listlogo/puton.png";
 import searchdemo from "@/components/searchdemo.vue";
-import { getlist, appload } from "@/api/list.js";
+import { getlist, appload, appCategory } from "@/api/list.js";
 export default {
   name: "modelManaga",
   data() {
@@ -82,74 +78,44 @@ export default {
       puton,
       currentPage: 1,
       total: 0,
-      data: [
-        {
-          id: 1,
-          label: "一级 1",
-          children: [
-            {
-              id: 4,
-              label: "二级 1-1",
-              children: [
-                {
-                  id: 9,
-                  label: "三级 1-1-1",
-                },
-                {
-                  id: 10,
-                  label: "三级 1-1-2",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          id: 2,
-          label: "一级 2",
-          children: [
-            {
-              id: 5,
-              label: "二级 2-1",
-            },
-            {
-              id: 6,
-              label: "二级 2-2",
-            },
-          ],
-        },
-        {
-          id: 3,
-          label: "一级 3",
-          children: [
-            {
-              id: 7,
-              label: "二级 3-1",
-            },
-            {
-              id: 8,
-              label: "二级 3-2",
-            },
-          ],
-        },
-      ],
+      data: [],
       defaultProps: {
-        children: "children",
-        label: "label",
+        children: "item",
+        label: "category_name",
       },
+      queryId: null,
     };
   },
   mounted() {
     this.year = new Date().getFullYear();
-    getlist(1).then((res) => {
+    getlist("page=1").then((res) => {
       // console.log(res);
       this.list = res.data.data.list;
       this.total = res.data.data.count;
+    });
+    appCategory().then((res) => {
+      console.log("分类", res);
+      this.data = res.data.data;
     });
   },
   components: {
     searchdemo,
   },
   methods: {
+    handleNodeClick(data) {
+      console.log(data);
+      this.queryId = data.id;
+      let str = "category_id=" + data.id + "&page=1";
+      this.getdata(str);
+      this.currentPage = 1;
+    },
+    getdata(query) {
+      getlist(query).then((res) => {
+        console.log(res);
+        this.list = res.data.data.list;
+        this.total = res.data.data.count;
+      });
+    },
     goup(id, index) {
       appload("load=1&id=" + id).then((res) => {
         // console.log(res)
@@ -171,7 +137,13 @@ export default {
     },
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
-      getlist(val).then((res) => {
+      let queryStr = ''
+      if(this.queryId) {
+        queryStr = "category_id=" +this.queryId + "&page="+val
+      } else {
+        queryStr = "page="+val
+      }
+      getlist(queryStr).then((res) => {
         this.list = res.data.data.list;
         this.total = res.data.data.count;
       });

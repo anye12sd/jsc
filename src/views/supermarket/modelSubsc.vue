@@ -10,13 +10,10 @@
       <div class="folder">
         <el-tree
           :data="data"
-          show-checkbox
-          node-key="id"
-          :default-expanded-keys="[2, 3]"
-          :default-checked-keys="[5]"
           :props="defaultProps"
-        >
-        </el-tree>
+          @node-click="handleNodeClick"
+          :highlight-current="true"
+        ></el-tree>
       </div>
       <div class="list">
         <div class="line topline">
@@ -54,7 +51,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-size="11"
+      :page-size="10"
       layout="total, prev, pager, next, jumper"
       :total="total"
       class="pagination"
@@ -66,7 +63,7 @@
 <script>
 import searchdemo from "@/components/searchdemo.vue";
 import subsc from "@/assets/listlogo/subscribe.png";
-import { appuser, demandadd } from "@/api/list.js";
+import { appuser, demandadd, appCategory } from "@/api/list.js";
 import { mapState } from "vuex";
 export default {
   name: "modelSubsc",
@@ -77,67 +74,27 @@ export default {
       total: 0,
       status: {},
       list: [],
-      data: [
-        {
-          id: 1,
-          label: "一级 1",
-          children: [
-            {
-              id: 4,
-              label: "二级 1-1",
-              children: [
-                {
-                  id: 9,
-                  label: "三级 1-1-1",
-                },
-                {
-                  id: 10,
-                  label: "三级 1-1-2",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          id: 2,
-          label: "一级 2",
-          children: [
-            {
-              id: 5,
-              label: "二级 2-1",
-            },
-            {
-              id: 6,
-              label: "二级 2-2",
-            },
-          ],
-        },
-        {
-          id: 3,
-          label: "一级 3",
-          children: [
-            {
-              id: 7,
-              label: "二级 3-1",
-            },
-            {
-              id: 8,
-              label: "二级 3-2",
-            },
-          ],
-        },
-      ],
+      data: [],
       defaultProps: {
-        children: "children",
-        label: "label",
+        children: "item",
+        label: "category_name",
       },
+      queryId:null
     };
   },
   mounted() {
-    appuser(1).then((res) => {
+    appuser("page=1").then((res) => {
       console.log(res);
       this.list = res.data.data.list;
       this.total = res.data.data.count;
+    });
+    // this.$axios.get("/api/app/category").then(res=>{
+    //   console.log("分类",res.data)
+    //   this.data = res.data.data
+    // })
+    appCategory().then((res) => {
+      console.log("分类", res);
+      this.data = res.data.data;
     });
   },
   components: {
@@ -149,6 +106,19 @@ export default {
   methods: {
     handleNodeClick(data) {
       console.log(data);
+      this.queryId = data.id;
+      let str = "category_id=" +data.id + "&page=1"
+      this.getdata(str)
+      this.currentPage = 1
+      // this.isChange
+      // this.handleCurrentChange(str)
+    },
+    getdata(query) {
+      appuser(query).then((res) => {
+        console.log(res);
+        this.list = res.data.data.list;
+        this.total = res.data.data.count;
+      });
     },
     gosubscribe(k) {
       // 普通用户
@@ -171,7 +141,13 @@ export default {
     },
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
-      appuser(val).then((res) => {
+      let queryStr = ''
+      if(this.queryId) {
+        queryStr = "category_id=" +this.queryId.id + "&page="+val
+      } else {
+        queryStr = "page="+val
+      }
+      appuser(queryStr).then((res) => {
         this.list = res.data.data.list;
         this.total = res.data.data.count;
       });

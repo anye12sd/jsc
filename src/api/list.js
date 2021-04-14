@@ -28,17 +28,17 @@ export function dele(num) {
     })
 }
 
-export function getlist(page) {
+export function getlist(str) {
     return request({
         method:"get",
-        url:"/app/list?page="+page
+        url:"/app/list?"+str
     })
 }
 
-export function appuser(page){
+export function appuser(str){
     return request({
         method:"get",
-        url:"/app/user?page="+page
+        url:"/app/user?"+str
     })
 }
 
@@ -178,5 +178,12 @@ export function apppreview(id){
     return request({
         method:"get",
         url:"/app/preview?id="+id
+    })
+}
+
+export function appCategory(){
+    return request({
+        method:"get",
+        url:"/app/category"
     })
 }
