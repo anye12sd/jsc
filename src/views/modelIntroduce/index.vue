@@ -407,6 +407,9 @@ export default {
         font-size: 14px;
         color: #666f8e;
         letter-spacing: 1px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-height: 50%;
       }
     }
   }

@@ -25,7 +25,7 @@
           cols="70"
           rows="8"
           v-model="area"
-          placeholder="模型说明，最长125字符"
+          placeholder="模型说明，最长1000字符"
         ></textarea>
       </div>
       <div>
@@ -212,7 +212,7 @@ export default {
       if (
         this.titname.length > 12 ||
         this.titname.length < 4 ||
-        this.area.length > 125
+        this.area.length > 1000
       ) {
         this.$message({
           message: "请按要求填写",
@@ -236,10 +236,10 @@ export default {
   },
   watch: {
     area(newValue, oldValue) {
-      if (newValue.length > 125) {
+      if (newValue.length > 1000) {
         this.is2 = true;
         this.$message({
-          message: "模型说明最多125字符",
+          message: "模型说明最多1000字符",
           type: "warning",
         });
       } else {
