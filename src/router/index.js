@@ -168,8 +168,29 @@ const routes = [
   // 普通用户页面
   {
     path:"/oridinaryUsers",
-    component:()=>import("../views/ordinaryUsers")
-  }
+    component:()=>import("../views/ordinaryUsers"),
+    children:[
+      {
+        path:'',
+        redirect:"pcdrive"
+      },
+      {
+        path:"pcdrive",
+        name:"Pcdirve",
+        component:()=>import("../views/ordinaryUsers/pcdrive")
+      },
+      {
+        path:'modelmarket',
+        name:"Modelmarket",
+        component:()=>import("../views/ordinaryUsers/modelmarket")
+      },
+      {
+        path:"detail/:id",
+        name:"Detail",
+        component:()=>import("../views/ordinaryUsers/detail")
+      }
+    ]
+  },
 
 ]
 

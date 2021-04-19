@@ -43,12 +43,12 @@ export default {
         //   type: "two",
         //   componentName: "comEducation",
         // },
-        // // 出生
-        // {
-        //   eleId: "three",
-        //   type: "three",
-        //   componentName: "birth",
-        // },
+        // 出生
+        {
+          eleId: "three",
+          type: "three",
+          componentName: "birth",
+        },
         // // 历年师资配比变化情况
         // {
         //   eleId: "four",

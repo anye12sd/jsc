@@ -1,5 +1,5 @@
 <template>
-  <div id="birth">
+  <div id="birth" :class="size?'fix':'unfix'">
     <div class="bigtit">出生</div>
     <div class="current">
       <div>
@@ -26,6 +26,12 @@ export default {
       yezt_cs: null,
       yezt_cs2: [],
     };
+  },
+  props:{
+    size:{
+      type:Boolean,
+      default:false
+    }
   },
   mounted() {
     this.getdata();
@@ -218,9 +224,16 @@ export default {
 </script>
 
 <style scoped lang="less">
-#birth {
+.fix{
+  width: 650px;
+  height: 350px;
+}
+.infix{
   width: 100%;
   height: 100%;
+}
+#birth {
+  
   padding: 5px;
   color: #fff;
   box-sizing: border-box;

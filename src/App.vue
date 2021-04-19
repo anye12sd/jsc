@@ -138,12 +138,12 @@ html {
 }
 @media screen and (max-height: 720px) {
   #app {
-    height: 1000px;
+    height: 730px;
   }
 }
 @media screen and (max-width: 1500px) {
   #app {
-    width: 1520px;
+    width: 1540px;
   }
 }
 // @media screen and (max-aspect-ratio: 16/10)

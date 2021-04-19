@@ -1,5 +1,5 @@
 <template>
-  <div class="oridinaryUsers">
+  <div :class="className[current] + ' oridinaryUsers'">
     <div class="top">
       <div class="time">{{ date1 }}&nbsp;&nbsp;{{ date2 }}</div>
       <div class="tit">数字驾驶舱桌面版</div>
@@ -9,19 +9,28 @@
         <span>普通用户</span>
       </div>
     </div>
-    <pcdrive></pcdrive>
+    <!-- <component :is="pages[current].componentName"></component> -->
+    <router-view></router-view>
     <div class="bottom">
-        <div class="page">
-            
-        </div>
-        <div></div>
+      <div class="page">
+        <img src="@/assets/oridinary/direction.png" alt=" " @click="reduce" />
+        <div class="currentPageName">{{ pages[current].name }}</div>
+        <img
+          src="@/assets/oridinary/direction.png"
+          alt=" "
+          class="rr"
+          @click="plus"
+        />
+      </div>
+      <div class="allPage"></div>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import pcdrive from "./pcdrive"
+// import pcdrive from "./pcdrive";
+// import modelmarket from "./modelmarket";
 export default {
   name: "oridinaryUsers",
   data() {
@@ -39,13 +48,27 @@ export default {
         6: "星期六",
       },
       iden: {},
+      current: 0,
+      className: ["pc", "mo",'mo'],
+      pages: [
+        {
+          name: "PC驾驶舱",
+          path: "/oridinaryUsers/pcdrive",
+        },
+        {
+          name: "模型超市",
+          path: "/oridinaryUsers/modelmarket",
+        },
+      ],
     };
   },
   mounted() {
+    // console.log(location.hash)
     this.getTime();
   },
-  components:{
-      pcdrive
+  components: {
+    // pcdrive,
+    // modelmarket,
   },
   computed: {
     ...mapState("config", ["identity"]),
@@ -56,30 +79,61 @@ export default {
       this.date1 = date.toLocaleDateString().split("/").join("-");
       this.date2 = date.getHours() + ":" + date.getMinutes();
       this.day = date.getDay();
-      console.log(this.day);
+    },
+    plus() {
+      if (this.current >= 1) {
+        this.current = 0;
+      } else {
+        this.current++;
+      }
+      // console.log(this.pages[this.current].path)
+      this.$router.push(this.pages[this.current].path)
+    },
+    reduce() {
+      if (this.current <= 0) {
+        this.current = this.pages.length - 1;
+      } else {
+        this.current--;
+      }
+      this.$router.push(this.pages[this.current].path)
     },
   },
 };
 </script>
 
 <style scoped lang="less">
-.oridinaryUsers {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
+.pc {
   background-image: url("../../assets/oridinary/head.png"),
     url("../../assets/oridinary/leftside.png"),
     url("../../assets/oridinary/rightside.png"),
     url("../../assets/oridinary/bottom.png"),
     url("../../assets/oridinary/line.png");
-  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat,no-repeat;
-  background-size: 98% auto, auto 65%, auto 65%, 65% auto,65% auto;
-  background-position: center top, left 26%, right 26%, center bottom,center bottom;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  background-size: 98% auto, auto 65%, auto 65%, 56% auto, 65% auto;
+  background-position: center top, left 26%, right 26%, center bottom,
+    center bottom;
+}
+.mo {
+  background-image: url("../../assets/oridinary/head.png"),
+    url("../../assets/oridinary/leftside.png"),
+    url("../../assets/oridinary/rightside.png"),
+    url("../../assets/oridinary/bottom.png"),
+    url("../../assets/oridinary/modelbg.png");
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  background-size: 98% auto, auto 65%, auto 65%, 56% auto, 100% 100%;
+  background-position: center top, left 26%, right 26%, center bottom,
+    center center;
+}
+.oridinaryUsers {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
   .top {
     text-align: center;
     display: flex;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 0 30px;
     height: 8%;
     box-sizing: border-box;
     padding-top: 1.1%;
@@ -118,6 +172,33 @@ export default {
       }
     }
   }
+  .bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 13%;
+    box-sizing: border-box;
+    .page {
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
+      > img {
+        width: 30px;
+        cursor: pointer;
+      }
+      > .currentPageName {
+        font-family: Helvetica;
+        color: #fff;
+        font-size: 23px;
+        text-shadow: 0 3px 4px rgba(7, 110, 255, 0.63);
+        margin: 0 10px;
+      }
+      > .rr {
+        transform: rotate(180deg);
+      }
+    }
+  }
 }
 </style>

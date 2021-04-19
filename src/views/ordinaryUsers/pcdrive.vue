@@ -3,13 +3,36 @@
     <div class="main">
       <div class="left">
         <div>
-          <div></div>
+          <!-- 为什么这里不直接传宽高？这需求又改了，新样式，这代码可以少写点 -->
+          <div class="name"><span>模型名称</span></div>
+          <div class="item" ref="item">
+            <birth
+              :size="true"
+              :style="
+                'transform:scale(' +
+                widper +
+                ',' +
+                heiper +
+                ');transform-origin:0% 0%;'
+              "
+            ></birth>
+          </div>
         </div>
+        <div></div>
         <div>
-          <div></div>
-        </div>
-        <div>
-          <div></div>
+          <div class="name"><span>模型名称</span></div>
+          <div class="item" ref="item">
+            <birth
+              :size="true"
+              :style="
+                'transform:scale(' +
+                widper +
+                ',' +
+                heiper +
+                ');transform-origin:0% 0%;'
+              "
+            ></birth>
+          </div>
         </div>
       </div>
       <div class="cen">
@@ -22,13 +45,49 @@
       </div>
       <div class="right">
         <div>
-          <div></div>
+          <div class="name"><span>模型名称</span></div>
+          <div class="item" ref="item">
+            <birth
+              :size="true"
+              :style="
+                'transform:scale(' +
+                widper +
+                ',' +
+                heiper +
+                ');transform-origin:0% 0%;'
+              "
+            ></birth>
+          </div>
         </div>
         <div>
-          <div></div>
+          <div class="name"><span>模型名称</span></div>
+          <div class="item" ref="item">
+            <birth
+              :size="true"
+              :style="
+                'transform:scale(' +
+                widper +
+                ',' +
+                heiper +
+                ');transform-origin:0% 0%;'
+              "
+            ></birth>
+          </div>
         </div>
         <div>
-          <div></div>
+          <div class="name"><span>模型名称</span></div>
+          <div class="item" ref="item">
+            <birth
+              :size="true"
+              :style="
+                'transform:scale(' +
+                widper +
+                ',' +
+                heiper +
+                ');transform-origin:0% 0%;'
+              "
+            ></birth>
+          </div>
         </div>
       </div>
     </div>
@@ -40,10 +99,53 @@ import f1 from "@/assets/oridinary/f1.png";
 import f2 from "@/assets/oridinary/f2.png";
 import f3 from "@/assets/oridinary/f3.png";
 import f4 from "@/assets/oridinary/f4.png";
+import Birth from "../../components/subpage/birth.vue";
+const modulesFiles = require.context(
+  "../../components/subpage",
+  true,
+  /\.vue$/
+);
+let allpage = {};
+modulesFiles.keys().forEach((path) => {
+  let arr = path.split("/");
+  let name = arr[arr.length - 1].split(".")[0]; //组件名称
+  let c = modulesFiles(path); //组件实例
+  allpage[name] = c.default;
+}, {});
 export default {
   name: "pcdrive",
+  mounted() {
+    // console.log(this.$refs.item.clientWidth, this.$refs.item.clientHeight);
+    // let width =
+    //   window.getComputedStyle(this.$refs.item).width.split("px")[0] * 1;
+    // let height =
+    //   window.getComputedStyle(this.$refs.item).height.split("px")[0] * 1;
+    this.widper = Math.floor((this.$refs.item.clientWidth / 650) * 100) / 100;
+    this.heiper = Math.floor((this.$refs.item.clientHeight / 350) * 100) / 100;
+    this.goto();
+    window.onresize = () => {
+      this.changesize();
+    };
+  },
+  methods: {
+    goto() {
+      // 请求获取的数组
+      let data = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
+      for (let i = 0; i < data.length; i += 6) {
+        this.models.push(data.slice(i, i + 6));
+      }
+    },
+    changesize() {
+      if(this.$refs.item){
+        this.widper = Math.floor((this.$refs.item.clientWidth / 650) * 100) / 100;
+      this.heiper = Math.floor((this.$refs.item.clientHeight / 350) * 100) / 100;
+      }
+    },
+  },
   data() {
     return {
+      widper: 1,
+      heiper: 1,
       f1,
       f2,
       f3,
@@ -66,7 +168,18 @@ export default {
           img: f4,
         },
       ],
+      models: [],
+      // 页面渲染的数据
+
+      showingModel: {
+        // 左边的数组
+        left: [],
+        right: [],
+      },
     };
+  },
+  components: {
+    ...allpage,
   },
 };
 </script>
@@ -94,6 +207,25 @@ export default {
         padding: 1% 1%;
         transition: all;
         cursor: pointer;
+        .name {
+          width: 100%;
+          height: 20%;
+          padding-left: 12%;
+          color: #fff;
+          padding-top: 3.5%;
+          box-sizing: border-box;
+          position: relative;
+          span {
+            position: absolute;
+            bottom: 7px;
+          }
+        }
+        .item {
+          width: 90%;
+          margin: 0 auto;
+          height: 73%;
+          background: #000;
+        }
         //   >div{
         //       width: 100%;
         //       height: 100%;
