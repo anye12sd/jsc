@@ -1,6 +1,9 @@
 <template>
   <div class="modelManaga">
-    <searchdemo :four="true" one="模型编号" two="请输入模型编号"></searchdemo>
+    <!-- <searchdemo :four="true" one="模型编号" two="请输入模型编号"></searchdemo> -->
+    <div class="addnew" v-if="ismanaga">
+      <span @click="addnew">新增模型</span>
+    </div>
     <div class="listfolder">
       <div class="folder">
         <el-tree
@@ -58,6 +61,13 @@
       class="pagination"
     >
     </el-pagination>
+    <modify
+      v-if="showModify"
+      @justHide="justHide"
+      :changeAble="waitchange"
+      @changeConfirm="justHide"
+      @subok="subok"
+    ></modify>
   </div>
 </template>
 
@@ -65,7 +75,9 @@
 import change from "@/assets/listlogo/channge.png";
 import off from "@/assets/listlogo/off.png";
 import puton from "@/assets/listlogo/puton.png";
-import searchdemo from "@/components/searchdemo.vue";
+import modify from "./modify";
+// import searchdemo from "@/components/searchdemo.vue";
+import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import { getlist, appload, appCategory } from "@/api/list.js";
 export default {
   name: "modelManaga",
@@ -76,6 +88,8 @@ export default {
       change,
       off,
       puton,
+      ismanaga: false,
+      showModify:false,
       currentPage: 1,
       total: 0,
       data: [],
@@ -84,7 +98,11 @@ export default {
         label: "category_name",
       },
       queryId: null,
+      waitchange:false
     };
+  },
+  computed: {
+    ...mapState("config", ["identity"]),
   },
   mounted() {
     this.year = new Date().getFullYear();
@@ -97,11 +115,32 @@ export default {
       console.log("分类", res);
       this.data = res.data.data;
     });
+    console.log(this[3])
+    if(this.identity == 1 || this.identity == 2) {
+      this.ismanaga = true
+    }
   },
   components: {
-    searchdemo,
+    modify
+    // searchdemo,
   },
   methods: {
+    justHide() {
+      this.showModify = false;
+      this.waitchange = false;
+    },
+    subok() {
+      this.showModify = false;
+      this.waitchange = false;
+      // this.init()
+    },
+    changeModel(k) {
+      this.showModify = true;
+      this.waitchange = k;
+    },
+    addnew(){
+      this.showModify = true;
+    },
     handleNodeClick(data) {
       console.log(data);
       this.queryId = data.id;
@@ -137,24 +176,36 @@ export default {
     },
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
-      let queryStr = ''
-      if(this.queryId) {
-        queryStr = "category_id=" +this.queryId + "&page="+val
+      let queryStr = "";
+      if (this.queryId) {
+        queryStr = "category_id=" + this.queryId + "&page=" + val;
       } else {
-        queryStr = "page="+val
+        queryStr = "page=" + val;
       }
       getlist(queryStr).then((res) => {
         this.list = res.data.data.list;
         this.total = res.data.data.count;
       });
     },
-  },
+  }
 };
 </script>
 
 <style scoped lang="less">
 .modelManaga {
   height: 91%;
+  .addnew {
+    height: 35px;
+    line-height: 35px;
+    text-align: right;
+    span {
+      background: #017cf8;
+      border-radius: 4px;
+      color: #fff;
+      padding: 3px 5px;
+      cursor: pointer;
+    }
+  }
   .listfolder {
     display: flex;
     height: 86%;

@@ -1,6 +1,7 @@
 <template>
   <div id="app" :class="identity == 3?'dark':'white'">
     <topbar v-if="isLogin && identity != 3"></topbar>
+    <!-- <topbar v-if="showtopbar"></topbar> -->
     <router-view></router-view>
   </div>
 </template>
@@ -13,7 +14,7 @@ export default {
   name: "app",
   data() {
     return {
-      num: 0,
+      num: 0
     };
   },
   mounted() {
@@ -22,6 +23,7 @@ export default {
   methods: {
     init() {
       let access_token = location.search.split("=")[1];
+      if(!access_token) return
       if (access_token == "aaaa") {
         this.$store.commit("config/setidentity", 1);
         this.togetmenu();
@@ -49,9 +51,10 @@ export default {
           if (res.data.status == 200) {
             this.$store.commit("config/setUsetInfo", res.data.data);
             this.$store.commit("config/setidentity", res.data.data.role_id);
-            if(res.data.data.role_id == 3) {
-              this.$router.push("/oridinaryUsers")
-            }
+            this.$router.push("/oridinaryUsers")
+            // if(res.data.data.role_id == 3) {
+            //   this.$router.push("/oridinaryUsers")
+            // }
           } else {
             this.$message({
               message: "获取信息失败请重新登录",
@@ -90,7 +93,7 @@ export default {
     topbar,
   },
   computed: {
-    ...mapState("config", ["isLogin","identity"]),
+    ...mapState("config", ["isLogin","identity","showtopbar"]),
   },
   watch: {
     isLogin(newValue) {

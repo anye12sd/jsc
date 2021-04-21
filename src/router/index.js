@@ -46,6 +46,11 @@ const routes = [
         path: "subScribe",
         name: "SubScribe",
         component: () => import("@/views/pcCockpit/subscribe")
+      },
+      {
+        path:"distribution",
+        name:"Distribution",
+        component: () => import("@/views/pcCockpit/distribution")
       }
     ]
   },

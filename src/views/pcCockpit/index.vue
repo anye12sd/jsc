@@ -32,13 +32,13 @@ export default {
       current: 0,
       usingOption: [],
       options: [
-        {
-          id: 7,
-          routerpath: "/pcCockpit/pageShow",
-          name: "页面展示",
-          classname1: "status02",
-          classname2: "status01",
-        },
+        // {
+        //   id: 7,
+        //   routerpath: "/pcCockpit/pageShow",
+        //   name: "页面展示",
+        //   classname1: "status02",
+        //   classname2: "status01",
+        // },
         {
           id: 9,
           routerpath: "/pcCockpit/approval",
@@ -53,6 +53,13 @@ export default {
           classname1: "status12",
           classname2: "status11",
         },
+        {
+          id:7,
+           routerpath: "/pcCockpit/distribution",
+          name: "页面分配",
+          classname1: "status12",
+          classname2: "status11",
+        }
       ],
     };
   },

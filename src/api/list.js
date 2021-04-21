@@ -187,3 +187,24 @@ export function appCategory(){
         url:"/app/category"
     })
 }
+
+export function portalSubscribe(str){
+    return request({
+        method:"get",
+        url:"/portal/subscribe?"+str
+    })
+}
+
+export function portalSubscribeall(str){
+    return request({
+        method:"get",
+        url:"/portal/subscribeall?"+str
+    })
+}
+
+export function subscribeList(str){
+    return request({
+        method:"get",
+        url:"/subscribe/list?"+str
+    })
+}

@@ -4,6 +4,7 @@
       <div class="time">{{ date1 }}&nbsp;&nbsp;{{ date2 }}</div>
       <div class="tit">数字驾驶舱桌面版</div>
       <div class="user">
+        <span class="goafter" v-if="identity == 1 || identity == 2" @click="goafter">前往管理平台</span>
         <span>{{ week[day] }}</span>
         <img src="../../assets/oridinary/portrait.png" alt=" " />
         <span>普通用户</span>
@@ -59,6 +60,9 @@ export default {
           name: "模型超市",
           path: "/oridinaryUsers/modelmarket",
         },
+        {
+          name:"模型详情"
+        }
       ],
     };
   },
@@ -74,6 +78,10 @@ export default {
     ...mapState("config", ["identity"]),
   },
   methods: {
+    goafter(){
+      this.$store.commit("config/setShowTopBar",true)
+      this.$$router.push("/pcCockpit/distribution")
+    },
     getTime() {
       let date = new Date();
       this.date1 = date.toLocaleDateString().split("/").join("-");
@@ -98,6 +106,15 @@ export default {
       this.$router.push(this.pages[this.current].path)
     },
   },
+  watch:{
+    $route(to,from){
+      if(to.name == "Detail") {
+        this.current = 2
+      } else if(to.name == "Modelmarket") {
+        this.current = 1
+      }
+    }
+  }
 };
 </script>
 
@@ -164,6 +181,9 @@ export default {
       align-items: center;
       text-align: right;
       justify-content: flex-end;
+      .goafter{
+        cursor: pointer;
+      }
       span {
         margin-left: 5px;
       }
@@ -179,6 +199,7 @@ export default {
     width: 100%;
     height: 13%;
     box-sizing: border-box;
+    z-index: 50;
     .page {
       display: flex;
       justify-content: center;

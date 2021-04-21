@@ -91,6 +91,10 @@
         </div>
       </div>
     </div>
+    <div class="pagination">
+      <el-pagination layout=" pager" :page-size="6" :total="total" @current-change="handleCurrentChange">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -128,6 +132,9 @@ export default {
     };
   },
   methods: {
+    handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      },
     goto() {
       // 请求获取的数组
       let data = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
@@ -146,6 +153,7 @@ export default {
     return {
       widper: 1,
       heiper: 1,
+      total:1,
       f1,
       f2,
       f3,
@@ -183,7 +191,30 @@ export default {
   },
 };
 </script>
-
+<style lang="less">
+.pcdrive {
+  .pagination {
+    position: absolute;
+    bottom: 3%;
+    width: 100%;
+    z-index: 100;
+    .el-pagination {
+      text-align: center;
+      .el-pager {
+        li {
+          background: none;
+          color: #2abdf6;
+          cursor: pointer;
+        }
+        .active {
+          // color: #0e0aee;
+          color: #fff;
+        }
+      }
+    }
+  }
+}
+</style>
 <style scoped lang="less">
 .pcdrive {
   height: 92%;

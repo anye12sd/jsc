@@ -9,6 +9,7 @@ export default {
             userName:"王",
             role_id:3
         },
+        showtopbar:false,
         topbararr:[],
         // PC驾驶舱
         1: [],
@@ -25,6 +26,9 @@ export default {
     },
     //修改state
     mutations: {
+        setShowTopBar(state,payload){
+            state.showtopbar = payload
+        },
         setLogin(state,payload){
             state.isLogin = payload
         },
