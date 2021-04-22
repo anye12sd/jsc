@@ -3,33 +3,35 @@
     <div class="mask" @click="hide"></div>
     <div class="main">
       <div class="tit">
-        {{ changeAble ? "修改模型" : "新增模型" }}
+        {{ changeAble ? "修改模型" : "模型介绍" }}
       </div>
-      <div>
+      <!-- <div>
         <label for="titname">模型名称</label>
         <input
           type="text"
-          :class="'kkk ' + (is1 ? 'unqualified' : '')"
+          class="kkk"
           id="titname"
           v-model="titname"
-          @blur="titblur"
+          @blur="titblur('模型名称在4到12字符之间', $event)"
           placeholder="输入名称，最长14字符，最短4字符"
         />
-      </div>
-      <div>
-        <label for="area">模型说明</label>
+      </div> -->
+      <div v-for="k in explain" :key="k.name">
+        <label for="">{{ k.name }}</label>
         <textarea
-          name="area"
-          :class="'kkk ' + (is2 ? 'unqualified' : '')"
-          id="area"
-          cols="70"
-          rows="8"
-          v-model="area"
-          placeholder="模型说明，最长1000字符"
+          name=""
+          id=""
+          cols="30"
+          rows="5"
+          placeholder="最多140个字符"
+          v-model="k.content"
+          @blur="
+            explainblur(k.name + '必填且不能多于140字符', k.content, $event)
+          "
         ></textarea>
       </div>
       <div>
-        <span class="zzz">模型展示图图片</span>
+        <span class="zzz">上传图片</span>
         <div class="uploadArea kkk" @click="goup">
           <span v-show="!canUpimg" @click="reup" class="reup">重新上传</span>
           <img
@@ -64,8 +66,6 @@ export default {
   name: "modify",
   data() {
     return {
-      is1: false,
-      is2: false,
       uploadImg,
       hasImg: false,
       userImg: null,
@@ -74,12 +74,39 @@ export default {
       area: "",
       canUpimg: true,
       changeImge: false,
+      explain: [
+        {
+          name: "模型背景",
+          content: "",
+        },
+        {
+          name: "数据来源",
+          content: "",
+        },
+        {
+          name: "处理逻辑",
+          content: "",
+        },
+        {
+          name: "应用成效",
+          content: "",
+        },
+        {
+          name: "计算结果",
+          content: "",
+        },
+        {
+          name: "加工过程",
+          content: "",
+        },
+      ],
     };
   },
   props: {
     changeAble: {
       default: false,
     },
+    module_id: {},
   },
   mounted() {
     // console.log(this.changeAble);
@@ -93,8 +120,14 @@ export default {
     if (this.changeAble) {
       // this.userImg = ...
       this.hasImg = true;
-      this.titname = this.changeAble.modulename;
-      this.area = this.changeAble.introduce;
+      // this.titname = this.changeAble.modulename;
+      // this.area = this.changeAble.introduce;
+      this.explain[0].content = this.changeAble.background;
+      this.explain[3].content = this.changeAble.results;
+      this.explain[1].content = this.changeAble.source;
+      this.explain[4].content = this.changeAble.result;
+      this.explain[2].content = this.changeAble.logic;
+      this.explain[5].content = this.changeAble.process;
       this.userImg = "http://10.21.197.237" + this.changeAble.img_url;
     }
   },
@@ -112,22 +145,39 @@ export default {
         this.$refs.upfile.click();
       }
     },
-    titblur() {
+    titblur(str, event) {
+      console.log(event);
       if (this.titname.length > 12 || this.titname.length < 4) {
         this.$message({
-          message: "模型名称在4到12字符之间",
+          message: str,
           type: "warning",
         });
-        this.is1 = true;
+        // this.is1 = true;
+        event.target.classList.add("unqualified");
       } else {
-        this.is2 = false;
+        // this.is2 = false;
+        event.target.classList.remove("unqualified");
+      }
+    },
+    explainblur(str, content, event) {
+      // console.log(event);
+      if (content.length > 140 || content.length <= 0) {
+        this.$message({
+          message: str,
+          type: "warning",
+        });
+        // this.is1 = true;
+        event.target.classList.add("unqualified");
+      } else {
+        // this.is2 = false;
+        event.target.classList.remove("unqualified");
       }
     },
     readFile() {
       // 'Content-Type':'multipart/form-data'
       //   console.log(this.$refs.upfile.files[0]);
       this.canUpimg = false;
-      this.changeImge = true;
+
       let file = this.$refs.upfile.files[0];
       if (!/image\/\w+/.test(file.type)) {
         this.$message({
@@ -136,6 +186,7 @@ export default {
         });
         return false;
       }
+      this.changeImge = true;
       let reader = new FileReader();
       reader.readAsDataURL(file);
       let that = this;
@@ -149,76 +200,107 @@ export default {
       this.$refs.upfile.click();
     },
     edit(url) {
+      console.log("0000")
       let data = new FormData();
       if (this.changeImge) {
         data.append("image", this.$refs.upfile.files[0]);
       } else {
         data.append("img_url", this.changeAble.img_url);
       }
-      data.append("modulename", this.titname);
-      data.append("introduce", this.area);
+      data.append("module_id", this.module_id);
+      data.append("background", this.explain[0].content);
+      data.append("results", this.explain[3].content);
+      data.append("source", this.explain[1].content);
+      data.append("result", this.explain[4].content);
+      data.append("logic", this.explain[2].content);
+      data.append("process", this.explain[5].content);
       data.append("access_token", location.search.split("=")[1]);
       data.append("id", this.changeAble.id);
-        this.$axios({
-          method: "post",
-          headers: { "Content-Type": "multipart/form-data" },
-          url: url + "/Introduce/edit",
-          data: data,
-        }).then((res) => {
-          // console.log(res);
-          if (res.data.status == 400) {
-            this.$message({
-              message: res.data.message,
-              type: "warning",
-            });
-          }
-          if(res.data.status == 200) {
-            // this.$router.go(0);
-            this.$emit("subok")
-          }
-        });
+      this.$axios({
+        method: "post",
+        headers: { "Content-Type": "multipart/form-data" },
+        url: url + "/Introduce/add",
+        data: data,
+      }).then((res) => {
+        // console.log(res);
+        if (res.data.status == 400) {
+          this.$message({
+            message: res.data.message,
+            type: "warning",
+          });
+        }
+        if (res.data.status == 200) {
+          // this.$router.go(0);
+          this.$message({
+            message: "修改成功",
+            type: "success",
+          });
+          this.$emit("subok");
+        }
+      });
     },
     addnew(url) {
       let data = new FormData();
-      if(!this.changeImge) {
+      if (!this.changeImge) {
         this.$message({
           message: "请上传图片",
           type: "warning",
         });
+        return;
       }
-      data.append("modulename", this.titname);
-      data.append("introduce", this.area);
+      data.append("module_id", this.module_id);
+      data.append("background", this.explain[0].content);
+      data.append("results", this.explain[3].content);
+      data.append("source", this.explain[1].content);
+      data.append("result", this.explain[4].content);
+      data.append("logic", this.explain[2].content);
+      data.append("process", this.explain[5].content);
       data.append("access_token", location.search.split("=")[1]);
       data.append("image", this.$refs.upfile.files[0]);
       this.$axios({
-          method: "post",
-          headers: { "Content-Type": "multipart/form-data" },
-          url: url + "/Introduce/add",
-          data: data,
-        }).then((res) => {
-          // console.log(res);
-          if (res.data.status == 400) {
-            this.$message({
-              message: res.data.message,
-              type: "warning",
-            });
-          }
-          if(res.data.status == 200) {
-            this.$emit("subok")
-          }
-        });
+        method: "post",
+        headers: { "Content-Type": "multipart/form-data" },
+        url: url + "/Introduce/add",
+        data: data,
+      }).then((res) => {
+        // console.log(res);
+        if (res.data.status == 400) {
+          this.$message({
+            message: res.data.message,
+            type: "warning",
+          });
+        }
+        if (res.data.status == 200) {
+          this.$message({
+            message: "添加成功",
+            type: "success",
+          });
+          this.$emit("subok");
+        }
+      });
     },
     confirm() {
-      if (
-        this.titname.length > 12 ||
-        this.titname.length < 4 ||
-        this.area.length > 1000
-      ) {
-        this.$message({
-          message: "请按要求填写",
-          type: "warning",
-        });
-        return;
+      // if (
+      //   this.titname.length > 12 ||
+      //   this.titname.length < 4
+      // ) {
+      //   this.$message({
+      //     message: "请按要求填写",
+      //     type: "warning",
+      //   });
+      //   return;
+      // }
+      for (let i = 0; i < this.explain.length; i++) {
+        if (
+          this.explain[i].content.length <= 0 ||
+          this.explain[i].content.length > 140
+        ) {
+          this.$message({
+            message: "请按要求填写",
+            type: "warning",
+          });
+          return;
+        }
       }
       let url;
       if (process.env.NODE_ENV == "development") {
@@ -269,7 +351,8 @@ export default {
   .main {
     width: 880px;
     height: 560px;
-    background-image: url("../../assets/bg.png");
+    // background-image: url("../../assets/bg.png");
+    background-color: #fff;
     background-size: cover;
     overflow: hidden;
     position: absolute;
@@ -277,11 +360,15 @@ export default {
     left: calc(50% - 440px);
     background-color: #fff;
     z-index: 20;
-
+    overflow-y: scroll;
+    padding-bottom: 30px;
+    box-sizing: border-box;
     .kkk {
       background: #ffffff;
-      width: 560px;
-      border: 1px solid #ffffff;
+      width: 450px;
+      // border: 1px solid #ffffff;
+      border: 1px solid lightgrey;
+      box-sizing: border-box;
       border-radius: 4px;
       box-sizing: border-box;
     }
@@ -289,14 +376,20 @@ export default {
       border-color: rgb(247, 71, 71);
     }
     textarea {
-      width: 560px;
+      width: 450px;
       resize: none;
       padding: 5px;
       outline: 0;
+      border: 1px solid lightgrey;
+      border-radius: 4px;
+      box-sizing: border-box;
     }
     input {
       padding: 8px 4px;
       outline: 0;
+      border: 1px solid lightgrey;
+      width: 450px;
+      box-sizing: border-box;
     }
     input:focus,
     textarea:focus {

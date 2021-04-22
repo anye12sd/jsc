@@ -91,7 +91,6 @@ export default {
     //   this.usingOption[0].classname1 = "status02";
     //   this.usingOption[0].classname2 = "status01";
     //   this.current = this.usingOption[0].id
-    //   this.$store.commit("jurisdiction/setprocess",this.usingOption[0].routerpath.split("/")[2])
     //   }
     // }
   },

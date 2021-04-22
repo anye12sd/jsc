@@ -3,8 +3,8 @@
     <div class="tit">PC驾驶舱</div>
     <div class="option">
       <div
-        v-for="k in usingOption"
-        :key="k.name"
+        v-for="(k,index) in usingOption"
+        :key="index"
         :class="'op ' + (current == k.id ? k.classname1 : k.classname2)"
         @click="chose(k)"
       >
@@ -70,7 +70,7 @@ export default {
     ...mapState("config", ["currentRouterPath", "1"]),
   },
   mounted() {
-    this.change();
+    // this.change();
   },
   methods: {
     ...mapMutations("config",["setpcCockpit"]),
@@ -80,7 +80,7 @@ export default {
     },
     change() {
       if (this[1].items) {
-        //  console.log("2222",this.current)
+        //  console.log("2222",this[1].items,this.usingOption)
         this.options.forEach((item) => {
           this[1].items.forEach((p) => {
             if (item.id == p.id) {
@@ -89,10 +89,10 @@ export default {
             }
           });
         });
+        // console.log("2222",this[1].items,this.usingOption)
         this.usingOption[0].classname1 = "status02";
         this.usingOption[0].classname2 = "status01";
         this.current = this.usingOption[0].id
-        // this.$store.commit("jurisdiction/setpcCockpit",this.usingOption[0].routerpath.split("/")[2])
       }
     },
   },

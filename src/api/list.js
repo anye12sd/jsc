@@ -208,3 +208,10 @@ export function subscribeList(str){
         url:"/subscribe/list?"+str
     })
 }
+// 订阅列表
+export function portaluser(str){
+    return request({
+        method:"get",
+        url:"portal/user?" +str
+    })
+}

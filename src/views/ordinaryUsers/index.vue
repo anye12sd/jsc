@@ -67,7 +67,13 @@ export default {
     };
   },
   mounted() {
-    // console.log(location.hash)
+    console.log(location.hash)
+    if(location.hash == "#/oridinaryUsers/modelmarket") {
+      this.current = 1
+    }
+    if(location.hash.includes("/oridinaryUsers/detail")) {
+      this.current = 2
+    }
     this.getTime();
   },
   components: {
@@ -80,7 +86,7 @@ export default {
   methods: {
     goafter(){
       this.$store.commit("config/setShowTopBar",true)
-      this.$$router.push("/pcCockpit/distribution")
+      this.$router.push("/pcCockpit/distribution")
     },
     getTime() {
       let date = new Date();
@@ -108,10 +114,13 @@ export default {
   },
   watch:{
     $route(to,from){
+      console.log(to)
       if(to.name == "Detail") {
         this.current = 2
       } else if(to.name == "Modelmarket") {
+        
         this.current = 1
+        console.log(this.current)
       }
     }
   }

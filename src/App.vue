@@ -1,7 +1,7 @@
 <template>
-  <div id="app" :class="identity == 3?'dark':'white'">
-    <topbar v-if="isLogin && identity != 3"></topbar>
-    <!-- <topbar v-if="showtopbar"></topbar> -->
+  <div id="app" :class="!showtopbar ? 'dark' : 'white'">
+    <!-- <topbar v-if="isLogin && identity != 3"></topbar> -->
+    <topbar v-if="showtopbar"></topbar>
     <router-view></router-view>
   </div>
 </template>
@@ -14,7 +14,7 @@ export default {
   name: "app",
   data() {
     return {
-      num: 0
+      num: 0,
     };
   },
   mounted() {
@@ -23,35 +23,49 @@ export default {
   methods: {
     init() {
       let access_token = location.search.split("=")[1];
-      if(!access_token) return
+      if (!access_token) return;
       if (access_token == "aaaa") {
         this.$store.commit("config/setidentity", 1);
+        this.$store.commit("config/setUsetInfo", {
+            userName:"系统",
+            role_id:1
+        });
         this.togetmenu();
-        return
+        // this.$router.push("/oridinaryUsers");
+        return;
       } else if (access_token == "bbbb") {
         this.$store.commit("config/setidentity", 2);
+        this.$store.commit("config/setUsetInfo", {
+            userName:"单位",
+            role_id:1
+        });
         this.togetmenu();
-        return
+        // this.$router.push("/oridinaryUsers");
+        return;
       } else if (access_token == "cccc") {
         //普通用户
-        console.log(access_token);
         this.$store.commit("config/setidentity", 3);
-        this.$router.push("/oridinaryUsers")
+        this.$store.commit("config/setUsetInfo", {
+            userName:"普通",
+            role_id:3
+        });
+        // this.$router.push("/oridinaryUsers");
         this.togetmenu();
-        return
+        return;
       } else if (access_token == "dddd") {
         //模型开发人员
         this.$store.commit("config/setidentity", 4);
         this.togetmenu();
-        return
+        // this.$router.push("/oridinaryUsers");
+        return;
       }
       if (access_token) {
+        console.log("user");
         tologin().then((res) => {
-          console.log("user", res);
           if (res.data.status == 200) {
             this.$store.commit("config/setUsetInfo", res.data.data);
             this.$store.commit("config/setidentity", res.data.data.role_id);
-            this.$router.push("/oridinaryUsers")
+            this.$router.push("/oridinaryUsers");
             // if(res.data.data.role_id == 3) {
             //   this.$router.push("/oridinaryUsers")
             // }
@@ -93,7 +107,7 @@ export default {
     topbar,
   },
   computed: {
-    ...mapState("config", ["isLogin","identity","showtopbar"]),
+    ...mapState("config", ["isLogin", "identity", "showtopbar"]),
   },
   watch: {
     isLogin(newValue) {
@@ -107,6 +121,15 @@ export default {
           location.href = "http://10.21.197.237";
         }
       }
+    },
+    $route(to, from) {
+      // console.log(to,to.fullPath.includes("oridinaryUsers"))
+      if(to.fullPath.includes("oridinaryUsers")) {
+        this.$store.commit("config/setShowTopBar",false)
+      } else {
+        this.$store.commit("config/setShowTopBar",true)
+      }
+      
     },
   },
 };
@@ -133,10 +156,10 @@ html {
   height: 100%;
   // overflow: hidden;
 }
-.dark{
-  background: linear-gradient(180deg, #161D28 47%, #0B252C 100%);
+.dark {
+  background: linear-gradient(180deg, #161d28 47%, #0b252c 100%);
 }
-.white{
+.white {
   background-color: #f0f2f9;
 }
 @media screen and (max-height: 720px) {

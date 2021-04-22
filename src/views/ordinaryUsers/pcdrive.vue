@@ -103,7 +103,9 @@ import f1 from "@/assets/oridinary/f1.png";
 import f2 from "@/assets/oridinary/f2.png";
 import f3 from "@/assets/oridinary/f3.png";
 import f4 from "@/assets/oridinary/f4.png";
+import { portaluser } from "@/api/list.js";
 import Birth from "../../components/subpage/birth.vue";
+
 const modulesFiles = require.context(
   "../../components/subpage",
   true,
@@ -137,6 +139,7 @@ export default {
       },
     goto() {
       // 请求获取的数组
+      portaluser().then(res=>{})
       let data = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
       for (let i = 0; i < data.length; i += 6) {
         this.models.push(data.slice(i, i + 6));

@@ -5,42 +5,45 @@
       <div class="model">
         <div class="top">
           <div class="main">
-            <img src="@/assets/oridinary/modelIcon.png" alt="" />
-            <div>{{ k.name }}</div>
+            <img :src="info.img_url?'http://10.21.197.237'+info.img_url:'@/assets/oridinary/modelIcon.png'" alt="" />
+            <div>{{ modelInfo.modulename }}</div>
           </div>
           <div class="to">
             <img src="@/assets/oridinary/connect.png" alt="" />
           </div>
         </div>
         <div class="bot">
-          <div style="display: flex; justify-content: space-between">
+          <!-- <div style="display: flex; justify-content: space-between"> -->
+          <div>
             <div>
               <span class="tit">所属单位</span>
-              <span class="con">{{ k.branch }}</span>
+              <span class="con">{{ modelInfo.branch_name }}</span>
             </div>
-            <div style="text-align: right">
+            <div style="text-align: left">
               <span class="tit">类型</span>
-              <span class="con">{{ k.type }}</span>
+              <span class="con">{{ modelInfo.module_type }}</span>
             </div>
           </div>
           <div>
             <span class="tit">模型修改时间</span>
-            <span class="con">{{ k.time }}</span>
+            <span class="con">{{ modelInfo.update_time }}</span>
           </div>
         </div>
       </div>
     </div>
     <div class="right">
-      <div v-for="k in modelDetail" :key="k.tit" class="each">
+      <div v-for="(value,name) in opt" :key="name" class="each">
         <div class="icon"></div>
-        <div class="title">{{ k.tit }}</div>
-        <div class="content">{{ k.txt }}</div>
+        <div class="title">{{ value }}</div>
+        <div class="content">{{ info[name] }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { introduce } from "@/api/list.js";
+import {mapState} from 'vuex'
 export default {
   name: "detail",
   data() {
@@ -51,48 +54,33 @@ export default {
         type: "SQL类型",
         time: "2021-01-20 12:30:00",
       },
-      modelDetail: [
-        {
-          tit: "模型背景",
-          txt:
-            "结合水气数据统计并分析全县月、季度、年度的使用量趋势。结合水气数据、地理信息数据统计并分析各区域水气使用量及整体趋势。趋势。结合水气数据、地理信息数据统计并分析各区域水气使用量及整体趋势。趋势。结合水气数据、地理信息数据统计并分析各区域水气使用量及整体趋势。趋势",
-        },
-        {
-          tit: "应用成效",
-          txt:
-            "结合水气数据统计并分析全县月、季度、年度的使用量趋势。结合水气数据、地理信息数据统计并分析各区域水气使用量及整体趋势。趋势。结合水气数据、地理信息数据统计并分析各区域水气使用量及整体趋势。趋势。结合水气数据、地理信息数据统计并分析各区域水气使用量及整体趋势。趋势",
-        },
-        {
-          tit: "数据来源",
-          txt:
-            "结合水气数据统计并分析全县月、季度、年度的使用量趋势。结合水气数据、地理信息数据统计并分析各区域水气使用量及整体趋势。趋势。结合水气数据、地理信息数据统计并分析各区域水气使用量及整体趋势。趋势。结合水气数据、地理信息数据统计并分析各区域水气使用量及整体趋势。趋势",
-        },
-        {
-          tit: "计算结果",
-          txt:
-            "结合水气数据统计并分析全县月、季度、年度的使用量趋势。结合水气数据、地理信息数据统计并分析各区域水气使用量及整体趋势。趋势。结合水气数据、地理信息数据统计并分析各区域水气使用量及整体趋势。趋势。结合水气数据、地理信息数据统计并分析各区域水气使用量及整体趋势。趋势",
-        },
-        {
-          tit: "处理逻辑",
-          txt:
-            "结合水气数据统计并分析全县月、季度、年度的使用量趋势。结合水气数据、地理信息数据统计并分析各区域水气使用量及整体趋势。趋势。结合水气数据、地理信息数据统计并分析各区域水气使用量及整体趋势。趋势。结合水气数据、地理信息数据统计并分析各区域水气使用量及整体趋势。趋势",
-        },
-        {
-          tit: "加工过程",
-          txt:
-            "结合水气数据统计并分析全县月、季度、年度的使用量趋势。结合水气数据、地理信息数据统计并分析各区域水气使用量及整体趋势。趋势。结合水气数据、地理信息数据统计并分析各区域水气使用量及整体趋势。趋势。结合水气数据、地理信息数据统计并分析各区域水气使用量及整体趋势。趋势",
-        },
-      ],
+      info: {},
+      opt: {
+        background: "模型背景",
+        results: "应用成效",
+        source: "数据来源",
+        result: "计算结果",
+        logic: "处理逻辑",
+        process: "加工过程"
+      },
     };
   },
-  mounted() {
-    console.log(this.$route.params);
+  computed:{
+    ...mapState("jurisdiction",['modelInfo'])
   },
-  methods:{
-      goback(){
-          this.$router.go(-1)
-      }
-  }
+  mounted() {
+    console.log(this.$route.params,this.modelInfo);
+    introduce(this.$route.params.id).then((res) => {
+      console.log(res);
+      this.info = res.data.data;
+    });
+  },
+  methods: {
+    goback() {
+      // this.$router.go(-1);
+      this.$router.push("/oridinaryUsers/modelmarket")
+    },
+  },
 };
 </script>
 
@@ -193,10 +181,10 @@ export default {
     flex-wrap: wrap;
     .each {
       width: 47%;
-      .icon{
-          width: 64px;
-          height: 5px;
-          background-image: linear-gradient(270deg, #11F8EE 4%, #02C0FD 87%);
+      .icon {
+        width: 64px;
+        height: 5px;
+        background-image: linear-gradient(270deg, #11f8ee 4%, #02c0fd 87%);
       }
       .title {
         font-family: MicrosoftYaHei-Bold;

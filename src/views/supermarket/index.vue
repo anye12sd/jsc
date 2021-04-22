@@ -57,12 +57,11 @@ export default {
   },
   components: {},
   computed:{
-    ...mapState("config",["currentRouterPath","2"]),
-    ...mapState("jurisdiction",["supermarket"])
+    ...mapState("config",["currentRouterPath","2"])
   },
   mounted(){
     
-    this.change()
+    // this.change()
   },
   methods: {
     chose(item) {
@@ -90,7 +89,6 @@ export default {
       this.usingOption[0].classname1 = "status02";
       this.usingOption[0].classname2 = "status01";
       this.current = this.usingOption[0].id
-      // this.$store.commit("jurisdiction/setsupermarket",this.usingOption[0].routerpath.split("/")[2])
       }
       // console.log(this.usingOption)
     }

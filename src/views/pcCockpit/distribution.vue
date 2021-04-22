@@ -33,13 +33,21 @@
       <div class="main">
         <div class="top">
           <span class="name">姓名</span>
-          <input type="text" name="" id="" />
+          <input type="text" class="xm" v-model="xm" />
           <span v-if="identity == 1">单位</span>
-          <input type="text" name="" id="" v-if="identity == 1" />
-          <span class="search">搜索</span>
+          <el-select v-model="company" filterable placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.branchname"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+          <span class="search" @click="search">搜索</span>
           <span class="all" @click="manydis">批量分配</span>
           <span class="all" @click="manyundis">批量解除分配</span>
-          <span class="all">所有人</span>
+          <!-- <span class="all">所有人</span> -->
         </div>
         <div class="users">
           <div class="firstline line">
@@ -54,6 +62,17 @@
             <div class="name">姓名</div>
             <div class="branch" v-if="identity == 1">单位</div>
             <div class="act">操作</div>
+          </div>
+          <div
+            v-if="users.length == 0"
+            style="
+              text-align: center;
+              height: 50px;
+              line-height: 50px;
+              color: gray;
+            "
+          >
+            暂无数据
           </div>
           <div class="line" v-for="(p, index) in users" :key="p.id">
             <div>
@@ -84,7 +103,7 @@
           :page-size="10"
           layout="total, prev, pager, next, jumper"
           :total="usertotal"
-          class="pagination"
+          class="pagination special"
           style="text-align: center"
         >
         </el-pagination>
@@ -97,6 +116,7 @@
 import {
   getsubscribe,
   subscribeList,
+  appbranch,
   portalSubscribe,
   portalSubscribeall,
 } from "@/api/list.js";
@@ -118,6 +138,9 @@ export default {
       usertotal: 0,
       isAll: false,
       demand_id: 0,
+      options: [],
+      company: null,
+      xm: '',
       status: [
         false,
         false,
@@ -138,7 +161,7 @@ export default {
   },
   mounted() {
     getsubscribe("page=1").then((res) => {
-      console.log(res);
+      // console.log(res);
       this.list = res.data.data.list;
       this.total = res.data.data.count;
       // console.log(this.total)
@@ -183,9 +206,26 @@ export default {
     },
   },
   methods: {
+    search() {
+      if (this.xm == null && this.company == null) return;
+      subscribeList(
+        "demand_id=" +
+          this.demand_id +
+          "&page=1" +
+          "&branch_id=" +
+          this.company +
+          "&username=" +
+          this.xm
+      ).then((res) => {
+        console.log(res);
+        if (res.data.status == 200) {
+          this.users = res.data.data.list;
+          this.usertotal = res.data.data.count;
+        }
+      });
+    },
     onedis(id, index) {
       // 单一分配
-
       portalSubscribe(
         "id=" + id + "&demand_id=" + this.demand_id + "&status=1"
       ).then((res) => {
@@ -235,6 +275,13 @@ export default {
         return;
       }
       ids = ids.slice(0, ids.length - 1);
+      if (ids.length == 0) {
+        this.$message({
+          message: "请选择人员",
+          type: "warning",
+        });
+        return;
+      }
       console.log(ids);
       portalSubscribeall(
         "ids=" + ids + "&demand_id=" + this.demand_id + "&status=1"
@@ -245,7 +292,7 @@ export default {
             message: "分配成功",
             type: "success",
           });
-          this.hide()
+          this.hide();
           this.status.forEach((item, index) => {
             if (item) {
               this.users[index].subscribe = 2;
@@ -274,6 +321,13 @@ export default {
         return;
       }
       ids = ids.slice(0, ids.length - 1);
+      if (ids.length == 0) {
+        this.$message({
+          message: "请选择人员",
+          type: "warning",
+        });
+        return;
+      }
       console.log(ids);
       portalSubscribeall(
         "ids=" + ids + "&demand_id=" + this.demand_id + "&status=2"
@@ -284,7 +338,7 @@ export default {
             message: "解除分配成功",
             type: "success",
           });
-          this.hide()
+          this.hide();
           this.status.forEach((item, index) => {
             if (item) {
               this.users[index].subscribe = 0;
@@ -317,19 +371,29 @@ export default {
       this.showmesbox = true;
       this.demand_id = id;
       this.getUserList(1);
+      appbranch().then((res) => {
+        console.log(res);
+        if (res.data.status == 200) {
+          this.options = res.data.data;
+        }
+      });
     },
     hide() {
       this.showmesbox = false;
       this.selectNum = 0;
+      this.company = '';
+      this.xm = '';
     },
     getUserList(page) {
-      subscribeList("demand_id=" + this.demand_id+"&page="+page).then((res) => {
-        console.log(res);
-        if (res.data.status == 200) {
-          this.users = res.data.data.list;
-          this.usertotal = res.data.data.count;
+      subscribeList("demand_id=" + this.demand_id + "&page=" + page).then(
+        (res) => {
+          console.log(res);
+          if (res.data.status == 200) {
+            this.users = res.data.data.list;
+            this.usertotal = res.data.data.count;
+          }
         }
-      });
+      );
     },
     handleCurrentChange(val) {
       getsubscribe("page=" + val).then((res) => {
@@ -340,7 +404,27 @@ export default {
     },
     handleCurrentChange2(val) {
       this.selectNum = 0;
-      this.getUserList(val);
+
+      if (this.company || this.xm) {
+        subscribeList(
+          "demand_id=" +
+            this.demand_id +
+            "&page=" +
+            val +
+            "&branch_id=" +
+            this.company +
+            "&username=" +
+            this.xm
+        ).then((res) => {
+          console.log(res);
+          if (res.data.status == 200) {
+            this.users = res.data.data.list;
+            this.usertotal = res.data.data.count;
+          }
+        });
+      } else {
+        this.getUserList(val);
+      }
     },
   },
 };
@@ -444,9 +528,26 @@ export default {
       font-size: 16px;
       letter-spacing: 2px;
       padding-top: 15px;
+      .special {
+        position: absolute;
+        bottom: 10px;
+        width: 100%;
+      }
       .top {
         text-align: center;
         margin-top: 5px;
+        .xm {
+          border: 1px solid lightgray;
+          border-radius: 4px;
+          width: 140px;
+          height: 30px;
+          padding-left: 15px;
+        }
+        input:focus {
+          border: 1px solid #409eff;
+          outline: 0;
+          text-align: left;
+        }
         * {
           vertical-align: middle;
           margin: 0 5px;
@@ -497,6 +598,22 @@ export default {
         }
       }
     }
+  }
+}
+</style>
+
+<style lang="less">
+.distribution {
+  .el-input--suffix .el-input__inner {
+    border: 1px solid lightgray;
+    border-radius: 4px;
+    width: 220px;
+    height: 30px;
+  }
+  .el-input__icon {
+    line-height: 100%;
+    display: block;
+    height: 94%;
   }
 }
 </style>

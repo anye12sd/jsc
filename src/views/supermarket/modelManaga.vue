@@ -46,6 +46,9 @@
             <p @click="godown(k.id, index)" v-if="k.load == 1 || k.load == 3">
               <img :src="puton" alt="图片资源缺失" /> <span>下架</span>
             </p>
+            <p @click="intro(k.id, index)">
+              <span>模型介绍</span>
+            </p>
           </div>
         </div>
       </div>
@@ -64,6 +67,7 @@
     <modify
       v-if="showModify"
       @justHide="justHide"
+      :module_id="module_id"
       :changeAble="waitchange"
       @changeConfirm="justHide"
       @subok="subok"
@@ -78,7 +82,7 @@ import puton from "@/assets/listlogo/puton.png";
 import modify from "./modify";
 // import searchdemo from "@/components/searchdemo.vue";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import { getlist, appload, appCategory } from "@/api/list.js";
+import { getlist, appload, appCategory,introduce } from "@/api/list.js";
 export default {
   name: "modelManaga",
   data() {
@@ -98,7 +102,8 @@ export default {
         label: "category_name",
       },
       queryId: null,
-      waitchange:false
+      waitchange:false,
+      module_id:0
     };
   },
   computed: {
@@ -112,7 +117,7 @@ export default {
       this.total = res.data.data.count;
     });
     appCategory().then((res) => {
-      console.log("分类", res);
+      // console.log("分类", res);
       this.data = res.data.data;
     });
     console.log(this[3])
@@ -125,6 +130,21 @@ export default {
     // searchdemo,
   },
   methods: {
+    intro(id){
+      introduce(id).then(res=>{
+        console.log(res)
+        if(res.data.status == 200 && res.data.data.length == 0) {
+          this.waitchange = false;
+          this.showModify = true;
+          this.module_id = id
+        }
+        if(res.data.data.background) {
+          this.showModify = true;
+          this.module_id = id;
+          this.waitchange = res.data.data;
+        }
+      })
+    },
     justHide() {
       this.showModify = false;
       this.waitchange = false;

@@ -2,10 +2,12 @@
   <div class="modelmarket">
     <div class="main">
       <div v-for="(k, index) in models" :key="index" class="each">
-        <div class="top" @click="getdetail">
+        <div class="top" @click="getdetail(k)">
           <img src="@/assets/oridinary/modelIcon.png" alt="" />
           <div>{{ k.modulename }}</div>
-          <span class="modelDownload" @click.stop="download(k.id,$event)">模型下载</span>
+          <span class="modelDownload" @click.stop="download(k.id, $event)"
+            >模型下载</span
+          >
         </div>
         <div class="bot">
           <div style="display: flex; justify-content: space-between">
@@ -26,14 +28,19 @@
       </div>
     </div>
     <div class="pagination">
-      <el-pagination layout=" pager" :page-size="9" :total="total" @current-change="handleCurrentChange">
+      <el-pagination
+        layout=" pager"
+        :page-size="9"
+        :total="total"
+        @current-change="handleCurrentChange"
+      >
       </el-pagination>
     </div>
   </div>
 </template>
 
 <script>
-import { appuserlist } from "@/api/list.js";
+import { getlist } from "@/api/list.js";
 export default {
   name: "modelmarket",
   data() {
@@ -43,7 +50,7 @@ export default {
     };
   },
   mounted() {
-    appuserlist(1).then((res) => {
+    getlist("page=1&pageSize=9").then((res) => {
       console.log(res);
       this.models = res.data.data.list;
       this.total = res.data.data.count;
@@ -51,12 +58,17 @@ export default {
   },
   methods: {
     handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-      },
-    getdetail() {
-      this.$router.push("/oridinaryUsers/detail/" + 12);
+      console.log(`当前页: ${val}`);
+      getlist("page="+val+"&pageSize=9").then((res) => {
+        this.models = res.data.data.list;
+        this.total = res.data.data.count;
+      });
     },
-    download(id,event) {
+    getdetail(item) {
+      this.$router.push("/oridinaryUsers/detail/" + item.id);
+      this.$store.commit("jurisdiction/setModelInfo", item);
+    },
+    download(id, event) {
       window.open(
         "http://10.21.197.237/app/sql?id=" +
           id +

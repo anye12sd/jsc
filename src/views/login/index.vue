@@ -26,6 +26,7 @@ export default {
       console.log(access_token)
       if (access_token) {
         this.hasToken = true
+        this.$router.push("/oridinaryUsers");
         return
       }
       let str;

@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import PcCokpit from "@/views/pcCockpit"
 import store from "../store"
 
-// console.log(store.state.jurisdiction,store.state.jurisdiction.supermarket)
 
 
 Vue.use(VueRouter)
@@ -26,11 +25,10 @@ const routes = [
   {
     path: "/pcCockpit",
     component: PcCokpit,
-    // children:store.state.jurisdiction.pcCockpit
     children: [
       {
         path: "",
-        redirect: "pageShow"
+        redirect: "distribution"
       },
       {
         path: 'pageShow',
@@ -57,7 +55,6 @@ const routes = [
   {
     path: "/supermarket",
     component: () => import('../views/supermarket'),
-    // children:store.state.jurisdiction.supermarket
     children: [
       {
         path: "",
@@ -94,7 +91,6 @@ const routes = [
     path: "/process",
     // name:"Process",
     component: () => import("../views/process"),
-    // children:store.state.jurisdiction.process
     children: [
       {
         path: "",
@@ -121,7 +117,6 @@ const routes = [
     path: "/demand",
     // name: "Demand",
     component: () => import("../views/demand"),
-    // children:store.state.jurisdiction.demand
     children:[{
       path:"",
       redirect: "addNewDemand"
@@ -147,7 +142,6 @@ const routes = [
     path: "/userAuthorization",
     // name: "UserAuthorization",
     component: () => import("../views/userAuthorization"),
-    // children:store.state.jurisdiction.userAuthorization
     children:[{
       path:"",
       redirect: "userManaga"
@@ -203,4 +197,10 @@ const router = new VueRouter({
   routes
 })
 
+// router.beforeEach((to,from,next) => {
+//   if(to.fullPath != from.fullPath) {
+//     next();
+//   }
+
+// })
 export default router

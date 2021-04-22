@@ -103,7 +103,6 @@ export default {
             this.$store.commit("config/setpcCockpit", op[index]);
           } else if (item.id == 2) {
             this.$store.commit("config/setsupermarket",op[index]);
-            // this.$store.commit("jurisdiction/setsupermarket", res.data.data[index]);
           } else if (item.id == 3) {
             this.$store.commit("config/setmodelIntroduce", op[index]);
           } else if (item.id == 4) {
@@ -124,6 +123,7 @@ export default {
           });
         });
         this.usingOption = op;
+        // console.log(this.usingOption)
     },
     chose(index, path) {
       this.current = index;
@@ -136,6 +136,9 @@ export default {
     },
   },
   watch: {
+    topbararr(){
+      this.init()
+    },
     $route(to, from) {
       let path = document.location.hash;
       this.$store.commit("config/setPath", path);
@@ -153,6 +156,8 @@ export default {
     usingOption(){
       // console.log("change")
       let flag = false;
+      if(this.usingOption.length == 0) return
+      // console.log(this.usingOption)
       this.usingOption.forEach(item=>{
         if(location.hash.includes(item.path)) {
           flag = true
@@ -160,7 +165,6 @@ export default {
         }
       })
       if(flag) return
-      // console.log(this.usingOption)
       this.$router.push(this.usingOption[0].path)
       // if("/"+location.hash.split("/")[1] == this.usingOption[0].path) return
       // this.$router.push(this.usingOption[0].path)
