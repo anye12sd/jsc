@@ -52,6 +52,7 @@
 </template>
 
 <script>
+// 产业比重情况
 export default {
   name: "industryShare",
   data() {

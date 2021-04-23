@@ -37,7 +37,7 @@
       </div>
       <div class="cen">
         <div>
-          <div v-for="k in opt" :key="k.name" class="each">
+          <div v-for="(k,index) in opt" :key="k.name" :class="current == index ? 'each':'each light'" @click="changtype(index)">
             <img :src="k.img" alt=" " />
             <div>{{ k.name }}</div>
           </div>
@@ -104,7 +104,6 @@ import f2 from "@/assets/oridinary/f2.png";
 import f3 from "@/assets/oridinary/f3.png";
 import f4 from "@/assets/oridinary/f4.png";
 import { portaluser } from "@/api/list.js";
-import Birth from "../../components/subpage/birth.vue";
 
 const modulesFiles = require.context(
   "../../components/subpage",
@@ -134,12 +133,17 @@ export default {
     };
   },
   methods: {
+    changtype(index){
+      this.current = index
+    },
     handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
       },
     goto() {
       // 请求获取的数组
-      portaluser().then(res=>{})
+      portaluser("page=1").then(res=>{
+        console.log(res)
+      })
       let data = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
       for (let i = 0; i < data.length; i += 6) {
         this.models.push(data.slice(i, i + 6));
@@ -157,6 +161,7 @@ export default {
       widper: 1,
       heiper: 1,
       total:1,
+      current:0,
       f1,
       f2,
       f3,
@@ -181,7 +186,6 @@ export default {
       ],
       models: [],
       // 页面渲染的数据
-
       showingModel: {
         // 左边的数组
         left: [],
@@ -310,6 +314,9 @@ export default {
         }
         > .each:nth-of-type(4) {
           margin-top: 41%;
+        }
+        >.light{
+          opacity: 0.6;
         }
         > div {
           width: 25%;

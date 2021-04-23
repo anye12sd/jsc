@@ -2,7 +2,7 @@
   <div class="modelmarket">
     <div class="main">
       <div v-for="(k, index) in models" :key="index" class="each">
-        <div class="top" @click="getdetail(k)">
+        <div class="top checked" @click="getdetail(k)">
           <img src="@/assets/oridinary/modelIcon.png" alt="" />
           <div>{{ k.modulename }}</div>
           <span class="modelDownload" @click.stop="download(k.id, $event)"
@@ -24,6 +24,23 @@
             <span class="tit">模型修改时间</span>
             <span class="con">{{ k.create_time }}</span>
           </div> -->
+        </div>
+      </div>
+      <div v-for="(k, index) in 9- models.length" :key="index" class="each">
+        <div class="top unchecked">
+          <img src="@/assets/oridinary/modelIcon.png" alt="" />
+          <div>模型名称</div>
+          <span class="modelDownload" @click.stop="download(k.id, $event)"
+            >模型下载</span
+          >
+        </div>
+        <div class="bot">
+          <div style="display: flex; justify-content: space-between">
+            <div>
+              <span class="tit">所属单位</span>
+              <span class="con">****</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -131,12 +148,18 @@ export default {
       width: 29%;
       height: 28%;
       margin: 0 2%;
+      >.checked{
+        background: url("../../assets/oridinary/modelborder.png") no-repeat;
+      }
+      >.unchecked{
+        background: url("../../assets/oridinary/notsale.png") no-repeat;
+      }
       > .top {
         display: flex;
         align-content: center;
         text-align: center;
         flex-wrap: wrap;
-        background: url("../../assets/oridinary/modelborder.png") no-repeat;
+        
         background-size: 100% 100%;
         cursor: pointer;
         transition: transform;

@@ -38,7 +38,6 @@ export default {
           if (optionsdata.code == 200) {
             this.cyhl_zsyz = optionsdata.data[0][0];
             this.cyhl_zsyz1 = optionsdata.data[1];
-            console.log(this.cyhl_zsyz,this.cyhl_zsyz1)
           }
           this.drawing();
         })

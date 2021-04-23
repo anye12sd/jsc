@@ -92,7 +92,7 @@ export default {
   padding: 5px 0;
   display: flex;
   .left {
-    width: 32%;
+    width: 50%;
     .back {
       height: 25px;
       line-height: 25px;
@@ -171,7 +171,7 @@ export default {
     }
   }
   .right {
-    width: 68%;
+    width: 50%;
     background: url("../../assets/oridinary/bigborder.png") no-repeat;
     background-size: 100% 100%;
     padding: 2% 4%;

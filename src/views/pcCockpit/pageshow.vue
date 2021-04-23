@@ -1,6 +1,6 @@
 <template>
   <div class="pageshow">
-    <div v-for="k in eles" :key="k.eleId" :id="k.eleId">
+    <div v-for="k in eles" :key="k.componentName">
       <component :is="k.componentName" v-if="k.componentName"></component>
     </div>
   </div>
@@ -79,11 +79,13 @@ export default {
         //   type: "eight",
         //   componentName:"job"
         // },
+        // 婚姻
         // {
         //   eleId:"nine",
         //   type:"nine",
         //   componentName:"marriage"
         // },
+        // 民生诉求
         // {
         //   eleId: "ten",
         //   type: "ten",
@@ -120,16 +122,40 @@ export default {
         //   componentName:"life"
         // },
         // 产业比重情况
+        // {
+        //   eleId:"sixteen",
+        //   type:"sixteen",
+        //   componentName:"industryShare"
+        // },
+        // // 招商引资
+        // {
+        //   eleId:"seventeen",
+        //   type:"seventeen",
+        //   componentName:"attractInvestment"
+        // },
+        // // 固定资产投资 
+        // {
+        //   componentName:"fixedAssets"
+        // },
+        // // 企业信息 
+        // {
+        //   componentName:"enterpriseInformation"
+        // },
+        // // 企业综合评分 
+        // {
+        //   componentName:"scoreOfEnterprises"
+        // },
+        // // 评分企业TOP排名 
+        // {
+        //   componentName:"topRanking"
+        // },
+        // 企业动态 以下未写
         {
-          eleId:"sixteen",
-          type:"sixteen",
-          componentName:"industryShare"
+          componentName:"enterpriseNews"
         },
-        // 招商引资
+        // 企业评分预警
         {
-          eleId:"seventeen",
-          type:"seventeen",
-          componentName:"attractInvestment"
+          componentName:"earlyWarning"
         }
       ],
     };

@@ -56,7 +56,7 @@ export default {
         //模型开发人员
         this.$store.commit("config/setidentity", 4);
         this.togetmenu();
-        // this.$router.push("/oridinaryUsers");
+        this.$router.push("/oridinaryUsers");
         return;
       }
       if (access_token) {
@@ -65,7 +65,7 @@ export default {
           if (res.data.status == 200) {
             this.$store.commit("config/setUsetInfo", res.data.data);
             this.$store.commit("config/setidentity", res.data.data.role_id);
-            this.$router.push("/oridinaryUsers");
+            // this.$router.push("/oridinaryUsers");
             // if(res.data.data.role_id == 3) {
             //   this.$router.push("/oridinaryUsers")
             // }
