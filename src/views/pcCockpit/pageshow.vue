@@ -97,18 +97,18 @@ export default {
         //   type:"eleven",
         //   componentName:"hotword"
         // },
-        // // 疾病
-        // {
-        //   eleId:"twelve",
-        //   type:"twelve",
-        //   componentName:"disease"
-        // },
-        // // 三高
-        // {
-        //   eleId:"thirteen",
-        //   type:"thirteen",
-        //   componentName:"threeHigh"
-        // },
+        // 疾病
+        {
+          eleId:"twelve",
+          type:"twelve",
+          componentName:"disease"
+        },
+        // 三高
+        {
+          eleId:"thirteen",
+          type:"thirteen",
+          componentName:"threeHigh"
+        },
         // // 社会保障，低收入人群保障
         // {
         //   eleId:"fourteen",

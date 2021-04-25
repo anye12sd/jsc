@@ -3,7 +3,7 @@
     <div class="main">
       <div v-for="(k, index) in models" :key="index" class="each">
         <div class="top checked" @click="getdetail(k)">
-          <img src="@/assets/oridinary/modelIcon.png" alt="" />
+          <img :src=" k.img_url ? 'http://10.21.197.237'+k.img_url:modelImg " alt="" />
           <div>{{ k.modulename }}</div>
           <span class="modelDownload" @click.stop="download(k.id, $event)"
             >模型下载</span
@@ -13,7 +13,7 @@
           <div style="display: flex; justify-content: space-between">
             <div>
               <span class="tit">所属单位</span>
-              <span class="con">{{ k.branch_name }}</span>
+              <span class="con">{{ k.get_branch_name }}</span>
             </div>
             <!-- <div style="text-align: right">
               <span class="tit">类型</span>
@@ -58,12 +58,14 @@
 
 <script>
 import { getlist } from "@/api/list.js";
+import modelImg from '@/assets/oridinary/modelIcon.png'
 export default {
   name: "modelmarket",
   data() {
     return {
       models: [],
       total: 1,
+      modelImg
     };
   },
   mounted() {

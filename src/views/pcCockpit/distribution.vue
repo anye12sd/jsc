@@ -35,7 +35,7 @@
           <span class="name">姓名</span>
           <input type="text" class="xm" v-model="xm" />
           <span v-if="identity == 1">单位</span>
-          <el-select v-model="company" filterable placeholder="请选择">
+          <el-select v-model="company" filterable placeholder="请选择" v-if="identity == 1">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -45,8 +45,10 @@
             </el-option>
           </el-select>
           <span class="search" @click="search">搜索</span>
-          <span class="all" @click="manydis">批量分配</span>
-          <span class="all" @click="manyundis">批量解除分配</span>
+          <span class="all" @click="manydis">分配</span>
+          <span class="all" @click="manyundis">解除分配</span>
+          <span class="all" v-if="identity == 2">单位批量分配</span>
+          <span class="all" v-if="identity == 2">单位批量解除分配</span>
           <!-- <span class="all">所有人</span> -->
         </div>
         <div class="users">
@@ -260,11 +262,13 @@ export default {
       let flag = false;
       this.status.forEach((item, index) => {
         if (item) {
+          // 等于0可以分配
+          if (this.users[index].subscribe != 0) {
+            return
+          }
           ids += this.users[index].id;
           ids += ",";
-          if (this.users[index].subscribe == 0) {
-            flag = true;
-          }
+          
         }
       });
       if (flag) {
@@ -306,16 +310,17 @@ export default {
       let flag = false;
       this.status.forEach((item, index) => {
         if (item) {
+          if (this.users[index].subscribe == 0) {
+            return
+          }
           ids += this.users[index].id;
           ids += ",";
-          if (this.users[index].subscribe != 0) {
-            flag = true;
-          }
+          
         }
       });
       if (flag) {
         this.$message({
-          message: "选中人员有已分配人员",
+          message: "选中人员有已解除分配人员",
           type: "warning",
         });
         return;

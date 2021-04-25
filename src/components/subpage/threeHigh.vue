@@ -1,6 +1,6 @@
 <template>
   <div class="threeHigh">
-    <div>三高人数（今年）</div>
+    <div class="tit">三高人数（今年）</div>
     <el-row class="txt">
       <el-col :span="8">
         <div class="qyxxtitle">高血压人数</div>
@@ -267,6 +267,8 @@ export default {
   padding: 5px;
   color: #fff;
   box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
   .tit {
     font-family: SourceHanSansCN-Heavy;
     font-weight: 600;

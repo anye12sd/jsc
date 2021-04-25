@@ -1,8 +1,8 @@
 <template>
   <div class="disease">
     <div class="tit">疾病</div>
+    <div class="topsxl">疾病排行(今年)</div>
     <el-row>
-      <div class="topsxl">疾病排行(今年)</div>
       <el-col :span="12">
         <div class="toppm">
           <div
@@ -88,6 +88,8 @@ export default {
   padding: 5px;
   color: #fff;
   box-sizing: border-box;
+  overflow: hidden;
+  position: absolute;
   .tit {
     font-family: SourceHanSansCN-Heavy;
     font-weight: 600;

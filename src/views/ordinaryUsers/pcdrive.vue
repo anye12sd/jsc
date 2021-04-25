@@ -2,97 +2,88 @@
   <div class="pcdrive">
     <div class="main">
       <div class="left">
-        <div>
+        <div v-for="k in 3" :key="k">
           <!-- 为什么这里不直接传宽高？这需求又改了，新样式，这代码可以少写点 -->
-          <div class="name"><span>模型名称</span></div>
-          <div class="item" ref="item">
-            <birth
-              :size="true"
-              :style="
-                'transform:scale(' +
-                widper +
-                ',' +
-                heiper +
-                ');transform-origin:0% 0%;'
-              "
-            ></birth>
+          <div class="name">
+            <span>{{ models[k - 1] ? models[k - 1].view_name:'' }}</span>
           </div>
-        </div>
-        <div></div>
-        <div>
-          <div class="name"><span>模型名称</span></div>
-          <div class="item" ref="item">
-            <birth
-              :size="true"
+          <div class="item" ref="item" >
+            <div
+             v-if="models[k - 1]"
               :style="
+                'width:650px;height:350px;' +
                 'transform:scale(' +
                 widper +
                 ',' +
                 heiper +
                 ');transform-origin:0% 0%;'
               "
-            ></birth>
+            >
+            <component
+                :is="models[k - 1].view_code"
+              ></component>
+            <!-- <threeHigh v-if="models[k.id - 1].view_code == 'threeHigh'"></threeHigh>
+            <disease v-if="models[k - 1].view_code == 'disease'"></disease> -->
+              <!-- <component
+                :is="models[k.id - 1].view_code"
+                v-if="models[k - 1].view_code != 'disease' && models[k - 1].view_code != 'threeHigh'"
+              ></component> -->
+            </div>
           </div>
         </div>
       </div>
       <div class="cen">
         <div>
-          <div v-for="(k,index) in opt" :key="k.name" :class="current == index ? 'each':'each light'" @click="changtype(index)">
+          <div
+            v-for="(k, index) in opt"
+            :key="k.name"
+            :class="current == index ? 'each' : 'each light'"
+            @click="changtype(index)"
+          >
             <img :src="k.img" alt=" " />
             <div>{{ k.name }}</div>
           </div>
         </div>
       </div>
       <div class="right">
-        <div>
-          <div class="name"><span>模型名称</span></div>
-          <div class="item" ref="item">
-            <birth
-              :size="true"
-              :style="
-                'transform:scale(' +
-                widper +
-                ',' +
-                heiper +
-                ');transform-origin:0% 0%;'
-              "
-            ></birth>
+        <div v-for="k in 3" :key="k" ref="item">
+          <div class="name">
+            <span>{{ models[k + 2] ? models[k + 2].view_name:'' }}</span>
           </div>
-        </div>
-        <div>
-          <div class="name"><span>模型名称</span></div>
           <div class="item" ref="item">
-            <birth
-              :size="true"
+            <div
+            v-if="models[k + 2]"
               :style="
+                'width:650px;height:350px;' +
                 'transform:scale(' +
                 widper +
                 ',' +
                 heiper +
                 ');transform-origin:0% 0%;'
               "
-            ></birth>
-          </div>
-        </div>
-        <div>
-          <div class="name"><span>模型名称</span></div>
-          <div class="item" ref="item">
-            <birth
-              :size="true"
-              :style="
-                'transform:scale(' +
-                widper +
-                ',' +
-                heiper +
-                ');transform-origin:0% 0%;'
-              "
-            ></birth>
+            >
+            <component
+                :is="models[k + 2].view_code"
+              ></component>
+            <!-- <threeHigh></threeHigh> -->
+            <!-- <threeHigh v-if="models[k + 2].view_code == 'threeHigh'"></threeHigh>
+            <disease v-if="models[k + 2].view_code == 'disease'"></disease> -->
+              <!-- <component
+                :is="models[k.id + 2].view_code"
+                v-if="models[k.id + 2].view_code != 'disease' && models[k + 2].view_code != 'threeHigh'"
+              ></component> -->
+            </div>
           </div>
         </div>
       </div>
     </div>
     <div class="pagination">
-      <el-pagination layout=" pager" :page-size="6" :total="total" @current-change="handleCurrentChange">
+      <el-pagination
+        layout=" pager"
+        :page-size="6"
+        :total="total"
+        @current-change="handleCurrentChange"
+      >
       </el-pagination>
     </div>
   </div>
@@ -119,57 +110,37 @@ modulesFiles.keys().forEach((path) => {
 }, {});
 export default {
   name: "pcdrive",
-  mounted() {
-    // console.log(this.$refs.item.clientWidth, this.$refs.item.clientHeight);
-    // let width =
-    //   window.getComputedStyle(this.$refs.item).width.split("px")[0] * 1;
-    // let height =
-    //   window.getComputedStyle(this.$refs.item).height.split("px")[0] * 1;
-    this.widper = Math.floor((this.$refs.item.clientWidth / 650) * 100) / 100;
-    this.heiper = Math.floor((this.$refs.item.clientHeight / 350) * 100) / 100;
-    this.goto();
-    window.onresize = () => {
-      this.changesize();
-    };
-  },
-  methods: {
-    changtype(index){
-      this.current = index
-    },
-    handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-      },
-    goto() {
-      // 请求获取的数组
-      portaluser("page=1").then(res=>{
-        console.log(res)
-      })
-      let data = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
-      for (let i = 0; i < data.length; i += 6) {
-        this.models.push(data.slice(i, i + 6));
-      }
-    },
-    changesize() {
-      if(this.$refs.item){
-        this.widper = Math.floor((this.$refs.item.clientWidth / 650) * 100) / 100;
-      this.heiper = Math.floor((this.$refs.item.clientHeight / 350) * 100) / 100;
-      }
-    },
-  },
   data() {
     return {
       widper: 1,
       heiper: 1,
-      total:1,
-      current:0,
+      total: 1,
+      current: 0,
+      allcomponents:allpage,
+      page:1,
       f1,
       f2,
       f3,
       f4,
+      num:[
+        {
+          id:1,
+          ke:"a"
+        },
+        {
+          id:2,
+          ke:"b"
+        },
+        {
+          id:3,
+          ke:"c"
+        }
+      ],
       opt: [
         {
           name: "幸福民生",
           img: f1,
+          category_id: 1,
         },
         {
           name: "社会治理",
@@ -182,6 +153,7 @@ export default {
         {
           name: "经济发展",
           img: f4,
+          category_id: 6,
         },
       ],
       models: [],
@@ -192,6 +164,51 @@ export default {
         right: [],
       },
     };
+  },
+  mounted() {
+    // console.log(this.$refs.item.clientWidth, this.$refs.item.clientHeight);
+    // let width =
+    //   window.getComputedStyle(this.$refs.item).width.split("px")[0] * 1;
+    // let height =
+    //   window.getComputedStyle(this.$refs.item).height.split("px")[0] * 1;
+    console.log(this.$refs);
+    this.widper =
+      Math.floor((this.$refs.item[0].clientWidth / 650) * 100) / 100;
+    this.heiper =
+      Math.floor((this.$refs.item[0].clientHeight / 350) * 100) / 100;
+    this.goto(1);
+      console.log(this.allcomponents)
+    window.onresize = () => {
+      this.changesize();
+    };
+  },
+  methods: {
+    changtype(index) {
+      this.current = index;
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+      this.page = val;
+      this.goto(val)
+    },
+    goto(page) {
+      // 请求获取的数组
+      portaluser("page="+page+"&pageSize=6").then((res) => {
+        console.log(res);
+        if (res.data.status == 200) {
+          this.total = res.data.data.count;
+          this.models = res.data.data.list;
+        }
+      });
+    },
+    changesize() {
+      if (this.$refs.item) {
+        this.widper =
+          Math.floor((this.$refs.item.clientWidth / 650) * 100) / 100;
+        this.heiper =
+          Math.floor((this.$refs.item.clientHeight / 350) * 100) / 100;
+      }
+    },
   },
   components: {
     ...allpage,
@@ -245,7 +262,7 @@ export default {
         padding: 1% 1%;
         transition: all;
         cursor: pointer;
-        .name {
+        >.name {
           width: 100%;
           height: 20%;
           padding-left: 12%;
@@ -253,15 +270,18 @@ export default {
           padding-top: 3.5%;
           box-sizing: border-box;
           position: relative;
-          span {
+          >span {
             position: absolute;
             bottom: 7px;
           }
         }
-        .item {
+        >.item {
           width: 90%;
-          margin: 0 auto;
           height: 73%;
+          // width: 650px;
+          // height: 350px;
+          margin: 0 auto;
+          position: relative;
           background: #000;
         }
         //   >div{
@@ -274,26 +294,38 @@ export default {
     .left > div:nth-of-type(1):hover {
       transform: scale(1.5, 1.5);
       transform-origin: top left;
+      position: relative;
+      z-index: 10;
     }
     .left > div:nth-of-type(2):hover {
       transform: scale(1.5, 1.5);
       transform-origin: center left;
+      position: relative;
+      z-index: 10;
     }
     .left > div:nth-of-type(3):hover {
       transform: scale(1.5, 1.5);
       transform-origin: bottom left;
+      position: relative;
+      z-index: 10;
     }
     .right > div:nth-of-type(1):hover {
       transform: scale(1.5, 1.5);
       transform-origin: top right;
+      position: relative;
+      z-index: 10;
     }
     .right > div:nth-of-type(2):hover {
       transform: scale(1.5, 1.5);
       transform-origin: center right;
+      position: relative;
+      z-index: 10;
     }
     .right > div:nth-of-type(3):hover {
       transform: scale(1.5, 1.5);
       transform-origin: bottom right;
+      position: relative;
+      z-index: 10;
     }
     .cen {
       width: 38%;
@@ -315,7 +347,7 @@ export default {
         > .each:nth-of-type(4) {
           margin-top: 41%;
         }
-        >.light{
+        > .light {
           opacity: 0.6;
         }
         > div {
