@@ -27,6 +27,7 @@ export default {
     return {
       current: 0,
       usingOption:[],
+      isconfig:false,
       options: [
         {
           id: 18,
@@ -60,7 +61,7 @@ export default {
     };
   },
   mounted() {
-    // this.change();
+    this.change();
   },
   methods: {
     chose(item) {
@@ -69,6 +70,7 @@ export default {
     },
     change() {
       // console.log("333333333",this[4],this.usingOption)
+      if(this.isconfig) return
       if (this[4].items) {
         // console.log("333333333",this[4],this.usingOption)
         this.options.forEach((item) => {
@@ -82,6 +84,7 @@ export default {
         this.usingOption[0].classname1 = "status02";
         this.usingOption[0].classname2 = "status01";
         this.current = this.usingOption[0].id
+        this.isconfig = true
         // console.log("333333333",this[4],this.usingOption)
       } else {
         this.usingOption = [{

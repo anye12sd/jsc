@@ -212,6 +212,13 @@ export function subscribeList(str){
 export function portaluser(str){
     return request({
         method:"get",
-        url:"portal/user?" +str
+        url:"/portal/user?" +str
+    })
+}
+
+export function subscribeall(str){
+    return request({
+        method:"get",
+        url:"/subscribe/all?"+str
     })
 }

@@ -23,6 +23,7 @@ export default {
     return {
       current: 0,
       usingOption:[],
+      isconfig:false,
       options: [
         {
           id: 10,
@@ -61,7 +62,7 @@ export default {
   },
   mounted(){
     
-    // this.change()
+    this.change()
   },
   methods: {
     chose(item) {
@@ -69,14 +70,9 @@ export default {
       this.current = item.id;
       this.$router.push(item.routerpath);
     },
-    handleSizeChange(val) {
-      // console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
-      // console.log(`当前页: ${val}`);
-    },
     change(){
       // console.log(this[2])
+      if(this.isconfig) return
       if(this[2].items){
         this.options.forEach(item=>{
         this[2].items.forEach(p=>{
@@ -89,6 +85,7 @@ export default {
       this.usingOption[0].classname1 = "status02";
       this.usingOption[0].classname2 = "status01";
       this.current = this.usingOption[0].id
+      this.isconfig = true
       }
       // console.log(this.usingOption)
     }

@@ -4,13 +4,14 @@
     <div class="addnew" v-if="ismanaga">
       <span @click="addnew">新增模型</span>
     </div>
-    <div class="listfolder">
+    <div class="listfolder" :style="ismanaga ? '' : 'margin-top:10px;'">
       <div class="folder">
         <el-tree
           :data="data"
           :props="defaultProps"
           @node-click="handleNodeClick"
         ></el-tree>
+        <tree :data="data"></tree>
       </div>
       <div class="list">
         <div class="line topline">
@@ -64,6 +65,10 @@
       class="pagination"
     >
     </el-pagination>
+    <div class="tip"  v-if="showputon">
+      <div class="mask" @click="justHide"></div>
+      <modelPuton v-if="showputon" class="maincen" @success="hideputon" @cancel="hideputon"></modelPuton>
+    </div>
     <modify
       v-if="showModify"
       @justHide="justHide"
@@ -80,9 +85,11 @@ import change from "@/assets/listlogo/channge.png";
 import off from "@/assets/listlogo/off.png";
 import puton from "@/assets/listlogo/puton.png";
 import modify from "./modify";
+import modelPuton from "./modelPuton";
+import tree from "@/components/tree.vue"
 // import searchdemo from "@/components/searchdemo.vue";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import { getlist, appload, appCategory,introduce } from "@/api/list.js";
+import { getlist, appload, appCategory, introduce } from "@/api/list.js";
 export default {
   name: "modelManaga",
   data() {
@@ -93,7 +100,8 @@ export default {
       off,
       puton,
       ismanaga: false,
-      showModify:false,
+      showModify: false,
+      showputon:false,
       currentPage: 1,
       total: 0,
       data: [],
@@ -102,8 +110,8 @@ export default {
         label: "category_name",
       },
       queryId: null,
-      waitchange:false,
-      module_id:0
+      waitchange: false,
+      module_id: 0,
     };
   },
   computed: {
@@ -117,37 +125,42 @@ export default {
       this.total = res.data.data.count;
     });
     appCategory().then((res) => {
-      // console.log("分类", res);
+      console.log("分类", res);
       this.data = res.data.data;
     });
-    console.log(this[3])
-    if(this.identity == 1 || this.identity == 2) {
-      this.ismanaga = true
+    console.log(this[3]);
+    if (this.identity == 2) {
+      this.ismanaga = true;
     }
   },
   components: {
-    modify
+    modelPuton,
+    modify,
+    tree
     // searchdemo,
   },
   methods: {
-    intro(id){
-      introduce(id).then(res=>{
-        console.log(res)
-        if(res.data.status == 200 && res.data.data.length == 0) {
+    intro(id) {
+      introduce(id).then((res) => {
+        console.log(res);
+        if (res.data.status == 200 && res.data.data.length == 0) {
           this.waitchange = false;
           this.showModify = true;
-          this.module_id = id
+          this.module_id = id;
         }
-        if(res.data.data.background) {
+        if (res.data.data.background) {
           this.showModify = true;
           this.module_id = id;
           this.waitchange = res.data.data;
         }
-      })
+      });
     },
     justHide() {
       this.showModify = false;
       this.waitchange = false;
+    },
+    hideputon(){
+      this.showputon = false
     },
     subok() {
       this.showModify = false;
@@ -158,8 +171,8 @@ export default {
       this.showModify = true;
       this.waitchange = k;
     },
-    addnew(){
-      this.showModify = true;
+    addnew() {
+      this.showputon = true;
     },
     handleNodeClick(data) {
       console.log(data);
@@ -207,7 +220,7 @@ export default {
         this.total = res.data.data.count;
       });
     },
-  }
+  },
 };
 </script>
 
@@ -298,6 +311,28 @@ export default {
       div {
         padding: 0.5% 0;
       }
+    }
+  }
+  .tip {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .mask {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.8);
+    }
+    .maincen{
+      position: relative;
+      z-index: 100;
     }
   }
 }

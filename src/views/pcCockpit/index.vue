@@ -31,6 +31,7 @@ export default {
     return {
       current: 0,
       usingOption: [],
+      isconfig:false,
       options: [
         // {
         //   id: 7,
@@ -70,7 +71,7 @@ export default {
     ...mapState("config", ["currentRouterPath", "1"]),
   },
   mounted() {
-    // this.change();
+    this.change();
   },
   methods: {
     ...mapMutations("config",["setpcCockpit"]),
@@ -79,6 +80,7 @@ export default {
       this.$router.push(item.routerpath);
     },
     change() {
+      if(this.isconfig) return
       if (this[1].items) {
         //  console.log("2222",this[1].items,this.usingOption)
         this.options.forEach((item) => {
@@ -93,6 +95,7 @@ export default {
         this.usingOption[0].classname1 = "status02";
         this.usingOption[0].classname2 = "status01";
         this.current = this.usingOption[0].id
+        this.isconfig = true
       }
     },
   },

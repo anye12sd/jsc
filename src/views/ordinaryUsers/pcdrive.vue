@@ -5,7 +5,7 @@
         <div v-for="k in 3" :key="k">
           <!-- 为什么这里不直接传宽高？这需求又改了，新样式，这代码可以少写点 -->
           <div class="name">
-            <span>{{ models[k - 1] ? models[k - 1].view_name:'' }}</span>
+            <span>{{ models[k - 1] ? models[k - 1].view_name:'模型名称' }}</span>
           </div>
           <div class="item" ref="item" >
             <div
@@ -48,7 +48,7 @@
       <div class="right">
         <div v-for="k in 3" :key="k" ref="item">
           <div class="name">
-            <span>{{ models[k + 2] ? models[k + 2].view_name:'' }}</span>
+            <span>{{ models[k + 2] ? models[k + 2].view_name:'模型名称' }}</span>
           </div>
           <div class="item" ref="item">
             <div
@@ -81,6 +81,7 @@
       <el-pagination
         layout=" pager"
         :page-size="6"
+        :current-page.sync="currentPage"
         :total="total"
         @current-change="handleCurrentChange"
       >
@@ -116,7 +117,6 @@ export default {
       heiper: 1,
       total: 1,
       current: 0,
-      allcomponents:allpage,
       page:1,
       f1,
       f2,
@@ -143,6 +143,11 @@ export default {
           category_id: 1,
         },
         {
+          name: "经济发展",
+          img: f4,
+          category_id: 6,
+        },
+        {
           name: "社会治理",
           img: f2,
         },
@@ -150,19 +155,10 @@ export default {
           name: "生态文明",
           img: f3,
         },
-        {
-          name: "经济发展",
-          img: f4,
-          category_id: 6,
-        },
+        
       ],
+      currentPage:1,
       models: [],
-      // 页面渲染的数据
-      showingModel: {
-        // 左边的数组
-        left: [],
-        right: [],
-      },
     };
   },
   mounted() {
@@ -171,20 +167,28 @@ export default {
     //   window.getComputedStyle(this.$refs.item).width.split("px")[0] * 1;
     // let height =
     //   window.getComputedStyle(this.$refs.item).height.split("px")[0] * 1;
-    console.log(this.$refs);
     this.widper =
       Math.floor((this.$refs.item[0].clientWidth / 650) * 100) / 100;
     this.heiper =
       Math.floor((this.$refs.item[0].clientHeight / 350) * 100) / 100;
     this.goto(1);
-      console.log(this.allcomponents)
     window.onresize = () => {
       this.changesize();
     };
   },
   methods: {
     changtype(index) {
+      if(index == 2 || index == 3) {
+        this.$message({
+              message: "此分类暂无",
+              type: "warning",
+            });
+        return
+      }
+      
       this.current = index;
+      this.currentPage = 1
+      this.goto(1)
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
@@ -193,7 +197,7 @@ export default {
     },
     goto(page) {
       // 请求获取的数组
-      portaluser("page="+page+"&pageSize=6").then((res) => {
+      portaluser("page="+page+"&pageSize=6&category_id="+this.opt[this.current].category_id).then((res) => {
         console.log(res);
         if (res.data.status == 200) {
           this.total = res.data.data.count;
@@ -283,6 +287,7 @@ export default {
           margin: 0 auto;
           position: relative;
           background: #000;
+          overflow: hidden;
         }
         //   >div{
         //       width: 100%;

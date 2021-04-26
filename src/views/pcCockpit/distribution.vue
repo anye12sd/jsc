@@ -1,20 +1,34 @@
 <template>
   <div class="distribution">
-    <div class="list">
-      <div class="line topline">
-        <div class="pagename">页面名称</div>
-        <div class="actions">操作</div>
+    <div class="listfolder">
+      <div class="folder">
+        <el-tree
+          :data="data"
+          :props="defaultProps"
+          @node-click="handleNodeClick"
+        ></el-tree>
       </div>
-      <div
-        v-if="list.length == 0"
-        style="text-align: center; height: 50px; line-height: 50px; color: gray"
-      >
-        暂无数据
-      </div>
-      <div v-for="(k, index) in list" :key="index" class="line">
-        <div class="pagename">{{ k.view_name }}</div>
-        <div class="actions">
-          <span @click="togive(k.id)">分配</span>
+      <div class="list">
+        <div class="line topline">
+          <div class="pagename">页面名称</div>
+          <div class="actions">操作</div>
+        </div>
+        <div
+          v-if="list.length == 0"
+          style="
+            text-align: center;
+            height: 50px;
+            line-height: 50px;
+            color: gray;
+          "
+        >
+          暂无数据
+        </div>
+        <div v-for="(k, index) in list" :key="index" class="line">
+          <div class="pagename">{{ k.view_name }}</div>
+          <div class="actions">
+            <span @click="togive(k.id)">分配</span>
+          </div>
         </div>
       </div>
     </div>
@@ -25,7 +39,7 @@
       :page-size="10"
       layout="total, prev, pager, next, jumper"
       :total="total"
-      class="pagination"
+      class="ppp"
     >
     </el-pagination>
     <div class="mesbox" v-show="showmesbox">
@@ -35,7 +49,12 @@
           <span class="name">姓名</span>
           <input type="text" class="xm" v-model="xm" />
           <span v-if="identity == 1">单位</span>
-          <el-select v-model="company" filterable placeholder="请选择" v-if="identity == 1">
+          <el-select
+            v-model="company"
+            filterable
+            placeholder="请选择"
+            v-if="identity == 1"
+          >
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -47,8 +66,12 @@
           <span class="search" @click="search">搜索</span>
           <span class="all" @click="manydis">分配</span>
           <span class="all" @click="manyundis">解除分配</span>
-          <span class="all" v-if="identity == 2">单位批量分配</span>
-          <span class="all" v-if="identity == 2">单位批量解除分配</span>
+          <span class="all" v-if="identity == 2" @click="alldis"
+            >单位批量分配</span
+          >
+          <span class="all" v-if="identity == 2" @click="allundis"
+            >单位批量解除分配</span
+          >
           <!-- <span class="all">所有人</span> -->
         </div>
         <div class="users">
@@ -121,6 +144,8 @@ import {
   appbranch,
   portalSubscribe,
   portalSubscribeall,
+  appCategory,
+  subscribeall,
 } from "@/api/list.js";
 import checked from "@/assets/listlogo/checked.png";
 import notcheck from "@/assets/listlogo/notcheck.png";
@@ -142,7 +167,13 @@ export default {
       demand_id: 0,
       options: [],
       company: null,
-      xm: '',
+      xm: "",
+      data: [],
+      queryId: null,
+      defaultProps: {
+        children: "item",
+        label: "category_name",
+      },
       status: [
         false,
         false,
@@ -162,12 +193,7 @@ export default {
     ...mapState("config", ["identity"]),
   },
   mounted() {
-    getsubscribe("page=1").then((res) => {
-      // console.log(res);
-      this.list = res.data.data.list;
-      this.total = res.data.data.count;
-      // console.log(this.total)
-    });
+    this.init();
   },
   watch: {
     selectNum(newValue, oldValue) {
@@ -208,6 +234,18 @@ export default {
     },
   },
   methods: {
+    init() {
+      getsubscribe("page=1").then((res) => {
+        // console.log(res);
+        this.list = res.data.data.list;
+        this.total = res.data.data.count;
+        // console.log(this.total)
+      });
+      appCategory().then((res) => {
+        // console.log("分类", res);
+        this.data = res.data.data;
+      });
+    },
     search() {
       if (this.xm == null && this.company == null) return;
       subscribeList(
@@ -257,6 +295,21 @@ export default {
         }
       });
     },
+    handleNodeClick(data) {
+      console.log(data);
+      this.queryId = data.id;
+      let str = "category_id=" + data.id + "&page=1";
+      this.getdata(str);
+      this.currentPage = 1;
+    },
+    getdata(str) {
+      getsubscribe(str).then((res) => {
+        // console.log(res);
+        this.list = res.data.data.list;
+        this.total = res.data.data.count;
+        // console.log(this.total)
+      });
+    },
     manydis() {
       let ids = "";
       let flag = false;
@@ -264,11 +317,10 @@ export default {
         if (item) {
           // 等于0可以分配
           if (this.users[index].subscribe != 0) {
-            return
+            return;
           }
           ids += this.users[index].id;
           ids += ",";
-          
         }
       });
       if (flag) {
@@ -296,7 +348,7 @@ export default {
             message: "分配成功",
             type: "success",
           });
-          this.hide();
+          // this.hide();
           this.status.forEach((item, index) => {
             if (item) {
               this.users[index].subscribe = 2;
@@ -311,11 +363,10 @@ export default {
       this.status.forEach((item, index) => {
         if (item) {
           if (this.users[index].subscribe == 0) {
-            return
+            return;
           }
           ids += this.users[index].id;
           ids += ",";
-          
         }
       });
       if (flag) {
@@ -343,7 +394,7 @@ export default {
             message: "解除分配成功",
             type: "success",
           });
-          this.hide();
+          // this.hide();
           this.status.forEach((item, index) => {
             if (item) {
               this.users[index].subscribe = 0;
@@ -386,8 +437,8 @@ export default {
     hide() {
       this.showmesbox = false;
       this.selectNum = 0;
-      this.company = '';
-      this.xm = '';
+      this.company = "";
+      this.xm = "";
     },
     getUserList(page) {
       subscribeList("demand_id=" + this.demand_id + "&page=" + page).then(
@@ -401,7 +452,13 @@ export default {
       );
     },
     handleCurrentChange(val) {
-      getsubscribe("page=" + val).then((res) => {
+      let queryStr = "";
+      if (this.queryId) {
+        queryStr = "category_id=" + this.queryId + "&page=" + val;
+      } else {
+        queryStr = "page=" + val;
+      }
+      getsubscribe(queryStr).then((res) => {
         // console.log(res)
         this.list = res.data.data.list;
         this.total = res.data.data.count;
@@ -431,6 +488,30 @@ export default {
         this.getUserList(val);
       }
     },
+    alldis() {
+      subscribeall("demand_id=" + this.demand_id + "&status=1").then((res) => {
+        if (res.data.data == true) {
+          this.$message({
+            message: "分配成功",
+            type: "success",
+          });
+          this.hide();
+          this.init();
+        }
+      });
+    },
+    allundis() {
+      subscribeall("demand_id=" + this.demand_id + "&status=2").then((res) => {
+        if (res.data.data == true) {
+          this.$message({
+            message: "解除分配成功",
+            type: "success",
+          });
+          this.hide();
+          this.init();
+        }
+      });
+    },
   },
 };
 </script>
@@ -438,74 +519,87 @@ export default {
 <style scoped lang="less">
 .distribution {
   height: 91%;
-  .list {
+  .ppp {
+    padding-left: 47%;
+  }
+  .listfolder {
+    display: flex;
     height: 86%;
-    margin-top: 10px;
-    .line {
-      // margin: 0.1% 0;
-      margin-top: 0.1%;
-      display: flex;
-      height: 8%;
-      border: 1px solid #f5f6f9;
-      div {
-        // padding: 0.75% 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        // padding: 0.45% 0;
-        font-family: MicrosoftYaHei;
-        font-size: 14px;
-        color: #666f8e;
-        text-align: center;
-      }
+    .folder {
+      width: 20%;
+      margin-top: 10px;
+    }
+    .list {
+      width: 80%;
 
-      p {
-        // display: flex;
-        // align-items: center;
-        display: inline-block;
-        vertical-align: middle;
-        width: 70px;
-        background: #f5f4f7;
-        border: 1px solid #e5e6eb;
-        border-radius: 4px;
-        padding: 2px;
-        font-family: MicrosoftYaHei;
-        font-size: 14px;
-        cursor: pointer;
-        * {
+      margin-top: 10px;
+      .line {
+        // margin: 0.1% 0;
+        margin-top: 0.1%;
+        display: flex;
+        height: 8%;
+        border: 1px solid #f5f6f9;
+        div {
+          // padding: 0.75% 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          // padding: 0.45% 0;
+          font-family: MicrosoftYaHei;
+          font-size: 14px;
+          color: #666f8e;
+          text-align: center;
+        }
+
+        p {
+          // display: flex;
+          // align-items: center;
+          display: inline-block;
           vertical-align: middle;
+          width: 70px;
+          background: #f5f4f7;
+          border: 1px solid #e5e6eb;
+          border-radius: 4px;
+          padding: 2px;
+          font-family: MicrosoftYaHei;
+          font-size: 14px;
+          cursor: pointer;
+          * {
+            vertical-align: middle;
+          }
+        }
+
+        .actions > span {
+          display: inline-block;
+          vertical-align: middle;
+          width: 70px;
+          background: #f5f4f7;
+          border: 1px solid #e5e6eb;
+          border-radius: 4px;
+          padding: 2px;
+          font-family: MicrosoftYaHei;
+          font-size: 14px;
+          cursor: pointer;
+        }
+        .sort {
+          flex: 1;
+        }
+        .pagename,
+        .company,
+        .actions {
+          flex: 2;
         }
       }
-
-      .actions > span {
-        display: inline-block;
-        vertical-align: middle;
-        width: 70px;
-        background: #f5f4f7;
-        border: 1px solid #e5e6eb;
-        border-radius: 4px;
-        padding: 2px;
-        font-family: MicrosoftYaHei;
-        font-size: 14px;
-        cursor: pointer;
-      }
-      .sort {
-        flex: 1;
-      }
-      .pagename,
-      .company,
-      .actions {
-        flex: 2;
-      }
-    }
-    .topline {
-      background: #f5f6f9;
-      margin: 0;
-      div {
-        padding: 0.5% 0;
+      .topline {
+        background: #f5f6f9;
+        margin: 0;
+        div {
+          padding: 0.5% 0;
+        }
       }
     }
   }
+
   .mesbox {
     position: fixed;
     width: 100%;

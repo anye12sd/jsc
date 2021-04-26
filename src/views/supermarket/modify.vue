@@ -23,10 +23,10 @@
           id=""
           cols="30"
           rows="5"
-          placeholder="最多140个字符"
+          placeholder="最多500个字符"
           v-model="k.content"
           @blur="
-            explainblur(k.name + '必填且不能多于140字符', k.content, $event)
+            explainblur(k.name + '必填且不能多于500字符', k.content, $event)
           "
         ></textarea>
       </div>
@@ -161,7 +161,7 @@ export default {
     },
     explainblur(str, content, event) {
       // console.log(event);
-      if (content.length > 140 || content.length <= 0) {
+      if (content.length > 500 || content.length <= 0) {
         this.$message({
           message: str,
           type: "warning",
@@ -293,7 +293,7 @@ export default {
       for (let i = 0; i < this.explain.length; i++) {
         if (
           this.explain[i].content.length <= 0 ||
-          this.explain[i].content.length > 140
+          this.explain[i].content.length > 500
         ) {
           this.$message({
             message: "请按要求填写",

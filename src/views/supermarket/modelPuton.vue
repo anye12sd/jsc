@@ -31,7 +31,7 @@
       <div class="item">
         <div style="width: 50%"></div>
         <div style="width: 50%">
-          <div class="cancel">取消</div>
+          <div class="cancel" @click="cancel">取消</div>
           <div class="confirm" @click="confirm">确定</div>
         </div>
       </div>
@@ -85,8 +85,12 @@ export default {
               "添加成功",
             type: "success",
           });
+          this.$emit("success")
         }
       });
+    },
+    cancel(){
+      this.$emit("cancel")
     }
   },
 };
@@ -127,6 +131,7 @@ export default {
     background-image: url("../../assets/bg.png");
     background-size: cover;
     overflow: hidden;
+    background-color: #fff;
   }
 
   .item {

@@ -23,6 +23,7 @@ export default {
     return {
       current: 0,
       usingOption: [],
+      isconfig:false,
       options: [
         {
           id: 16,
@@ -61,6 +62,7 @@ export default {
       this.$router.push(item.routerpath);
     },
     change() {
+      if(this.isconfig) return
       if (this[6].items) {
         this.options.forEach((item) => {
           this[6].items.forEach((p) => {
@@ -73,6 +75,7 @@ export default {
         this.usingOption[0].classname1 = "status02";
         this.usingOption[0].classname2 = "status01";
         this.current = this.usingOption[0].id
+        this.isconfig = true
       }
       // console.log(555555,this[6],this.usingOption)
     },
