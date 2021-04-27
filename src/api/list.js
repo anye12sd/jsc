@@ -222,3 +222,24 @@ export function subscribeall(str){
         url:"/subscribe/all?"+str
     })
 }
+
+export function categoryadd(str){
+    return request({
+        method:"get",
+        url:"/category/add?"+str
+    })
+}
+
+export function categoryedit(str) {
+    return request({
+        method:"get",
+        url:"/category/edit?"+str
+    })
+}
+
+export function categorydel (str) {
+    return request({
+        method:"get",
+        url:"/category/del?"+str
+    })
+}

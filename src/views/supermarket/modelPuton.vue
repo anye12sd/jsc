@@ -3,8 +3,8 @@
     <div class="main">
       <div class="tit">添加模型</div>
       <div class="item">
-        <label for="modelName" style="width: 50%">模型名称</label>
-        <div style="width: 50%">
+        <label for="modelName" style="width: 40%">模型名称</label>
+        <div style="width: 60%">
           <input
             type="text"
             id="modelName"
@@ -14,23 +14,33 @@
         </div>
       </div>
       <div class="item">
-        <label style="width: 50%">指派的模型开发人员</label>
-        <div style="width: 50%">
+        <label style="width: 40%">指派的模型开发人员</label>
+        <div style="width: 60%">
           <el-select v-model="value" clearable placeholder="请选择">
             <el-option
               v-for="(item, index) in options"
               :key="item.id"
               :label="item.nickname"
               :value="index"
-              @click="chose(item)"
             >
             </el-option>
           </el-select>
         </div>
       </div>
       <div class="item">
-        <div style="width: 50%"></div>
-        <div style="width: 50%">
+        <label style="width: 40%">所在分类</label>
+        <div style="width: 60%">
+          <el-cascader
+            v-model="typeId"
+            :options="alltype"
+            :props="propopt"
+            @change="handleChange"
+          ></el-cascader>
+        </div>
+      </div>
+      <div class="item">
+        <div style="width: 40%"></div>
+        <div style="width: 60%">
           <div class="cancel" @click="cancel">取消</div>
           <div class="confirm" @click="confirm">确定</div>
         </div>
@@ -47,22 +57,28 @@ export default {
   data() {
     return {
       options: [],
-      value: 0,
+      value: null,
       name: "",
+      typeId: null,
+      propopt: { expandTrigger: "hover",children: "item",label: "category_name", value:"id"},
     };
   },
+  props: ["alltype"],
   mounted() {
     console.log("www");
     demanduser().then((res) => {
       this.options = res.data.data;
-      // console.log(this.options);
+      console.log(this.options);
     });
   },
   methods: {
-    chose(item) {
-      console.log(item);
+    handleChange(ids){
+      console.log(ids)
+      this.typeId = ids[ids.length - 1]
+      console.log(this.typeId)
     },
     confirm() {
+      console.log(this.value)
       if (this.name.length < 4) {
         this.$message({
           message: "模型名称长度不能小于4",
@@ -70,28 +86,40 @@ export default {
         });
         return;
       }
+      if(this.value === null) {
+        this.$message({
+          message: "请选择模型开发人员",
+          type: "warning",
+        });
+        return;
+      }
+      if(!this.typeId){
+        this.$message({
+          message: "请选择分类",
+          type: "warning",
+        });
+        return;
+      }
       demandadd({
         demand_name: this.name,
-        execute_id: this.execute_id,
+        execute_id: this.value,
         type: 3,
-        status:3,
-        branch_id: this.options[this.value].branch_id,
+        status: 3
       }).then((res) => {
         console.log(res);
         if (res.data.status == 200) {
-          this.name = ''
+          this.name = "";
           this.$message({
-            message:
-              "添加成功",
+            message: "添加成功",
             type: "success",
           });
-          this.$emit("success")
+          this.$emit("success");
         }
       });
     },
-    cancel(){
-      this.$emit("cancel")
-    }
+    cancel() {
+      this.$emit("cancel");
+    },
   },
 };
 </script>
@@ -123,11 +151,11 @@ export default {
     font-family: MicrosoftYaHei-Bold;
     font-size: 20px;
     color: #000000;
-    margin-top: 64px;
+    margin-top: 40px;
   }
   .main {
-    width: 880px;
-    height: 514px;
+    width: 775px;
+    height: 449px;
     background-image: url("../../assets/bg.png");
     background-size: cover;
     overflow: hidden;
@@ -202,7 +230,7 @@ export default {
     }
   }
   .main > .item:nth-of-type(2) {
-    margin-top: 70px;
+    margin-top: 40px;
   }
 }
 </style>

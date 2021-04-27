@@ -37,7 +37,7 @@ export default {
         this.$store.commit("config/setidentity", 2);
         this.$store.commit("config/setUsetInfo", {
             userName:"单位",
-            role_id:1
+            role_id:2
         });
         this.togetmenu();
         // this.$router.push("/oridinaryUsers");

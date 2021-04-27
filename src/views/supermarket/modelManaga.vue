@@ -6,12 +6,15 @@
     </div>
     <div class="listfolder" :style="ismanaga ? '' : 'margin-top:10px;'">
       <div class="folder">
-        <el-tree
+        <!-- <el-tree
           :data="data"
           :props="defaultProps"
           @node-click="handleNodeClick"
-        ></el-tree>
-        <tree :data="data"></tree>
+        ></el-tree> -->
+        <div class="addtype">
+          <i class="addicon iconfont icon-tianjia" @click="addnewtype"></i>
+        </div>
+        <tree :data="data" @getdata="gettype" @chosetype="chosetype"></tree>
       </div>
       <div class="list">
         <div class="line topline">
@@ -65,9 +68,46 @@
       class="pagination"
     >
     </el-pagination>
-    <div class="tip"  v-if="showputon">
+    <div class="tip" v-if="showputon">
       <div class="mask" @click="justHide"></div>
-      <modelPuton v-if="showputon" class="maincen" @success="hideputon" @cancel="hideputon"></modelPuton>
+      <modelPuton
+        v-if="showputon"
+        class="maincen"
+        @success="hideputon"
+        @cancel="hideputon"
+        :alltype="data"
+      ></modelPuton>
+    </div>
+    <div class="tip" v-show="shownewtype">
+      <div class="mask" @click="hidenewtype"></div>
+      <div class="newtype">
+        <div class="tit">新建分类</div>
+        <div class="in">
+          <span>分类名称:</span>
+          <input
+            type="text"
+            v-model="newtypename"
+            placeholder="请输入分类名称"
+          />
+        </div>
+        <div class="in">
+          <span>分类位置:</span>
+          <!-- <input type="text" v-model="newtypeaddress" /> -->
+          <el-select v-model="newtypeaddress" placeholder="请选择">
+            <el-option
+              v-for="item in data"
+              :key="item.id"
+              :label="item.category_name"
+              :value="item.id"
+            >
+            </el-option>
+          </el-select>
+        </div>
+        <div class="action">
+          <span class="cancel" @click="hidenewtype">取消</span>
+          <span class="confirm" @click="confirmadd">确定</span>
+        </div>
+      </div>
     </div>
     <modify
       v-if="showModify"
@@ -86,10 +126,16 @@ import off from "@/assets/listlogo/off.png";
 import puton from "@/assets/listlogo/puton.png";
 import modify from "./modify";
 import modelPuton from "./modelPuton";
-import tree from "@/components/tree.vue"
+import tree from "@/components/tree.vue";
 // import searchdemo from "@/components/searchdemo.vue";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import { getlist, appload, appCategory, introduce } from "@/api/list.js";
+import {
+  getlist,
+  appload,
+  appCategory,
+  introduce,
+  categoryadd,
+} from "@/api/list.js";
 export default {
   name: "modelManaga",
   data() {
@@ -99,9 +145,10 @@ export default {
       change,
       off,
       puton,
+      shownewtype: false,
       ismanaga: false,
       showModify: false,
-      showputon:false,
+      showputon: false,
       currentPage: 1,
       total: 0,
       data: [],
@@ -112,6 +159,8 @@ export default {
       queryId: null,
       waitchange: false,
       module_id: 0,
+      newtypename: "",
+      newtypeaddress: "",
     };
   },
   computed: {
@@ -136,10 +185,50 @@ export default {
   components: {
     modelPuton,
     modify,
-    tree
+    tree,
     // searchdemo,
   },
   methods: {
+    gettype() {
+      appCategory().then((res) => {
+        this.data = res.data.data;
+      });
+    },
+    confirmadd() {
+      if (this.newtypename === "") {
+        this.$message({
+          message: "请输入分类名称",
+          type: "warning",
+        });
+        return;
+      }
+      let str = "";
+      str = "category_name=" + this.newtypename;
+      console.log(this.newtypeaddress);
+      console.log(this.newtypeaddress !== "");
+      if (this.newtypeaddress !== "") {
+        str = str + "&pid=" + this.newtypeaddress;
+      }
+      categoryadd(str).then((res) => {
+        console.log(res);
+        if (res.data.data == true) {
+          this.$message({
+            message: "添加成功",
+            type: "success",
+          });
+          this.gettype()
+          this.hidenewtype();
+        }
+      });
+    },
+    addnewtype() {
+      this.shownewtype = true;
+    },
+    hidenewtype() {
+      this.shownewtype = false;
+      this.newtypename = "";
+      this.newtypeaddress = "";
+    },
     intro(id) {
       introduce(id).then((res) => {
         console.log(res);
@@ -159,8 +248,8 @@ export default {
       this.showModify = false;
       this.waitchange = false;
     },
-    hideputon(){
-      this.showputon = false
+    hideputon() {
+      this.showputon = false;
     },
     subok() {
       this.showModify = false;
@@ -175,11 +264,15 @@ export default {
       this.showputon = true;
     },
     handleNodeClick(data) {
-      console.log(data);
       this.queryId = data.id;
       let str = "category_id=" + data.id + "&page=1";
       this.getdata(str);
       this.currentPage = 1;
+    },
+    chosetype(id){
+      console.log(id)
+      this.queryId = id
+      this.handleCurrentChange(1)
     },
     getdata(query) {
       getlist(query).then((res) => {
@@ -224,6 +317,24 @@ export default {
 };
 </script>
 
+<style lang="less">
+.modelManaga {
+  .newtype{
+    .el-input--suffix .el-input__inner {
+    border: 1px solid lightgray;
+    border-radius: 4px;
+    width: 220px;
+    height: 30px;
+  }
+  .el-input__icon {
+    line-height: 100%;
+    display: block;
+    height: 94%;
+  }
+  }
+  
+}
+</style>
 <style scoped lang="less">
 .modelManaga {
   height: 91%;
@@ -244,6 +355,18 @@ export default {
     height: 86%;
     .folder {
       width: 20%;
+      .addtype {
+        height: 26px;
+        line-height: 26px;
+        text-align: right;
+        .addicon {
+          font-size: 12px;
+          display: inline-block;
+          color: #c0c4cc;
+          margin-right: 10px;
+          cursor: pointer;
+        }
+      }
     }
     .list {
       width: 80%;
@@ -328,11 +451,95 @@ export default {
       height: 100%;
       top: 0;
       left: 0;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.4);
     }
-    .maincen{
+    .maincen {
       position: relative;
       z-index: 100;
+    }
+    .newtype {
+      width: 600px;
+      height: 220px;
+      background-color: #fff;
+      z-index: 100;
+      border-radius: 4px;
+      .tit {
+        font-size: 18px;
+        padding: 0 30px;
+        height: 55px;
+        line-height: 55px;
+        border-bottom: 1px solid lightgray;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+      }
+      .in {
+        margin-top: 10px;
+        span {
+          margin: 0 20px 0 128px;
+        }
+      }
+      .action {
+        height: 50px;
+        line-height: 50px;
+        border-top: 1px solid lightgray;
+        margin-top: 20px;
+        text-align: right;
+        .cancel {
+          border: 1px solid #409eff;
+          color: #409eff;
+          padding: 5px 20px;
+          border-radius: 4px;
+          box-sizing: border-box;
+          margin-right: 20px;
+          cursor: pointer;
+        }
+        .confirm {
+          background-color: #409eff;
+          border: 1px solid #409eff;
+          color: #fff;
+          padding: 5px 20px;
+          border-radius: 4px;
+          margin-right: 20px;
+          cursor: pointer;
+        }
+      }
+      input {
+        outline: 0;
+        border: 1px solid lightgray;
+        border-radius: 4px;
+        width: 220px;
+        height: 30px;
+        box-sizing: border-box;
+        padding-left: 15px;
+      }
+      input:focus {
+        border: 1px solid #409eff;
+        outline: 0;
+      }
+      ::-webkit-input-placeholder {
+        /* Chrome/Opera/Safari */
+        font-family: MicrosoftYaHei;
+        font-size: 14px;
+        color: #afadad;
+      }
+      ::-moz-placeholder {
+        /* Firefox 19+ */
+        font-family: MicrosoftYaHei;
+        font-size: 14px;
+        color: #afadad;
+      }
+      :-ms-input-placeholder {
+        /* IE 10+ */
+        font-family: MicrosoftYaHei;
+        font-size: 14px;
+        color: #afadad;
+      }
+      :-moz-placeholder {
+        /* Firefox 18- */
+        font-family: MicrosoftYaHei;
+        font-size: 14px;
+        color: #afadad;
+      }
     }
   }
 }
