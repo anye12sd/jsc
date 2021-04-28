@@ -81,7 +81,7 @@ export default {
     },
     change() {
       if(this.isconfig) return
-      if (this[1].items) {
+      if (this[1].items && this[1].length != 0) {
         //  console.log("2222",this[1].items,this.usingOption)
         this.options.forEach((item) => {
           this[1].items.forEach((p) => {

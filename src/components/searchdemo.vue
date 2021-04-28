@@ -7,30 +7,38 @@
         name="people"
         id="people"
         v-model="name"
+        @blur="blur"
         :placeholder="two"
       />
-      <label for="time">{{ four == true ? '选择时间':four }}</label>
+      <label for="time">{{ four == true ? "选择时间" : four }}</label>
       <el-date-picker
         v-model="datetime"
-        type="datetime"
-        placeholder="请选择时间范围"
+        type="datetimerange"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
         v-if="four == true"
+        :default-time="['12:00:00']"
+        @blur="blur"
       >
       </el-date-picker>
-      <input type="text" id="time" v-else :placeholder="three" v-model="name2" />
-    </div>
-    <div>
-      <!-- <input
+      <input
         type="text"
-        class="goSearch"
-        v-model="searchcontent"
-        placeholder="查询输入"
-      /> -->
-      <div class="searchlogo" style="color:#fff;" @click="confirm">
+        id="time"
+        v-else
+        :placeholder="three"
+        v-model="name2"
+        @blur="blur"
+      />
+      <div class="searchlogo" style="color: #fff;margin-left:20px" @click="confirm">
         搜索
         <!-- <img :src="search" alt="图片丢失" /> -->
       </div>
     </div>
+    <!-- <div>
+      <div class="searchlogo" style="color: #fff" @click="confirm">
+        搜索
+      </div>
+    </div> -->
   </div>
 </template>
 
@@ -43,7 +51,7 @@ export default {
       search,
       datetime: "",
       name: "",
-      name2:'',
+      name2: "",
       searchcontent: "",
     };
   },
@@ -61,18 +69,37 @@ export default {
       default: "请输入申请人姓名",
     },
     four: {
-      default: "请选择时间范围",
+      default: "请选择时间",
     },
   },
   methods: {
-    confirm(){
-      if(this.four == true) {
-        this.$emit("feedback",this.name,this.datetime)
+    blur(){
+      if (this.four == true) {
+        if(!this.name && !this.datetime) {
+          this.$emit("clear")
+        }
       } else {
-        this.$emit("feedback",this.name,this.name2)
+        if(!this.name && !this.name2) {
+          this.$emit("clear")
+        }
+      }
+    },
+    confirm() {
+      if (this.four == true) {
+        // console.log(th)
+        this.$emit("feedback", this.name, this.datetime);
+      } else {
+        this.$emit("feedback", this.name, this.name2);
+      }
+    },
+  },
+  watch:{
+    datetime(newValue){
+      if(!newValue && !this.name){
+          this.$emit("clear")
       }
     }
-  },
+  }
 };
 </script>
 <style scoped lang="less">
@@ -88,13 +115,14 @@ export default {
     margin-right: 1%;
   }
   input {
-    border: 1px solid #c1c1c1;
-    border-radius: 2px;
+    border: 1px solid #DCDFE6;
+    border-radius: 4px;
     height: 3%;
-    padding: 0.6% 3%;
+    padding: 3px 5px;
     font-family: MicrosoftYaHei;
     font-size: 14px;
     color: #606266;
+    box-sizing: border-box;
   }
 
   input:focus {
@@ -127,17 +155,11 @@ export default {
   }
   #people,
   #time {
-    width: 25%;
-    height: 38%;
+    width: 170px;
+    height: 30px;
   }
   #people {
     margin-right: 3%;
-  }
-  .goSearch {
-    width: 28%;
-    height: 38%;
-    border-top-right-radius: 0;
-    border-top-left-radius: 0;
   }
   .searchlogo {
     cursor: pointer;
@@ -152,40 +174,43 @@ export default {
   }
 }
 .search > div {
-  width: 40%;
+  
   height: 100%;
   display: flex;
   align-items: center;
 }
-// .search > div:nth-of-type(2) {
-//   justify-content: flex-end;
-// }
+.search>div:nth-of-type(1){
+  width: 80%;
+}
+.search > div:nth-of-type(2) {
+  width: 20%;
+}
 </style>
 
 <style lang="less">
 .search {
-  .el-date-editor.el-input {
-    width: 23%;
-    height: 40%;
-    padding: 0.6% 3%;
-  }
-  .el-input--prefix .el-input__inner {
-    border: 1px solid #c1c1c1;
-    border-radius: 2px;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-family: MicrosoftYaHei;
-    font-size: 14px;
-    padding-left: 30px;
-    // padding: 0.6% 13%;
-  }
+   .el-date-editor--datetimerange.el-input__inner{
+     height: 30px;
+   }
+  // .el-date-editor.el-input {
+  //   width: 25%;
+  //   height: 40%;
+  //   padding: 0.6% 3%;
+  // }
+  // .el-input--prefix .el-input__inner {
+  //   border: 1px solid #c1c1c1;
+  //   border-radius: 2px;
+  //   height: 100%;
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0;
+  //   font-family: MicrosoftYaHei;
+  //   font-size: 14px;
+  //   padding-left: 30px;
+  //   // padding: 0.6% 13%;
+  // }
   .el-input__icon {
-    line-height: 100%;
-    display: block;
-    margin-top: 10%;
-    height: 94%;
+    line-height: 24px;
   }
 }
 </style>

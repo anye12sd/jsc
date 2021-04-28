@@ -4,10 +4,15 @@
       <div class="time">{{ date1 }}&nbsp;&nbsp;{{ date2 }}</div>
       <div class="tit">数字驾驶舱桌面版</div>
       <div class="user">
-        <span class="goafter" v-if="identity == 1 || identity == 2" @click="goafter">前往管理平台</span>
+        <span
+          class="goafter"
+          v-if="identity == 1 || identity == 2"
+          @click="goafter"
+          >前往管理平台</span
+        >
         <span>{{ week[day] }}</span>
         <img src="../../assets/oridinary/portrait.png" alt=" " />
-        <span>普通用户</span>
+        <span>{{userid[identity]}}</span>
       </div>
     </div>
     <!-- <component :is="pages[current].componentName"></component> -->
@@ -39,6 +44,12 @@ export default {
       date1: "2021-3-24",
       date2: "12:00",
       day: 0,
+      userid: {
+        1: "系统管理员",
+        2: "单位管理员",
+        3: "普通用户",
+        4: "模型开发人员",
+      },
       week: {
         0: "星期日",
         1: "星期一",
@@ -50,7 +61,7 @@ export default {
       },
       iden: {},
       current: 0,
-      className: ["pc", "mo",'mo'],
+      className: ["pc", "mo", "mo"],
       pages: [
         {
           name: "PC驾驶舱",
@@ -61,18 +72,18 @@ export default {
           path: "/oridinaryUsers/modelmarket",
         },
         {
-          name:"模型详情"
-        }
+          name: "模型详情",
+        },
       ],
     };
   },
   mounted() {
-    console.log(location.hash)
-    if(location.hash == "#/oridinaryUsers/modelmarket") {
-      this.current = 1
+    console.log(location.hash);
+    if (location.hash == "#/oridinaryUsers/modelmarket") {
+      this.current = 1;
     }
-    if(location.hash.includes("/oridinaryUsers/detail")) {
-      this.current = 2
+    if (location.hash.includes("/oridinaryUsers/detail")) {
+      this.current = 2;
     }
     this.getTime();
   },
@@ -84,9 +95,9 @@ export default {
     ...mapState("config", ["identity"]),
   },
   methods: {
-    goafter(){
-      this.$store.commit("config/setShowTopBar",true)
-      this.$router.push("/pcCockpit/distribution")
+    goafter() {
+      this.$store.commit("config/setShowTopBar", true);
+      this.$router.push("/pcCockpit/distribution");
     },
     getTime() {
       let date = new Date();
@@ -101,29 +112,28 @@ export default {
         this.current++;
       }
       // console.log(this.pages[this.current].path)
-      this.$router.push(this.pages[this.current].path)
+      this.$router.push(this.pages[this.current].path);
     },
     reduce() {
       if (this.current <= 0) {
-        this.current = this.pages.length - 1;
+        this.current = this.pages.length - 2;
       } else {
         this.current--;
       }
-      this.$router.push(this.pages[this.current].path)
+      this.$router.push(this.pages[this.current].path);
     },
   },
-  watch:{
-    $route(to,from){
-      console.log(to)
-      if(to.name == "Detail") {
-        this.current = 2
-      } else if(to.name == "Modelmarket") {
-        
-        this.current = 1
-        console.log(this.current)
+  watch: {
+    $route(to, from) {
+      console.log(to);
+      if (to.name == "Detail") {
+        this.current = 2;
+      } else if (to.name == "Modelmarket") {
+        this.current = 1;
+        console.log(this.current);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -190,7 +200,7 @@ export default {
       align-items: center;
       text-align: right;
       justify-content: flex-end;
-      .goafter{
+      .goafter {
         cursor: pointer;
       }
       span {

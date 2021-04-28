@@ -70,9 +70,11 @@ export default {
     },
     change() {
       // console.log("333333333",this[4],this.usingOption)
+      console.log(this.isconfig)
       if(this.isconfig) return
-      if (this[4].items) {
+      if (this[4].items && this[4].length != 0) {
         // console.log("333333333",this[4],this.usingOption)
+        this.usingOption = []
         this.options.forEach((item) => {
           this[4].items.forEach((p) => {
             if (item.id == p.id) {
@@ -102,6 +104,7 @@ export default {
           classname2: "status11",
         }]
         this.current = this.usingOption[0].id
+        // this.isconfig = true
       }
 
     },

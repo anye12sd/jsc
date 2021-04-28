@@ -1,10 +1,9 @@
 <template>
   <div class="hasDoing">
     <searchdemo
-      four="流程名称"
-      one="标题"
-      two="请输入标题"
-      three="请输入流程名称"
+      :four="true"
+      one="流程名称"
+      two="请输入流程名称"
     ></searchdemo>
     <div class="list">
       <div class="line topline">

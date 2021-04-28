@@ -1,16 +1,17 @@
 <template>
   <div class="addNewDemand">
     <searchdemo
-      four="所属单位"
-      one="页面名称"
-      two="请输入页面名称"
-      three="请输入所属单位"
+      :four="true"
+      one="需求名称"
+      two="请输入需求名称"
+      @feedback="justgoto"
+      @clear="clear"
     ></searchdemo>
     <div class="add" @click="addNew">新增需求</div>
     <div class="list">
       <div class="line topline">
         <div class="num">序号</div>
-        <div class="name">流程名称</div>
+        <div class="name">需求名称</div>
         <div class="time">处理时间</div>
         <div class="status">状态</div>
       </div>
@@ -20,7 +21,12 @@
       >
         暂无数据
       </div>
-      <div v-for="(k, index) in list" :key="index" class="line">
+      <div
+        v-for="(k, index) in list"
+        :key="index"
+        class="line"
+        @click="showdetail(k.id)"
+      >
         <div class="num">{{ k.id }}</div>
         <div class="name" :title="k.demand_name">{{ k.demand_name }}</div>
         <div class="time" :title="k.create_time">{{ k.create_time }}</div>
@@ -38,6 +44,29 @@
       class="pagination"
     >
     </el-pagination>
+    <div class="write" v-show="showdemand">
+      <div class="mask" @click="hidedemand"></div>
+      <div class="conent" v-if="detail">
+        <div>
+          <span>需求名称:</span><span>{{ detail.demand_name }}</span>
+        </div>
+        <div>
+          <span>发起人:</span><span>{{ detail.username }}</span>
+        </div>
+        <div>
+          <span>需求类型:</span><span>{{ detail.demand_type }}</span>
+        </div>
+        <div>
+          <span>单位:</span><span>{{ detail.get_branch_name }}</span>
+        </div>
+        <div>
+          <span>时间:</span><span>{{ detail.create_time }}</span>
+        </div>
+        <div class="spec">
+          <span>需求描述:</span><span class="desc">{{ detail.demand_describe }}</span>
+        </div>
+      </div>
+    </div>
     <div class="write" v-show="showWrite">
       <div class="mask"></div>
       <div class="main">
@@ -80,11 +109,12 @@
 // 新增需求
 import searchdemo from "@/components/searchdemo.vue";
 import { demanduser } from "@/api/managa.js";
-import { demandlist, appbranch, demandadd } from "@/api/list.js";
+import { demandlist, appbranch, demandadd, getdemand } from "@/api/list.js";
 export default {
   name: "addNewDemand",
   data() {
     return {
+      showdemand: false,
       showWrite: false,
       currentPage: 1,
       total: 1,
@@ -96,6 +126,8 @@ export default {
       },
       options: [],
       list: [],
+      detail: null,
+      querymesg:null
     };
   },
   mounted() {
@@ -105,6 +137,42 @@ export default {
     searchdemo,
   },
   methods: {
+    justgoto(p1,p2){
+      console.log(p1,p2)
+      // console.log(p2[0].getTime(),p2[1].getTime(),p2[0].getTime()/1000,p2[1].getTime()/1000)
+      this.querymesg = {}
+      this.querymesg.demand_name = p1
+      if(!p2) {
+        this.querymesg.start_time=''
+        this.querymesg.end_time=''
+      } else {
+        this.querymesg.start_time = p2[0].getTime()/1000;
+        this.querymesg.end_time = p2[1].getTime()/1000;
+      }
+      demandlist("page=1&type=1&demand_name="+this.querymesg.demand_name+"&start_time="+this.querymesg.start_time+"&end_time="+this.querymesg.end_time).then(res=>{
+        console.log("搜索", res);
+        if (res.data.status == 200) {
+          this.total = res.data.data.count;
+          this.list = res.data.data.list;
+        }
+      })
+        
+    },
+    clear(){
+      this.querymesg = null
+    },
+    hidedemand() {
+      this.showdemand = false;
+    },
+    showdetail(id) {
+      this.showdemand = true;
+      getdemand(id).then((res) => {
+        console.log(res);
+        if (res.data.status == 200) {
+          this.detail = res.data.data;
+        }
+      });
+    },
     confirm() {
       if (this.form.demandName.length < 4) {
         this.$message({
@@ -116,9 +184,9 @@ export default {
       demandadd({
         demand_name: this.form.demandName,
         branch_id: this.form.company,
-        demand_describe:this.form.describe,
+        demand_describe: this.form.describe,
         type: 3,
-        status: 3
+        status: 3,
       }).then((res) => {
         // console.log(res);
         if (res.data.status == 200) {
@@ -160,7 +228,13 @@ export default {
     },
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
-      demandlist("type=3&page=" + val).then((res) => {
+      let str = "";
+      if(this.querymesg) {
+        str = "page="+val+"&type=1&demand_name="+this.querymesg.demand_name+"&start_time="+this.querymesg.start_time+"&end_time="+this.querymesg.end_time
+      } else {
+        str = "type=1&page=" + val
+      }
+      demandlist("type=1&page=" + val).then((res) => {
         if (res.data.status == 200) {
           this.total = res.data.data.count;
           this.list = res.data.data.list;
@@ -241,6 +315,9 @@ export default {
     height: 100%;
     top: 0;
     left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     .mask {
       position: absolute;
       width: 100%;
@@ -250,15 +327,66 @@ export default {
       background-color: rgba(0, 0, 0, 0.7);
       z-index: 10;
     }
+    .conent {
+      width: 880px;
+      height: 500px;
+      padding: 20px;
+      // background-image: url("../../assets/bg.png");
+      background-size: cover;
+      overflow: hidden;
+      background-color: #fff;
+      position: relative;
+      z-index: 100;
+      
+      > div {
+        padding-left: 150px;
+        margin-top: 10px;
+        >span{
+          vertical-align: middle;
+        }
+        > span:nth-of-type(1) {
+          flex: 1;
+          text-align: right;
+          display: inline-block;
+          width: 100px;
+          height: 40px;
+          line-height: 40px;
+          border-radius: 4px;
+          padding-right: 10px;
+        }
+        > span:nth-of-type(2) {
+          flex: 2;
+          border: 1px solid #dcdfe6;
+          background-color: #fff;
+          height: 35px;
+          line-height: 35px;
+          display: inline-block;
+          width: 500px;
+          border-radius: 4px;
+          box-sizing: border-box;
+          padding-left: 20px;
+        }
+        
+      }
+      >.spec{
+        >span{
+          vertical-align: top;
+        }
+        >.desc{
+          height: 180px;
+          overflow: auto;
+        }
+      }
+    }
     .main {
       width: 880px;
       height: 500px;
       background-image: url("../../assets/bg.png");
       background-size: cover;
       overflow: hidden;
-      position: absolute;
-      top: 100px;
-      left: calc(50% - 440px);
+      position: relative;
+      // top: 100px;
+      // left: calc(50% - 440px);
       background-color: #fff;
       z-index: 20;
       font-family: MicrosoftYaHei;

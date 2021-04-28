@@ -1,6 +1,6 @@
 <template>
   <div class="topbar">
-    <div class="tit">长兴驾驶舱PC端后台管理系统</div>
+    <div class="tit">数据分析应用成果超市</div>
     <div
       v-for="p in usingOption"
       :key="p.id"
@@ -11,7 +11,7 @@
       <p>{{ p.name }}</p>
     </div>
     <div class="user">
-      <!-- <img src="" alt="暂无头像" /> -->
+      <div class="left" @click="gobefore">返回前台</div>
       <div class="right">
         <div>
           <span class="userName">{{ userInfo.userName }}</span>
@@ -125,6 +125,9 @@ export default {
         this.usingOption = op;
         // console.log(this.usingOption)
     },
+    gobefore(){
+      this.$router.push("/oridinaryUsers")
+    },
     chose(index, path) {
       this.current = index;
       this.$router.push(path);
@@ -221,6 +224,12 @@ export default {
     // right: 16px;
     display: flex;
     align-items: center;
+    .left{
+      font-family: PingFangSC-Medium;
+      color: #ffffff;
+      margin-right: 5px;
+      cursor: pointer;
+    }
     .userName {
       font-family: PingFangSC-Medium;
       font-size: 18px;

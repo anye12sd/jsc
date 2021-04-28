@@ -11,5 +11,5 @@ module.exports = {
 			}
 		}
 	},
-	assetsDir:'static'
+	assetsDir:'resources'
 }

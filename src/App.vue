@@ -24,48 +24,51 @@ export default {
     init() {
       let access_token = location.search.split("=")[1];
       if (!access_token) return;
-      if (access_token == "aaaa") {
-        this.$store.commit("config/setidentity", 1);
-        this.$store.commit("config/setUsetInfo", {
-            userName:"系统",
-            role_id:1
-        });
-        this.togetmenu();
-        // this.$router.push("/oridinaryUsers");
-        return;
-      } else if (access_token == "bbbb") {
-        this.$store.commit("config/setidentity", 2);
-        this.$store.commit("config/setUsetInfo", {
-            userName:"单位",
-            role_id:2
-        });
-        this.togetmenu();
-        // this.$router.push("/oridinaryUsers");
-        return;
-      } else if (access_token == "cccc") {
-        //普通用户
-        this.$store.commit("config/setidentity", 3);
-        this.$store.commit("config/setUsetInfo", {
-            userName:"普通",
-            role_id:3
-        });
-        // this.$router.push("/oridinaryUsers");
-        this.togetmenu();
-        return;
-      } else if (access_token == "dddd") {
-        //模型开发人员
-        this.$store.commit("config/setidentity", 4);
-        this.togetmenu();
-        this.$router.push("/oridinaryUsers");
-        return;
+      if (window.globalconfig == 0) {
+        if (access_token == "aaaa") {
+          this.$store.commit("config/setidentity", 1);
+          this.$store.commit("config/setUsetInfo", {
+            userName: "系统",
+            role_id: 1,
+          });
+          this.togetmenu();
+          // this.$router.push("/oridinaryUsers");
+          return;
+        } else if (access_token == "bbbb") {
+          this.$store.commit("config/setidentity", 2);
+          this.$store.commit("config/setUsetInfo", {
+            userName: "单位",
+            role_id: 2,
+          });
+          this.togetmenu();
+          // this.$router.push("/oridinaryUsers");
+          return;
+        } else if (access_token == "cccc") {
+          //普通用户
+          this.$store.commit("config/setidentity", 3);
+          this.$store.commit("config/setUsetInfo", {
+            userName: "普通",
+            role_id: 3,
+          });
+          // this.$router.push("/oridinaryUsers");
+          this.togetmenu();
+          return;
+        } else if (access_token == "dddd") {
+          //模型开发人员
+          this.$store.commit("config/setidentity", 4);
+          this.togetmenu();
+          // this.$router.push("/demand");
+          return;
+        }
       }
+
       if (access_token) {
         console.log("user");
         tologin().then((res) => {
           if (res.data.status == 200) {
             this.$store.commit("config/setUsetInfo", res.data.data);
             this.$store.commit("config/setidentity", res.data.data.role_id);
-            // this.$router.push("/oridinaryUsers");
+
             // if(res.data.data.role_id == 3) {
             //   this.$router.push("/oridinaryUsers")
             // }
@@ -124,12 +127,13 @@ export default {
     },
     $route(to, from) {
       // console.log(to,to.fullPath.includes("oridinaryUsers"))
-      if(to.fullPath.includes("oridinaryUsers")) {
-        this.$store.commit("config/setShowTopBar",false)
+      if (to.fullPath == "/login") {
+        this.$store.commit("config/setShowTopBar", false);
+      } else if (to.fullPath.includes("oridinaryUsers")) {
+        this.$store.commit("config/setShowTopBar", false);
       } else {
-        this.$store.commit("config/setShowTopBar",true)
+        this.$store.commit("config/setShowTopBar", true);
       }
-      
     },
   },
 };

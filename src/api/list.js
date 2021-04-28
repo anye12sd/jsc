@@ -243,3 +243,17 @@ export function categorydel (str) {
         url:"/category/del?"+str
     })
 }
+
+export function getdetail(id){
+    return request({
+        method:"get",
+        url:"/message?id="+id
+    })
+}
+
+export function getdemand (id) {
+    return request ({
+        method:"get",
+        url:"/demand?id="+id
+    })
+}
