@@ -1,6 +1,10 @@
 <template>
   <div class="modelApproval">
-    <searchdemo :four="'申请人'" one="模型编号" two="请输入模型编号"></searchdemo>
+    <searchdemo
+      :four="'申请人'"
+      one="模型编号"
+      two="请输入模型编号"
+    ></searchdemo>
     <div class="list">
       <div class="line topline">
         <div>模型编号</div>
@@ -10,7 +14,12 @@
         <div>模型修改时间</div>
         <div class="actions">操作</div>
       </div>
-      <div v-if="list.length == 0" style="text-align: center; height:50px;line-height:50px;color:gray">暂无数据</div>
+      <div
+        v-if="list.length == 0"
+        style="text-align: center; height: 50px; line-height: 50px; color: gray"
+      >
+        暂无数据
+      </div>
       <div v-for="(k, index) in list" :key="index" class="line">
         <div>{{ k.num }}</div>
         <div>{{ k.name }}</div>
@@ -18,8 +27,8 @@
         <div>{{ k.address }}</div>
         <div>{{ k.time }}</div>
         <div class="actions">
-          <p> <img :src="adopt" alt="图片资源缺失"> <span>通过</span></p>
-          <p> <img :src="reject" alt="图片资源缺失"> <span>驳回</span></p>
+          <p><img :src="adopt" alt="图片资源缺失" /> <span>通过</span></p>
+          <p><img :src="reject" alt="图片资源缺失" /> <span>驳回</span></p>
         </div>
       </div>
     </div>
@@ -40,15 +49,16 @@
 <script>
 import searchdemo from "@/components/searchdemo.vue";
 import ll from "./data.json";
-import adopt from "@/assets/listlogo/adopt.png"
-import reject from "@/assets/listlogo/reject.png"
+import adopt from "@/assets/listlogo/adopt.png";
+import reject from "@/assets/listlogo/reject.png";
 export default {
   name: "modelApproval",
   data() {
     return {
-        adopt,reject,
-        list:ll,
-        currentPage:1
+      adopt,
+      reject,
+      list: ll,
+      currentPage: 1,
     };
   },
   components: {
@@ -67,25 +77,26 @@ export default {
 
 <style scoped lang="less">
 .modelApproval {
-    height: 91%;
+  height: 91%;
   .list {
-    height: 86%;
+    height: calc(91% - 35px);
     .line {
       // margin: 0.1% 0;
       margin-top: 0.1%;
       display: flex;
+      align-items: center;
+      justify-content: center;
       height: 8%;
       border: 1px solid #f5f6f9;
       div {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        // padding: 0.45% 0;
         font-family: MicrosoftYaHei;
         font-size: 14px;
         color: #666f8e;
         text-align: center;
         flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .actions {
         flex: 2;

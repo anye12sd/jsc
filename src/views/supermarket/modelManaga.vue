@@ -40,13 +40,15 @@
           <!-- <div :title="year+'000'+k.id">{{year+"000"+k.id }} </div> -->
           <div :title="k.modulename">{{ k.modulename }}</div>
           <div :title="k.module_type">{{ k.module_type }}</div>
-          <div :title="k.branch_id">{{ k.branch_id }}</div>
+          <div :title="k.branch_id">{{ k.get_branch_name }}</div>
           <div :title="k.update_time">{{ k.update_time }}</div>
           <div class="actions">
             <p @click="goup(k.id, index)" v-if="k.load == 2 || k.load == 3">
               <img :src="change" alt="图片资源缺失" /> <span>上架</span>
             </p>
-            <p><img :src="off" alt="图片资源缺失" /> <span>修改</span></p>
+            <p @click="edit(k, index)">
+              <img :src="off" alt="图片资源缺失" /> <span>修改</span>
+            </p>
             <p @click="godown(k.id, index)" v-if="k.load == 1 || k.load == 3">
               <img :src="puton" alt="图片资源缺失" /> <span>下架</span>
             </p>
@@ -59,7 +61,6 @@
     </div>
     <el-pagination
       background
-      @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
       :page-size="10"
@@ -68,8 +69,32 @@
       class="pagination"
     >
     </el-pagination>
+    <div class="tip" v-show="showedit">
+      <div class="mask" @click="hideedit"></div>
+      <div class="editcon">
+        <div class="ed">修改</div>
+        <div class="name">
+          <span>模型名称:</span>
+          <input type="text" v-model="waitEdit.modulename" />
+        </div>
+        <div class="name">
+          <span>类型:</span>
+          <!-- <input type="text" v-model="waitEdit.type" /> -->
+          <el-cascader
+            v-model="waitEdit.category_id"
+            :options="data"
+            :props="propopt"
+            @change="handleChange"
+          ></el-cascader>
+        </div>
+        <div class="ac">
+          <span @click="hideedit">取消</span>
+          <span @click="confirmedit">确定</span>
+        </div>
+      </div>
+    </div>
     <div class="tip" v-if="showputon">
-      <div class="mask" @click="justHide"></div>
+      <div class="mask" @click="hideputon"></div>
       <modelPuton
         v-if="showputon"
         class="maincen"
@@ -79,7 +104,7 @@
       ></modelPuton>
     </div>
     <div class="tip" v-show="shownewtype">
-      <div class="mask" @click="hidenewtype"></div>
+      <div class="mask" @click="hideedit"></div>
       <div class="newtype">
         <div class="tit">新建分类</div>
         <div class="in">
@@ -136,10 +161,18 @@ import {
   introduce,
   categoryadd,
 } from "@/api/list.js";
+import { appedit } from "@/api/managa.js";
 export default {
   name: "modelManaga",
   data() {
     return {
+      propopt: {
+        expandTrigger: "hover",
+        children: "item",
+        label: "category_name",
+        value: "id",
+        checkStrictly: true,
+      },
       list: [],
       year: 0,
       change,
@@ -161,6 +194,13 @@ export default {
       module_id: 0,
       newtypename: "",
       newtypeaddress: "",
+      waitEdit: {
+        modulename: "",
+        category_id: "",
+        id: 0,
+        index:0
+      },
+      showedit: false,
     };
   },
   computed: {
@@ -169,7 +209,7 @@ export default {
   mounted() {
     this.year = new Date().getFullYear();
     getlist("page=1").then((res) => {
-      // console.log(res);
+      console.log(res);
       this.list = res.data.data.list;
       this.total = res.data.data.count;
     });
@@ -189,6 +229,45 @@ export default {
     // searchdemo,
   },
   methods: {
+    hideedit() {
+      this.showedit = false;
+    },
+    edit(k, index) {
+      this.showedit = true;
+      this.waitEdit.modulename = k.modulename;
+      this.waitEdit.category_id = k.category_id;
+      this.waitEdit.id = k.id;
+      this.waitEdit.index = index;
+      console.log(this.waitEdit.category_id);
+    },
+    handleChange(ids) {
+      console.log(ids);
+      console.log(this.waitEdit.category_id);
+    },
+    confirmedit() {
+      let category_id = 0;
+      if (typeof this.waitEdit.category_id == "number") {
+        category_id = this.waitEdit.category_id;
+      } else {
+        category_id = this.waitEdit.category_id[
+          this.waitEdit.category_id.length - 1
+        ];
+      }
+      console.log(category_id)
+      let data = {
+        id: this.waitEdit.id,
+        modulename: this.waitEdit.modulename,
+        category_id,
+      };
+      appedit(data).then((res) => {
+        console.log(res,this.waitEdit.index);
+        if(res.data.status == 200) {
+          this.list[this.waitEdit.index].modulename = res.data.data.modulename
+          this.list[this.waitEdit.index].category_id = res.data.data.category_id
+          this.showedit = false;
+        }
+      });
+    },
     gettype() {
       appCategory().then((res) => {
         this.data = res.data.data;
@@ -216,7 +295,7 @@ export default {
             message: "添加成功",
             type: "success",
           });
-          this.gettype()
+          this.gettype();
           this.hidenewtype();
         }
       });
@@ -269,10 +348,10 @@ export default {
       this.getdata(str);
       this.currentPage = 1;
     },
-    chosetype(id){
-      console.log(id)
-      this.queryId = id
-      this.handleCurrentChange(1)
+    chosetype(id) {
+      console.log(id);
+      this.queryId = id;
+      this.handleCurrentChange(1);
     },
     getdata(query) {
       getlist(query).then((res) => {
@@ -297,9 +376,6 @@ export default {
         }
       });
     },
-    handleSizeChange(val) {
-      // console.log(`每页 ${val} 条`);
-    },
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
       let queryStr = "";
@@ -319,20 +395,27 @@ export default {
 
 <style lang="less">
 .modelManaga {
-  .newtype{
+  .editcon {
     .el-input--suffix .el-input__inner {
-    border: 1px solid lightgray;
-    border-radius: 4px;
-    width: 220px;
-    height: 30px;
+      border: 1px solid lightgray;
+      border-radius: 4px;
+      width: 300px;
+      height: 40px;
+    }
   }
-  .el-input__icon {
-    line-height: 100%;
-    display: block;
-    height: 94%;
+  .newtype {
+    .el-input--suffix .el-input__inner {
+      border: 1px solid lightgray;
+      border-radius: 4px;
+      width: 220px;
+      height: 30px;
+    }
+    .el-input__icon {
+      line-height: 100%;
+      display: block;
+      height: 94%;
+    }
   }
-  }
-  
 }
 </style>
 <style scoped lang="less">
@@ -352,7 +435,7 @@ export default {
   }
   .listfolder {
     display: flex;
-    height: 86%;
+    height: calc(100% - 70px);
     .folder {
       width: 20%;
       .addtype {
@@ -376,17 +459,15 @@ export default {
     padding-left: 47%;
   }
   .list {
-    height: 86%;
+    height: 100%;
     .line {
       // margin: 0.1% 0;
       margin-top: 0.1%;
       display: flex;
+      align-items: center;
       height: 8%;
       border: 1px solid #f5f6f9;
       div {
-        display: flex;
-        align-items: center;
-        justify-content: center;
         // padding: 0.45% 0;
         font-family: MicrosoftYaHei;
         font-size: 14px;
@@ -395,6 +476,7 @@ export default {
         flex: 1;
         overflow: hidden;
         text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .actions {
         flex: 2;
@@ -452,6 +534,69 @@ export default {
       top: 0;
       left: 0;
       background: rgba(0, 0, 0, 0.4);
+    }
+    .editcon {
+      position: relative;
+      z-index: 100;
+      background: #fff;
+      border-radius: 4px;
+      width: 600px;
+      height: 220px;
+      .ed {
+        height: 60px;
+        line-height: 60px;
+        // border-bottom: 1px solid lightgray;
+        padding-left: 50px;
+        font-size: 20px;
+      }
+      .name {
+        height: 50px;
+        line-height: 50px;
+        padding-left: 50px;
+        span {
+          display: inline-block;
+          width: 100px;
+          text-align: right;
+          margin-right: 5px;
+        }
+        input {
+          background: #ffffff;
+          border: 1px solid #dcdfe6;
+          border-radius: 4px;
+          width: 300px;
+          height: 40px;
+          padding-left: 20px;
+          font-family: MicrosoftYaHei;
+          font-size: 14px;
+          color: #333333;
+          outline: none;
+          box-sizing: border-box;
+        }
+      }
+      .ac {
+        height: 50px;
+        line-height: 50px;
+        // border-top: 1px solid lightgray;
+        text-align: right;
+        span:nth-of-type(1) {
+          border: 1px solid #017cf8;
+          color: #409eff;
+          padding: 4px 15px;
+          border-radius: 4px;
+          box-sizing: border-box;
+          margin-right: 20px;
+          cursor: pointer;
+        }
+        span:nth-of-type(2) {
+          background-color: #017cf8;
+          border: 1px solid #017cf8;
+          color: #fff;
+          padding: 4px 15px;
+          border-radius: 4px;
+          margin-right: 20px;
+          cursor: pointer;
+        }
+      }
     }
     .maincen {
       position: relative;

@@ -70,7 +70,7 @@ export default {
     },
     change() {
       // console.log("333333333",this[4],this.usingOption)
-      console.log(this.isconfig)
+      // console.log(this.isconfig)
       if(this.isconfig) return
       if (this[4].items && this[4].length != 0) {
         // console.log("333333333",this[4],this.usingOption)

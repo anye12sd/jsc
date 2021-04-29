@@ -25,7 +25,7 @@
           暂无数据
         </div>
         <div v-for="(k, index) in list" :key="index" class="line">
-          <div class="pagename">{{ k.view_name }}</div>
+          <div class="pagename" :title="k.view_name">{{ k.view_name }}</div>
           <div class="actions">
             <span @click="togive(k.id)">分配</span>
           </div>
@@ -524,27 +524,27 @@ export default {
   }
   .listfolder {
     display: flex;
-    height: 86%;
+    height: calc(100% - 45px);
     .folder {
       width: 20%;
       margin-top: 10px;
     }
     .list {
-      width: 80%;
+      width: 100%;
 
       margin-top: 10px;
       .line {
         // margin: 0.1% 0;
         margin-top: 0.1%;
         display: flex;
+        align-items: center;
+        justify-content: center;
         height: 8%;
         border: 1px solid #f5f6f9;
         div {
-          // padding: 0.75% 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          // padding: 0.45% 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
           font-family: MicrosoftYaHei;
           font-size: 14px;
           color: #666f8e;

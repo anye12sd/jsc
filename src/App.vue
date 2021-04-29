@@ -166,7 +166,7 @@ html {
 .white {
   background-color: #f0f2f9;
 }
-@media screen and (max-height: 720px) {
+@media screen and (max-height: 620px) {
   #app {
     height: 730px;
   }

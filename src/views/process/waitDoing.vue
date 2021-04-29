@@ -47,7 +47,7 @@
           />
         </div>
         <div class="num">{{ k.id }}</div>
-        <div class="name" :name="k.name">{{ k.demand_name }}</div>
+        <div class="name" :title="k.name">{{ k.demand_name }}</div>
         <div class="time" :title="k.time">{{ k.create_time }}</div>
         <div class="actions">
           <p @click.stop="goon(k.id, index)">
@@ -141,7 +141,7 @@ export default {
       list: [],
       detail: [],
       detail2: null,
-      querymesg:null
+      querymesg: null,
     };
   },
   components: {
@@ -164,30 +164,41 @@ export default {
     ...mapState("config", ["identity"]),
   },
   methods: {
-    justgoto(p1,p2){
-      console.log(p1,p2)
-      console.log(p2[0].getTime(),p2[1].getTime(),p2[0].getTime()/1000,p2[1].getTime()/1000)
-      this.querymesg = {}
-      this.querymesg.demand_name = p1
-      if(!p2) {
-        this.querymesg.start_time=''
-        this.querymesg.end_time=''
+    justgoto(p1, p2) {
+      console.log(p1, p2);
+      console.log(
+        p2[0].getTime(),
+        p2[1].getTime(),
+        p2[0].getTime() / 1000,
+        p2[1].getTime() / 1000
+      );
+      this.querymesg = {};
+      this.querymesg.demand_name = p1;
+      if (!p2) {
+        this.querymesg.start_time = "";
+        this.querymesg.end_time = "";
       } else {
-        this.querymesg.start_time = p2[0].getTime()/1000;
-        this.querymesg.end_time = p2[1].getTime()/1000;
+        this.querymesg.start_time = p2[0].getTime() / 1000;
+        this.querymesg.end_time = p2[1].getTime() / 1000;
       }
-      
-      demandlist("page=1&type=3&demand_name="+this.querymesg.demand_name+"&start_time="+this.querymesg.start_time+"&end_time="+this.querymesg.end_time).then(res=>{
+
+      demandlist(
+        "page=1&type=3&demand_name=" +
+          this.querymesg.demand_name +
+          "&start_time=" +
+          this.querymesg.start_time +
+          "&end_time=" +
+          this.querymesg.end_time
+      ).then((res) => {
         console.log("搜索", res);
         if (res.data.status == 200) {
           this.total = res.data.data.count;
           this.list = res.data.data.list;
         }
-      })
-        
+      });
     },
-    clear(){
-      this.querymesg = null
+    clear() {
+      this.querymesg = null;
     },
     showdetail(id) {
       console.log(id);
@@ -331,10 +342,18 @@ export default {
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
       let str = "";
-      if(this.querymesg) {
-        str = "page="+val+"&type=3&demand_name="+this.querymesg.demand_name+"&start_time="+this.querymesg.start_time+"&end_time="+this.querymesg.end_time
+      if (this.querymesg) {
+        str =
+          "page=" +
+          val +
+          "&type=3&demand_name=" +
+          this.querymesg.demand_name +
+          "&start_time=" +
+          this.querymesg.start_time +
+          "&end_time=" +
+          this.querymesg.end_time;
       } else {
-        str = "type=3&page=" + val
+        str = "type=3&page=" + val;
       }
       demandlist(str).then((res) => {
         if (res.data.status == 200) {
@@ -379,17 +398,16 @@ export default {
     }
   }
   .list {
-    height: 86%;
+    height: calc(91% - 35px);
     .line {
       // margin: 0.1% 0;
       margin-top: 0.1%;
       display: flex;
+      align-items: center;
+      justify-content: center;
       height: 8%;
       border: 1px solid #f5f6f9;
       div {
-        display: flex;
-        align-items: center;
-        justify-content: center;
         // padding: 0.45% 0;
         font-family: MicrosoftYaHei;
         font-size: 14px;
@@ -398,6 +416,7 @@ export default {
         flex: 2;
         overflow: hidden;
         text-overflow: ellipsis;
+        white-space: nowrap;
         img {
           background-color: #fff;
           cursor: pointer;

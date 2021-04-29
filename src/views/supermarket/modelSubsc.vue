@@ -34,9 +34,9 @@
           暂无数据
         </div>
         <div v-for="(k, index) in list" :key="index" class="line">
-          <div class="name">{{ k.modulename }}</div>
-          <div class="type">{{ k.module_type }}</div>
-          <div class="company">{{ k.branch_id }}</div>
+          <div class="name" :title="k.modulename">{{ k.modulename }}</div>
+          <div class="type" :title="k.module_type">{{ k.module_type }}</div>
+          <div class="company" :title="k.branch_id">{{ k.branch_id }}</div>
           <div class="actions">
             <p :class="k.type == 0 ? 'blue' : 'gray'" @click="gosubscribe(k)">
               <img :src="subsc" alt="图片资源缺失" />
@@ -164,7 +164,7 @@ export default {
   }
   .listfolder {
     display: flex;
-    height: 86%;
+    height: calc(100% - 35px);
     .folder {
       width: 20%;
     }

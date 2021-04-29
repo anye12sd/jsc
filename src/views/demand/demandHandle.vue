@@ -4,7 +4,8 @@
       four="需求单位"
       one="需求名称"
       two="请输入需求名称"
-      three="请输入需求单位"
+      @feedback="justgoto"
+      @clear="clear"
     ></searchdemo>
     <div class="list">
       <div class="line topline">
@@ -81,11 +82,12 @@ export default {
       showtip: false,
       showtip2: false,
       activeNum: -1,
-      total:1,
+      total: 1,
       st: ["通过", "驳回", "无状态", "单位分配", "开发中"],
       list: [],
       actionPeoples: [],
       waitchosePerson: 0,
+      querymesg:null
     };
   },
   mounted() {
@@ -95,6 +97,16 @@ export default {
     searchdemo,
   },
   methods: {
+    justgoto(p1,p2){
+      console.log(p1,p2)
+      this.querymesg = {};
+      this.querymesg.demand_name = p1;
+      this.querymesg.branch_id = p2
+      this.handleCurrentChange(this.currentPage)
+    },
+    clear(){
+      this.querymesg = null
+    },
     getdata() {
       demandlist("page=1&type=3&status=4").then((res) => {
         console.log("需求处理", res);
@@ -109,7 +121,13 @@ export default {
     },
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
-      demandlist("status=4&type=3&page=" + val).then((res) => {
+      let str = ''
+      if(this.querymesg) {
+        str = "status=4&type=3&page=" + val +"&demand_name="+this.querymesg.demand_name+"&branch_id="+this.querymesg.branch_id
+      } else {
+        str = "status=4&type=3&page=" + val
+      }
+      demandlist(str).then((res) => {
         if (res.data.status == 200) {
           this.total = res.data.data.count;
           this.list = res.data.data.list;
@@ -178,19 +196,16 @@ export default {
 .demandHandle {
   height: 91%;
   .list {
-    height: 86%;
+    height: calc(91% - 35px);
     .line {
       // margin: 0.1% 0;
       margin-top: 0.1%;
       display: flex;
+      align-items: center;
+      justify-content: center;
       height: 8%;
       border: 1px solid #f5f6f9;
       div {
-        // padding: 0.75% 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        // padding: 0.45% 0;
         font-family: MicrosoftYaHei;
         font-size: 14px;
         color: #666f8e;
@@ -198,6 +213,7 @@ export default {
         flex: 2;
         overflow: hidden;
         text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .num {
         flex: 1;

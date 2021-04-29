@@ -1,10 +1,11 @@
 <template>
   <div class="hasDoneDemand">
     <searchdemo
-      four="流程名称"
-      one="标题"
-      two="请输入标题"
-      three="请输入流程名称"
+      :four="true"
+      one="模型名称"
+      two="请输入模型名称"
+      @feedback="justgoto"
+      @clear="clear"
     ></searchdemo>
     <div class="list">
       <div class="line topline">
@@ -51,6 +52,7 @@ export default {
       total:1,
       st: ["通过", "驳回", "无状态", "单位分配", "开发中"],
       list: [],
+      querymesg:null
     };
   },
   components: {
@@ -60,9 +62,26 @@ export default {
     this.getdata(1)
   },
   methods: {
+    justgoto(p1, p2) {
+      console.log(p1, p2);
+      // console.log(p2[0].getTime(),p2[1].getTime(),p2[0].getTime()/1000,p2[1].getTime()/1000)
+      this.querymesg = {};
+      this.querymesg.demand_name = p1;
+      if (!p2) {
+        this.querymesg.start_time = "";
+        this.querymesg.end_time = "";
+      } else {
+        this.querymesg.start_time = p2[0].getTime() / 1000;
+        this.querymesg.end_time = p2[1].getTime() / 1000;
+      }
+      this.handleCurrentChange(this.currentPage)
+    },
+    clear() {
+      this.querymesg = null
+    },
     getdata(page){
       demandexecute("type=2&page="+page).then(res=>{
-        // console.log(res)
+        console.log(res)
         if(res.data.status == 200) {
           this.list = res.data.data.list
           this.total = res.data.data.count
@@ -84,25 +103,23 @@ export default {
 .hasDoneDemand {
   height: 91%;
   .list {
-    height: 86%;
+    height: calc(91% - 35px);;
     .line {
       // margin: 0.1% 0;
       margin-top: 0.1%;
       display: flex;
+        align-items: center;
+        justify-content: center;
       height: 8%;
       border: 1px solid #f5f6f9;
       div {
-        // padding: 0.75% 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        // padding: 0.45% 0;
         font-family: MicrosoftYaHei;
         font-size: 14px;
         color: #666f8e;
         text-align: center;
         overflow: hidden;
         text-overflow: ellipsis;
+        white-space: nowrap;
         flex: 2;
       }
       .num{

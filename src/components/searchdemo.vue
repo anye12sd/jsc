@@ -21,15 +21,28 @@
         @blur="blur"
       >
       </el-date-picker>
-      <input
+      <el-select v-model="company" :placeholder="three" clearable @blur="blur" v-else>
+        <el-option
+          v-for="item in options"
+          :key="item.id"
+          :label="item.branchname"
+          :value="item.id"
+        >
+        </el-option>
+      </el-select>
+      <!-- <input
         type="text"
         id="time"
         v-else
         :placeholder="three"
         v-model="name2"
         @blur="blur"
-      />
-      <div class="searchlogo" style="color: #fff;margin-left:20px" @click="confirm">
+      /> -->
+      <div
+        class="searchlogo"
+        style="color: #fff; margin-left: 20px"
+        @click="confirm"
+      >
         搜索
         <!-- <img :src="search" alt="图片丢失" /> -->
       </div>
@@ -44,6 +57,7 @@
 
 <script>
 import search from "@/assets/search.png";
+import { appbranch } from "@/api/list.js";
 export default {
   name: "searchdemo",
   data() {
@@ -53,6 +67,8 @@ export default {
       name: "",
       name2: "",
       searchcontent: "",
+      company: null,
+      options:[]
     };
   },
   props: {
@@ -66,21 +82,29 @@ export default {
     },
     three: {
       type: String,
-      default: "请输入申请人姓名",
+      default: "选择需求单位",
     },
     four: {
       default: "请选择时间",
     },
   },
+  mounted() {
+    if (this.four != true) {
+      appbranch().then((res) => {
+
+        this.options = res.data.data;
+      });
+    }
+  },
   methods: {
-    blur(){
+    blur() {
       if (this.four == true) {
-        if(!this.name && !this.datetime) {
-          this.$emit("clear")
+        if (!this.name && !this.datetime) {
+          this.$emit("clear");
         }
       } else {
-        if(!this.name && !this.name2) {
-          this.$emit("clear")
+        if (!this.name && !this.company) {
+          this.$emit("clear");
         }
       }
     },
@@ -89,19 +113,35 @@ export default {
         // console.log(th)
         this.$emit("feedback", this.name, this.datetime);
       } else {
-        this.$emit("feedback", this.name, this.name2);
+        this.$emit("feedback", this.name, this.company);
       }
     },
   },
-  watch:{
-    datetime(newValue){
-      if(!newValue && !this.name){
-          this.$emit("clear")
+  watch: {
+    datetime(newValue) {
+      if (!newValue && !this.name) {
+        this.$emit("clear");
       }
-    }
-  }
+    },
+  },
 };
 </script>
+
+<style lang="less">
+.search {
+  .el-input--suffix .el-input__inner {
+    padding-right: 30px;
+    width: 200px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .el-select .el-input .el-select__caret{
+    position: relative;
+    top: -1px;
+  }
+
+}
+</style>
 <style scoped lang="less">
 .search {
   height: 9%;
@@ -115,7 +155,7 @@ export default {
     margin-right: 1%;
   }
   input {
-    border: 1px solid #DCDFE6;
+    border: 1px solid #dcdfe6;
     border-radius: 4px;
     height: 3%;
     padding: 3px 5px;
@@ -174,12 +214,11 @@ export default {
   }
 }
 .search > div {
-  
   height: 100%;
   display: flex;
   align-items: center;
 }
-.search>div:nth-of-type(1){
+.search > div:nth-of-type(1) {
   width: 80%;
 }
 .search > div:nth-of-type(2) {
@@ -189,9 +228,9 @@ export default {
 
 <style lang="less">
 .search {
-   .el-date-editor--datetimerange.el-input__inner{
-     height: 30px;
-   }
+  .el-date-editor--datetimerange.el-input__inner {
+    height: 30px;
+  }
   // .el-date-editor.el-input {
   //   width: 25%;
   //   height: 40%;

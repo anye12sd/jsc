@@ -20,9 +20,9 @@
         暂无数据
       </div>
       <div v-for="(k, index) in list" :key="index" class="line">
-        <div class="name">{{ k.modulename }}</div>
-        <div class="type">{{ k.module_type }}</div>
-        <div class="company">{{ k.branch_id }}</div>
+        <div class="name" :title="k.modulename">{{ k.modulename }}</div>
+        <div class="type" :title="k.module_type">{{ k.module_type }}</div>
+        <div class="company" :title="k.branch_id">{{ k.branch_id }}</div>
         <div class="actions">
           <p @click="topreview(k.id)">
             <img :src="datapreview" alt="图片资源缺失" /> <span>数据预览</span>
@@ -136,23 +136,24 @@ export default {
 .modelDownload {
   height: 91%;
   .list {
-    height: 86%;
+    height: calc(91% - 35px);;
     .line {
       // margin: 0.1% 0;
       margin-top: 0.1%;
       display: flex;
+        align-items: center;
+        justify-content: center;
       height: 8%;
       border: 1px solid #f5f6f9;
       div {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        // padding: 0.45% 0;
         font-family: MicrosoftYaHei;
         font-size: 14px;
         color: #666f8e;
         text-align: center;
         flex: 2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .type {
         flex: 1;

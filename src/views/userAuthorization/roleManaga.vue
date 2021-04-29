@@ -121,18 +121,18 @@ export default {
 .roleManaga {
   height: 91%;
   .list {
-    height: 86%;
+    height:calc(91% - 35px);;
     .line {
       // margin: 0.1% 0;
       margin-top: 0.1%;
       display: flex;
+        align-items: center;
+        justify-content: center;
       height: 8%;
       border: 1px solid #f5f6f9;
       div {
         // padding: 0.75% 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        
         // padding: 0.45% 0;
         font-family: MicrosoftYaHei;
         font-size: 14px;
@@ -141,6 +141,7 @@ export default {
         flex: 2;
         overflow: hidden;
         text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       .actions > span {

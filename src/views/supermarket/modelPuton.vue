@@ -31,7 +31,6 @@
         <label style="width: 40%">所在分类</label>
         <div style="width: 60%">
           <el-cascader
-            v-model="typeId"
             :options="alltype"
             :props="propopt"
             @change="handleChange"
@@ -60,25 +59,31 @@ export default {
       value: null,
       name: "",
       typeId: null,
-      propopt: { expandTrigger: "hover",children: "item",label: "category_name", value:"id"},
+      propopt: {
+        expandTrigger: "hover",
+        children: "item",
+        label: "category_name",
+        value: "id",
+        checkStrictly: true
+      },
     };
   },
   props: ["alltype"],
   mounted() {
-    console.log("www");
+    // console.log("www");
     demanduser().then((res) => {
       this.options = res.data.data;
-      console.log(this.options);
+      // console.log(this.options);
     });
   },
   methods: {
-    handleChange(ids){
-      console.log(ids)
-      this.typeId = ids[ids.length - 1]
-      console.log(this.typeId)
+    handleChange(ids) {
+      // console.log(ids);
+      this.typeId = ids[ids.length - 1];
+      // console.log(this.typeId);
     },
     confirm() {
-      console.log(this.value)
+      // console.log(this.value);
       if (this.name.length < 4) {
         this.$message({
           message: "模型名称长度不能小于4",
@@ -86,14 +91,14 @@ export default {
         });
         return;
       }
-      if(this.value === null) {
+      if (this.value === null) {
         this.$message({
           message: "请选择模型开发人员",
           type: "warning",
         });
         return;
       }
-      if(!this.typeId){
+      if (!this.typeId) {
         this.$message({
           message: "请选择分类",
           type: "warning",
@@ -104,9 +109,9 @@ export default {
         demand_name: this.name,
         execute_id: this.value,
         type: 3,
-        status: 3
+        status: 3,
       }).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.status == 200) {
           this.name = "";
           this.$message({

@@ -2,9 +2,11 @@
   <div class="userManaga">
     <searchdemo
       four="所属单位"
-      one="页面名称"
-      two="请输入页面名称"
-      three="请输入所属单位"
+      one="姓名"
+      two="请输入姓名"
+      three="选择所属单位"
+      @feedback="justgoto"
+      @clear="clear"
     ></searchdemo>
     <div class="list">
       <div class="line topline">
@@ -148,12 +150,23 @@ export default {
         account: null,
         status: 1,
       },
+      querymesg:null
     };
   },
   components: {
     searchdemo,
   },
   methods: {
+     justgoto(p1,p2){
+      console.log(p1,p2)
+      this.querymesg = {};
+      this.querymesg.userName = p1;
+      this.querymesg.branch_id = p2
+      this.handleCurrentChange(this.currentPage)
+    },
+    clear(){
+      this.querymesg = null
+    },
     confirm() {
       userEdit({
         userName: this.userInfo.userName,
@@ -231,7 +244,13 @@ export default {
       });
     },
     getdata(page) {
-      userList(page).then((res) => {
+      let str = ''
+      if(this.querymesg) {
+        str =  page +"&userName="+this.querymesg.userName+"&branch_id="+this.querymesg.branch_id
+      } else {
+        str = page
+      }
+      userList(str).then((res) => {
         console.log(res);
         if (res.data.status == 200) {
           this.list = res.data.data.list;
@@ -257,24 +276,27 @@ export default {
 .userManaga {
   height: 91%;
   .list {
-    height: 86%;
+    height: calc(91% - 35px);;
     .line {
       // margin: 0.1% 0;
       margin-top: 0.1%;
       display: flex;
+        align-items: center;
+        justify-content: center;
       height: 8%;
       border: 1px solid #f5f6f9;
       div {
         // padding: 0.75% 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        
         // padding: 0.45% 0;
         font-family: MicrosoftYaHei;
         font-size: 14px;
         color: #666f8e;
         text-align: center;
         flex: 2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .actions {
         flex: 3;

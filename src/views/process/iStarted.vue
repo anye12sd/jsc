@@ -1,10 +1,11 @@
 <template>
   <div class="istarted">
     <searchdemo
-      four="流程名称"
-      one="标题"
-      two="请输入标题"
-      three="请输入流程名称"
+      :four="true"
+      one="流程名称"
+      two="请输入流程名称"
+       @feedback="justgoto"
+      @clear="clear"
     ></searchdemo>
     <div class="list">
       <div class="line topline">
@@ -53,6 +54,7 @@ export default {
       total: 1,
       st: ["通过", "驳回", "无状态", "单位分配", "开发中"],
       list: [],
+      querymesg: null,
     };
   },
   components: {
@@ -62,6 +64,42 @@ export default {
     this.getdata();
   },
   methods: {
+    justgoto(p1, p2) {
+      // console.log(p1, p2);
+      // console.log(
+      //   p2[0].getTime(),
+      //   p2[1].getTime(),
+      //   p2[0].getTime() / 1000,
+      //   p2[1].getTime() / 1000
+      // );
+      this.querymesg = {};
+      this.querymesg.demand_name = p1;
+      if (!p2) {
+        this.querymesg.start_time = "";
+        this.querymesg.end_time = "";
+      } else {
+        this.querymesg.start_time = p2[0].getTime() / 1000;
+        this.querymesg.end_time = p2[1].getTime() / 1000;
+      }
+
+      demandlist(
+        "page=1&type=3&demand_name=" +
+          this.querymesg.demand_name +
+          "&start_time=" +
+          this.querymesg.start_time +
+          "&end_time=" +
+          this.querymesg.end_time
+      ).then((res) => {
+        console.log("搜索", res);
+        if (res.data.status == 200) {
+          this.total = res.data.data.count;
+          this.list = res.data.data.list;
+        }
+      });
+    },
+    clear() {
+      this.querymesg = null;
+    },
     getdata() {
       demandlist("page=1&type=1").then((res) => {
         // console.log("我发起的", res);
@@ -75,8 +113,21 @@ export default {
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      // console.log(`当前页: ${val}`);
-      demandlist("type=1&page=" + val).then((res) => {
+      let str = "";
+      if (this.querymesg) {
+        str =
+          "page=" +
+          val +
+          "&type=3&demand_name=" +
+          this.querymesg.demand_name +
+          "&start_time=" +
+          this.querymesg.start_time +
+          "&end_time=" +
+          this.querymesg.end_time;
+      } else {
+        str = "type=3&page=" + val;
+      }
+      demandlist(str).then((res) => {
         if (res.data.status == 200) {
           this.total = res.data.data.count;
           this.list = res.data.data.list;
@@ -91,19 +142,16 @@ export default {
 .istarted {
   height: 91%;
   .list {
-    height: 86%;
+    height: calc(91% - 35px);
     .line {
       // margin: 0.1% 0;
       margin-top: 0.1%;
       display: flex;
+      align-items: center;
+      justify-content: center;
       height: 8%;
       border: 1px solid #f5f6f9;
       div {
-        // padding: 0.75% 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        // padding: 0.45% 0;
         font-family: MicrosoftYaHei;
         font-size: 14px;
         color: #666f8e;
@@ -111,6 +159,7 @@ export default {
         flex: 2;
         overflow: hidden;
         text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .num {
         flex: 1;

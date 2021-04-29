@@ -20,8 +20,8 @@
         暂无数据
       </div>
       <div v-for="(k, index) in list" :key="index" class="line">
-        <div class="pagename">{{ k.view_name }}</div>
-        <div class="person">{{ k.branch_name }}</div>
+        <div class="pagename" :title="k.view_name">{{ k.view_name }}</div>
+        <div class="person" :title="k.branch_name">{{ k.branch_name }}</div>
         <div class="actions">
           <p :class="k.type == 0 ? 'blue' : 'gray'" @click="gosunscribe(k)">
             <img :src="subsc" alt="图片资源缺失" />
@@ -130,7 +130,7 @@ export default {
 .subscribe {
   height: 91%;
   .list {
-    height: 86%;
+    height: calc(91% - 35px);;
     .line {
       // margin: 0.1% 0;
       margin-top: 0.1%;
