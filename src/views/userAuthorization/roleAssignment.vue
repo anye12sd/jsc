@@ -83,10 +83,10 @@ export default {
   },
   methods: {
      justgoto(p1,p2){
-      console.log(p1,p2)
+      // console.log(p1,p2)
       this.querymesg = {};
       this.querymesg.userName = p1;
-      this.querymesg.branch_id = p2
+      this.querymesg.branch_id = p2 == null ? '' : p2
       this.handleCurrentChange(this.currentPage)
     },
     clear(){
@@ -100,7 +100,7 @@ export default {
       if (p.name == this.active.role_name) return;
       let str = "?role_id="+p.id+"&id="+this.active.id
       userroleedit(str).then((res) => {
-        console.log(res)
+        // console.log(res)
         if (res.data.status == 200) {
           this.$message({
             message: "修改成功",
@@ -119,7 +119,7 @@ export default {
         str = page
       }
       userList(str).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.status == 200) {
           this.list = res.data.data.list;
           this.total = res.data.data.count;

@@ -156,7 +156,7 @@ export default {
         str = "type=1&page=" + page;
       }
       demandexecute(str).then((res) => {
-        console.log(res)
+        // console.log(res)
         if (res.data.status == 200) {
           this.list = res.data.data.list;
           this.total = res.data.data.count;

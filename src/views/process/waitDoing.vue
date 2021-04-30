@@ -165,13 +165,13 @@ export default {
   },
   methods: {
     justgoto(p1, p2) {
-      console.log(p1, p2);
-      console.log(
-        p2[0].getTime(),
-        p2[1].getTime(),
-        p2[0].getTime() / 1000,
-        p2[1].getTime() / 1000
-      );
+      // console.log(p1, p2);
+      // console.log(
+      //   p2[0].getTime(),
+      //   p2[1].getTime(),
+      //   p2[0].getTime() / 1000,
+      //   p2[1].getTime() / 1000
+      // );
       this.querymesg = {};
       this.querymesg.demand_name = p1;
       if (!p2) {
@@ -190,7 +190,7 @@ export default {
           "&end_time=" +
           this.querymesg.end_time
       ).then((res) => {
-        console.log("搜索", res);
+        // console.log("搜索", res);
         if (res.data.status == 200) {
           this.total = res.data.data.count;
           this.list = res.data.data.list;
@@ -201,7 +201,7 @@ export default {
       this.querymesg = null;
     },
     showdetail(id) {
-      console.log(id);
+      // console.log(id);
       this.drawer = true;
       getdetail(id).then((res) => {
         // console.log(res);
@@ -219,7 +219,11 @@ export default {
       this.drawer = false;
     },
     goon(id, index) {
-      demandstatus("status=1&id=" + id).then((res) => {
+      let status = 1;
+      if (this.identity == 1) {
+        status = 4;
+      }
+      demandstatus("status=" + status + "&id=" + id).then((res) => {
         // console.log(res);
         if (res.data.status == 200) {
           this.list.splice(index, 1);

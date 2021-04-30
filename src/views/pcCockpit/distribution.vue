@@ -269,7 +269,7 @@ export default {
       portalSubscribe(
         "id=" + id + "&demand_id=" + this.demand_id + "&status=1"
       ).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.data) {
           this.$message({
             message: "分配成功",
@@ -285,7 +285,7 @@ export default {
       portalSubscribe(
         "id=" + id + "&demand_id=" + this.demand_id + "&status=2"
       ).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.data) {
           this.$message({
             message: "分配成功",
@@ -296,7 +296,7 @@ export default {
       });
     },
     handleNodeClick(data) {
-      console.log(data);
+      // console.log(data);
       this.queryId = data.id;
       let str = "category_id=" + data.id + "&page=1";
       this.getdata(str);
@@ -338,11 +338,10 @@ export default {
         });
         return;
       }
-      console.log(ids);
       portalSubscribeall(
         "ids=" + ids + "&demand_id=" + this.demand_id + "&status=1"
       ).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.data) {
           this.$message({
             message: "分配成功",
@@ -384,11 +383,10 @@ export default {
         });
         return;
       }
-      console.log(ids);
       portalSubscribeall(
         "ids=" + ids + "&demand_id=" + this.demand_id + "&status=2"
       ).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.data) {
           this.$message({
             message: "解除分配成功",
@@ -404,7 +402,7 @@ export default {
       });
     },
     chose(index) {
-      console.log(this.status[index]);
+      // console.log(this.status[index]);
       if (this.status[index]) {
         this.status[index] = false;
         this.selectNum--;
@@ -428,7 +426,7 @@ export default {
       this.demand_id = id;
       this.getUserList(1);
       appbranch().then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.status == 200) {
           this.options = res.data.data;
         }
@@ -443,7 +441,7 @@ export default {
     getUserList(page) {
       subscribeList("demand_id=" + this.demand_id + "&page=" + page).then(
         (res) => {
-          console.log(res);
+          // console.log(res);
           if (res.data.status == 200) {
             this.users = res.data.data.list;
             this.usertotal = res.data.data.count;
@@ -478,7 +476,7 @@ export default {
             "&username=" +
             this.xm
         ).then((res) => {
-          console.log(res);
+          // console.log(res);
           if (res.data.status == 200) {
             this.users = res.data.data.list;
             this.usertotal = res.data.data.count;
@@ -635,6 +633,9 @@ export default {
       .top {
         text-align: center;
         margin-top: 5px;
+        input{
+          text-align: left;
+        }
         .xm {
           border: 1px solid lightgray;
           border-radius: 4px;

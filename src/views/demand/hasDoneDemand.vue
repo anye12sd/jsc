@@ -63,7 +63,7 @@ export default {
   },
   methods: {
     justgoto(p1, p2) {
-      console.log(p1, p2);
+      // console.log(p1, p2);
       // console.log(p2[0].getTime(),p2[1].getTime(),p2[0].getTime()/1000,p2[1].getTime()/1000)
       this.querymesg = {};
       this.querymesg.demand_name = p1;
@@ -81,7 +81,7 @@ export default {
     },
     getdata(page){
       demandexecute("type=2&page="+page).then(res=>{
-        console.log(res)
+        // console.log(res)
         if(res.data.status == 200) {
           this.list = res.data.data.list
           this.total = res.data.data.count

@@ -31,7 +31,7 @@ export default {
             userName: "系统",
             role_id: 1,
           });
-          this.togetmenu();
+          // this.togetmenu();
           // this.$router.push("/oridinaryUsers");
           return;
         } else if (access_token == "bbbb") {
@@ -40,7 +40,7 @@ export default {
             userName: "单位",
             role_id: 2,
           });
-          this.togetmenu();
+          // this.togetmenu();
           // this.$router.push("/oridinaryUsers");
           return;
         } else if (access_token == "cccc") {
@@ -51,26 +51,26 @@ export default {
             role_id: 3,
           });
           // this.$router.push("/oridinaryUsers");
-          this.togetmenu();
+          // this.togetmenu();
           return;
         } else if (access_token == "dddd") {
           //模型开发人员
           this.$store.commit("config/setidentity", 4);
-          this.togetmenu();
+          // this.togetmenu();
           // this.$router.push("/demand");
           return;
         }
       }
 
       if (access_token) {
-        console.log("user");
+        // console.log("user");
         tologin().then((res) => {
           if (res.data.status == 200) {
             this.$store.commit("config/setUsetInfo", res.data.data);
             this.$store.commit("config/setidentity", res.data.data.role_id);
 
-            // if(res.data.data.role_id == 3) {
-            //   this.$router.push("/oridinaryUsers")
+            // if(res.data.data.role_id != 3) {
+            //   this.togetmenu();
             // }
           } else {
             this.$message({
@@ -81,13 +81,13 @@ export default {
           }
           // this.$store.commit("config/setLogin",true)
         });
-        this.togetmenu();
+        
         // console.log(this.isLogin);
       }
     },
     togetmenu() {
       getMenu().then((res) => {
-        console.log("menu", res);
+        // console.log("menu", res);
         if (res.data.data == false) {
           this.$store.commit("config/setLogin", false);
           this.num++;
@@ -116,7 +116,7 @@ export default {
     isLogin(newValue) {
       if (newValue == false) {
         // this.$router.push("/login");
-        console.log("false");
+        // console.log("false");
         if (process.env.NODE_ENV == "development") {
           location.href = "http://localhost:8080";
         }
@@ -133,6 +133,7 @@ export default {
         this.$store.commit("config/setShowTopBar", false);
       } else {
         this.$store.commit("config/setShowTopBar", true);
+        this.togetmenu()
       }
     },
   },

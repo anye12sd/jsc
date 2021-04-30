@@ -158,10 +158,10 @@ export default {
   },
   methods: {
      justgoto(p1,p2){
-      console.log(p1,p2)
+      // console.log(p1,p2)
       this.querymesg = {};
       this.querymesg.userName = p1;
-      this.querymesg.branch_id = p2
+      this.querymesg.branch_id = p2 == null ? '' : p2
       this.handleCurrentChange(this.currentPage)
     },
     clear(){
@@ -219,7 +219,7 @@ export default {
       });
     },
     amend(id,index) {
-      console.log(this.isedit);
+      // console.log(this.isedit);
       user(id).then((res) => {
         // console.log(res);
         if (res.data.status == 200) {
@@ -251,7 +251,7 @@ export default {
         str = page
       }
       userList(str).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.status == 200) {
           this.list = res.data.data.list;
           this.total = res.data.data.count;
@@ -262,7 +262,7 @@ export default {
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
       this.getdata(val);
     },
   },

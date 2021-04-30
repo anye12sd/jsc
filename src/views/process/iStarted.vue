@@ -83,14 +83,14 @@ export default {
       }
 
       demandlist(
-        "page=1&type=3&demand_name=" +
+        "page=1&type=1&demand_name=" +
           this.querymesg.demand_name +
           "&start_time=" +
           this.querymesg.start_time +
           "&end_time=" +
           this.querymesg.end_time
       ).then((res) => {
-        console.log("搜索", res);
+        // console.log("搜索", res);
         if (res.data.status == 200) {
           this.total = res.data.data.count;
           this.list = res.data.data.list;
@@ -118,14 +118,14 @@ export default {
         str =
           "page=" +
           val +
-          "&type=3&demand_name=" +
+          "&type=1&demand_name=" +
           this.querymesg.demand_name +
           "&start_time=" +
           this.querymesg.start_time +
           "&end_time=" +
           this.querymesg.end_time;
       } else {
-        str = "type=3&page=" + val;
+        str = "type=1&page=" + val;
       }
       demandlist(str).then((res) => {
         if (res.data.status == 200) {

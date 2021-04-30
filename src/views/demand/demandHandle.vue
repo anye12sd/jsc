@@ -24,7 +24,7 @@
       <div v-for="(k, index) in list" :key="index" class="line">
         <div class="num">{{ index }}</div>
         <div class="name" :title="k.demand_name">{{ k.demand_name }}</div>
-        <div class="company" :title="k.branch_id">{{ k.branch_id }}</div>
+        <div class="company" :title="k.branch_id">{{ k.get_branch_name }}</div>
         <div class="status" :title="st[k.status - 1]">
           {{ st[k.status - 1] }}
         </div>
@@ -54,7 +54,7 @@
           <span>操作</span>
         </div>
         <div v-for="(p, index) in actionPeoples" :key="p.id" class="each">
-          <span>{{ p.nickname }}</span>
+          <span>{{ p.userName }}</span>
           <span @click="confirmChose(index)">选择</span>
         </div>
       </div>
@@ -98,7 +98,7 @@ export default {
   },
   methods: {
     justgoto(p1,p2){
-      console.log(p1,p2)
+      // console.log(p1,p2)
       this.querymesg = {};
       this.querymesg.demand_name = p1;
       this.querymesg.branch_id = p2
@@ -109,7 +109,7 @@ export default {
     },
     getdata() {
       demandlist("page=1&type=3&status=4").then((res) => {
-        console.log("需求处理", res);
+        // console.log("需求处理", res);
         if (res.data.status == 200) {
           this.total = res.data.data.count;
           this.list = res.data.data.list;

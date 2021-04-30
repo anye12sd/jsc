@@ -40,7 +40,7 @@
         <div class="bot">
           <div style="text-align: left; width: 100%">
             <span class="tit">所属单位</span>
-            <span class="con">{{ modelInfo.branch_name }}</span>
+            <span class="con">{{ modelInfo.get_branch_name }}</span>
           </div>
           <!-- <div style="text-align: left;width:50%;">
             <span class="tit">类型</span>
@@ -101,15 +101,15 @@ export default {
     ...mapState("jurisdiction", ["modelInfo"]),
   },
   mounted() {
-    console.log(this.$route.params, this.modelInfo);
+    // console.log(this.$route.params, this.modelInfo);
     introduce(this.$route.params.id).then((res) => {
-      console.log(res);
+      // console.log(res);
       this.info = res.data.data;
     });
   },
   methods: {
     showdetail(name) {
-      console.log(name);
+      // console.log(name);
       this.active = name;
     },
     goback() {

@@ -3,7 +3,10 @@
     <div class="main">
       <div v-for="(k, index) in models" :key="index" class="each">
         <div class="top checked" @click="getdetail(k)">
-          <img :src=" k.img_url ? 'http://10.21.197.237'+k.img_url:modelImg " alt="" />
+          <img
+            :src="k.img_url ? 'http://10.21.197.237' + k.img_url : modelImg"
+            alt=""
+          />
           <div>{{ k.modulename }}</div>
           <span class="modelDownload" @click.stop="download(k.id, $event)"
             >模型下载</span
@@ -15,18 +18,10 @@
               <span class="tit">所属单位</span>
               <span class="con">{{ k.get_branch_name }}</span>
             </div>
-            <!-- <div style="text-align: right">
-              <span class="tit">类型</span>
-              <span class="con">{{ k.module_type }}</span>
-            </div> -->
           </div>
-          <!-- <div>
-            <span class="tit">模型修改时间</span>
-            <span class="con">{{ k.create_time }}</span>
-          </div> -->
         </div>
       </div>
-      <div v-for="(k, index) in 9- models.length" :key="index" class="each">
+      <div v-for="(k, index) in 9 - models.length" :key="index" class="each">
         <div class="top unchecked">
           <img src="@/assets/oridinary/modelIcon.png" alt="" />
           <div>模型名称</div>
@@ -57,33 +52,41 @@
 </template>
 
 <script>
-import { getlist } from "@/api/list.js";
-import modelImg from '@/assets/oridinary/modelIcon.png'
+import { getlist, appuserlist } from "@/api/list.js";
+import modelImg from "@/assets/oridinary/modelIcon.png";
+import { mapState } from "vuex";
 export default {
   name: "modelmarket",
   data() {
     return {
       models: [],
       total: 1,
-      modelImg
+      modelImg,
     };
+  },
+  computed: {
+    ...mapState("config", ["identity"]),
   },
   mounted() {
     getlist("page=1&pageSize=9").then((res) => {
-      console.log(res);
-      this.models = res.data.data.list;
-      this.total = res.data.data.count;
-    });
+        // console.log(res);
+        if (res.data.status == 200) {
+          this.models = res.data.data.list;
+          this.total = res.data.data.count;
+        }
+      });
   },
   methods: {
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-      getlist("page="+val+"&pageSize=9").then((res) => {
-        this.models = res.data.data.list;
-        this.total = res.data.data.count;
-      });
+      getlist("page=" + val + "&pageSize=9").then((res) => {
+          if (res.data.status == 200) {
+            this.models = res.data.data.list;
+            this.total = res.data.data.count;
+          }
+        });
     },
     getdetail(item) {
+      // console.log(item);
       this.$router.push("/oridinaryUsers/detail/" + item.id);
       this.$store.commit("jurisdiction/setModelInfo", item);
     },
@@ -150,10 +153,10 @@ export default {
       width: 29%;
       height: 28%;
       margin: 0 2%;
-      >.checked{
+      > .checked {
         background: url("../../assets/oridinary/modelborder.png") no-repeat;
       }
-      >.unchecked{
+      > .unchecked {
         background: url("../../assets/oridinary/notsale.png") no-repeat;
       }
       > .top {
@@ -161,7 +164,7 @@ export default {
         align-content: center;
         text-align: center;
         flex-wrap: wrap;
-        
+
         background-size: 100% 100%;
         cursor: pointer;
         transition: transform;

@@ -11,7 +11,10 @@
       <p>{{ p.name }}</p>
     </div>
     <div class="user">
-      <div class="left" @click="gobefore">返回前台</div>
+      <div class="left">
+        <span @click="gobefore">返回前台</span>
+        <span @click="signout">退出登录</span>
+      </div>
       <div class="right">
         <div>
           <span class="userName">{{ userInfo.userName }}</span>
@@ -125,6 +128,14 @@ export default {
         this.usingOption = op;
         // console.log(this.usingOption)
     },
+    signout() {
+      if (process.env.NODE_ENV == "development") {
+        window.location.href = "http://localhost:8080/#/login"
+      }
+      if (process.env.NODE_ENV == "production") {
+        window.location.href = "http://10.21.197.237"
+      }
+    },
     gobefore(){
       this.$router.push("/oridinaryUsers")
     },
@@ -229,6 +240,19 @@ export default {
       color: #ffffff;
       margin-right: 5px;
       cursor: pointer;
+      text-align: center;
+      span{
+        font-size: 13px;
+        display: block;
+        background-color: #fff;
+        color: #016cf0;
+        // margin-top: 3px;
+        border-radius: 4px;
+        padding: 1px 5px;
+      }
+      span:nth-of-type(2){
+        margin-top: 2px;
+      }
     }
     .userName {
       font-family: PingFangSC-Medium;

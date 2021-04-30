@@ -209,15 +209,15 @@ export default {
   mounted() {
     this.year = new Date().getFullYear();
     getlist("page=1").then((res) => {
-      console.log(res);
+      // console.log(res);
       this.list = res.data.data.list;
       this.total = res.data.data.count;
     });
     appCategory().then((res) => {
-      console.log("分类", res);
+      // console.log("分类", res);
       this.data = res.data.data;
     });
-    console.log(this[3]);
+    // console.log(this[3]);
     if (this.identity == 2) {
       this.ismanaga = true;
     }
@@ -238,11 +238,11 @@ export default {
       this.waitEdit.category_id = k.category_id;
       this.waitEdit.id = k.id;
       this.waitEdit.index = index;
-      console.log(this.waitEdit.category_id);
+      // console.log(this.waitEdit.category_id);
     },
     handleChange(ids) {
-      console.log(ids);
-      console.log(this.waitEdit.category_id);
+      // console.log(ids);
+      // console.log(this.waitEdit.category_id);
     },
     confirmedit() {
       let category_id = 0;
@@ -253,14 +253,14 @@ export default {
           this.waitEdit.category_id.length - 1
         ];
       }
-      console.log(category_id)
+      // console.log(category_id)
       let data = {
         id: this.waitEdit.id,
         modulename: this.waitEdit.modulename,
         category_id,
       };
       appedit(data).then((res) => {
-        console.log(res,this.waitEdit.index);
+        // console.log(res,this.waitEdit.index);
         if(res.data.status == 200) {
           this.list[this.waitEdit.index].modulename = res.data.data.modulename
           this.list[this.waitEdit.index].category_id = res.data.data.category_id
@@ -283,13 +283,13 @@ export default {
       }
       let str = "";
       str = "category_name=" + this.newtypename;
-      console.log(this.newtypeaddress);
-      console.log(this.newtypeaddress !== "");
+      // console.log(this.newtypeaddress);
+      // console.log(this.newtypeaddress !== "");
       if (this.newtypeaddress !== "") {
         str = str + "&pid=" + this.newtypeaddress;
       }
       categoryadd(str).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.data == true) {
           this.$message({
             message: "添加成功",
@@ -310,7 +310,7 @@ export default {
     },
     intro(id) {
       introduce(id).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.status == 200 && res.data.data.length == 0) {
           this.waitchange = false;
           this.showModify = true;
@@ -349,13 +349,13 @@ export default {
       this.currentPage = 1;
     },
     chosetype(id) {
-      console.log(id);
+      // console.log(id);
       this.queryId = id;
       this.handleCurrentChange(1);
     },
     getdata(query) {
       getlist(query).then((res) => {
-        console.log(res);
+        //console.log(res);
         this.list = res.data.data.list;
         this.total = res.data.data.count;
       });

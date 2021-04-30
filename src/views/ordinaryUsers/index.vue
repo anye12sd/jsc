@@ -12,7 +12,8 @@
         >
         <span>{{ week[day] }}</span>
         <img src="../../assets/oridinary/portrait.png" alt=" " />
-        <span>{{userid[identity]}}</span>
+        <span>{{ userid[identity] }}</span>
+        <span style="cursor: pointer" @click="signout">退出</span>
       </div>
     </div>
     <!-- <component :is="pages[current].componentName"></component> -->
@@ -78,7 +79,6 @@ export default {
     };
   },
   mounted() {
-    console.log(location.hash);
     if (location.hash == "#/oridinaryUsers/modelmarket") {
       this.current = 1;
     }
@@ -95,6 +95,14 @@ export default {
     ...mapState("config", ["identity"]),
   },
   methods: {
+    signout() {
+      if (process.env.NODE_ENV == "development") {
+        window.location.href = "http://localhost:8080/#/login"
+      }
+      if (process.env.NODE_ENV == "production") {
+        window.location.href = "http://10.21.197.237"
+      }
+    },
     goafter() {
       this.$store.commit("config/setShowTopBar", true);
       this.$router.push("/pcCockpit/distribution");
@@ -125,12 +133,11 @@ export default {
   },
   watch: {
     $route(to, from) {
-      console.log(to);
       if (to.name == "Detail") {
         this.current = 2;
       } else if (to.name == "Modelmarket") {
         this.current = 1;
-        console.log(this.current);
+        // console.log(this.current);
       }
     },
   },

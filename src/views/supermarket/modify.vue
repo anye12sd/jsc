@@ -1,6 +1,6 @@
 <template>
   <div class="modify">
-    <div class="mask" @click="hide"></div>
+    <div class="mask"></div>
     <div class="main">
       <div class="tit">
         {{ changeAble ? "修改模型" : "模型介绍" }}

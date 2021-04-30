@@ -172,7 +172,7 @@ export default {
       issub: true,
       currentPage: 1,
       total: 1,
-      st: ["通过", "驳回", "无状态", "单位分配", "开发中"],
+      st: ["通过", "驳回", "无状态", "开发中", "草稿"],
       form: {
         demandName: null,
         company: null,
@@ -191,7 +191,7 @@ export default {
     };
   },
   mounted() {
-    this.getdata();
+    this.getdata(1);
   },
   components: {
     searchdemo,
@@ -239,7 +239,7 @@ export default {
         ...this.editform,
         status: 5,
       }).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.status == 200) {
           this.handleCurrentChange(this.currentPage)
           this.hideedit();
@@ -252,7 +252,7 @@ export default {
       this.editform.id = k.id;
       this.showedit = true;
       getdemand(k.id).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.status == 200) {
           this.editform.demand_describe = res.data.data.demand_describe;
         }
@@ -271,7 +271,7 @@ export default {
       });
     },
     justgoto(p1, p2) {
-      console.log(p1, p2);
+      // console.log(p1, p2);
       // console.log(p2[0].getTime(),p2[1].getTime(),p2[0].getTime()/1000,p2[1].getTime()/1000)
       this.querymesg = {};
       this.querymesg.demand_name = p1;
@@ -290,7 +290,7 @@ export default {
           "&end_time=" +
           this.querymesg.end_time
       ).then((res) => {
-        console.log("搜索", res);
+        // console.log("搜索", res);
         if (res.data.status == 200) {
           this.total = res.data.data.count;
           this.list = res.data.data.list;
@@ -306,7 +306,7 @@ export default {
     showdetail(id) {
       this.showdemand = true;
       getdemand(id).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.status == 200) {
           this.detail = res.data.data;
         }
@@ -340,11 +340,12 @@ export default {
             company: null,
             describe: null,
           };
+          this.getdata(this.currentPage)
         }
       });
     },
-    getdata() {
-      demandlist("page=1&type=1").then((res) => {
+    getdata(page) {
+      demandlist("page="+page+"&type=1").then((res) => {
         // console.log("我发起的", res);
         if (res.data.status == 200) {
           this.total = res.data.data.count;
