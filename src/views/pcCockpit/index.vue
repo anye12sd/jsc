@@ -112,7 +112,14 @@ export default {
       this.change();
     },
     usingOption(){
-      if(location.hash == "#"+this.usingOption[0].routerpath) return
+      for(let i = 0;i < this.usingOption[0].length; i++) {
+        if(location.hash == "#"+this.usingOption[i].routerpath) {
+          return
+        }
+      }
+      // if(location.hash == "#"+this.usingOption[0].routerpath) {
+      //   return
+      // }  
       this.$router.push(this.usingOption[0].routerpath)
     }
 

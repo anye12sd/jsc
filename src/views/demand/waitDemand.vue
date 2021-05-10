@@ -7,38 +7,53 @@
       @feedback="justgoto"
       @clear="clear"
     ></searchdemo>
-    <div class="list">
-      <div class="line topline">
-        <div class="num">序号</div>
-        <div class="name">模型名称</div>
-        <div class="time">申请时间</div>
-        <div class="status">状态</div>
-        <div class="actions">操作</div>
+    <div class="listfolder">
+      <div class="folder">
+        <el-tree
+          :data="data"
+          :props="defaultProps"
+          @node-click="handleNodeClick"
+        ></el-tree>
       </div>
-      <div
-        v-if="list.length == 0"
-        style="text-align: center; height: 50px; line-height: 50px; color: gray"
-      >
-        暂无数据
-      </div>
-      <div v-for="(k, index) in list" :key="index" class="line">
-        <div class="num">{{ k.id }}</div>
-        <div class="name" :title="k.demand_name">{{ k.demand_name }}</div>
-        <div class="time" :title="k.create_time">{{ k.create_time }}</div>
-        <div class="status" :title="st[k.status - 1]">
-          {{ st[k.status - 1] }}
+      <div class="list">
+        <div class="line topline">
+          <div class="num">序号</div>
+          <div class="name">模型名称</div>
+          <div class="time">申请时间</div>
+          <div class="status">状态</div>
+          <div class="actions">操作</div>
         </div>
-        <div class="actions">
-          <span @click="develop(k)">模型开发</span>
+        <div
+          v-if="list.length == 0"
+          style="
+            text-align: center;
+            height: 50px;
+            line-height: 50px;
+            color: gray;
+          "
+        >
+          暂无数据
+        </div>
+        <div v-for="(k, index) in list" :key="index" class="line">
+          <div class="num">{{ k.id }}</div>
+          <div class="name" :title="k.demand_name">{{ k.demand_name }}</div>
+          <div class="time" :title="k.create_time">{{ k.create_time }}</div>
+          <div class="status" :title="st[k.status - 1]">
+            {{ st[k.status - 1] }}
+          </div>
+          <div class="actions">
+            <span @click="develop(k)">模型开发</span>
+          </div>
         </div>
       </div>
     </div>
+
     <el-pagination
       background
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-size="11"
+      :page-size="10"
       layout="total, prev, pager, next, jumper"
       :total="total"
       class="pagination"
@@ -80,7 +95,7 @@
 <script>
 // 需求待办
 import searchdemo from "@/components/searchdemo.vue";
-import { demandexecute, appAdd } from "@/api/list.js";
+import { demandexecute, appAdd, appCategory } from "@/api/list.js";
 import { Base64 } from "js-base64";
 export default {
   name: "waitDemand",
@@ -100,16 +115,31 @@ export default {
         },
       ],
       list: [],
-      querymesg:null
+      querymesg: null,
+      data: [],
+      queryId: null,
+      defaultProps: {
+        children: "item",
+        label: "category_name",
+      },
     };
   },
   components: {
-    searchdemo,
+    searchdemo
   },
   mounted() {
     this.getdata(1);
+    appCategory().then((res) => {
+      this.data = res.data.data;
+    });
   },
   methods: {
+    handleNodeClick(data) {
+      // console.log(data);
+      this.queryId = data.id;
+      this.currentPage = 1;
+      this.getdata(1);
+    },
     justgoto(p1, p2) {
       // console.log(p1, p2);
       // console.log(p2[0].getTime(),p2[1].getTime(),p2[0].getTime()/1000,p2[1].getTime()/1000)
@@ -122,10 +152,10 @@ export default {
         this.querymesg.start_time = p2[0].getTime() / 1000;
         this.querymesg.end_time = p2[1].getTime() / 1000;
       }
-      this.handleCurrentChange(this.currentPage)
+      this.handleCurrentChange(this.currentPage);
     },
     clear() {
-      this.querymesg = null
+      this.querymesg = null;
     },
     confirm() {
       let sql = Base64.encode(this.content);
@@ -154,6 +184,9 @@ export default {
           this.querymesg.end_time;
       } else {
         str = "type=1&page=" + page;
+      }
+      if(this.queryId) {
+        str = str + "&category_id=" + this.queryId
       }
       demandexecute(str).then((res) => {
         // console.log(res)
@@ -189,8 +222,19 @@ export default {
 <style scoped lang="less">
 .waitDemand {
   height: 91%;
-  .list {
+  .pagination{
+    padding-left: 47%;
+  }
+  .listfolder {
+    display: flex;
     height: calc(91% - 35px);
+    .folder {
+      width: 20%;
+      margin-top: 10px;
+    }
+    .list {
+    
+    width: 80%;
     .line {
       // margin: 0.1% 0;
       margin-top: 0.1%;
@@ -235,6 +279,8 @@ export default {
       }
     }
   }
+  }
+  
 }
 .develop {
   position: fixed;

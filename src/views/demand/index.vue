@@ -26,8 +26,8 @@ export default {
   data() {
     return {
       current: 0,
-      usingOption:[],
-      isconfig:false,
+      usingOption: [],
+      isconfig: false,
       options: [
         {
           id: 18,
@@ -71,10 +71,10 @@ export default {
     change() {
       // console.log("333333333",this[4],this.usingOption)
       // console.log(this.isconfig)
-      if(this.isconfig) return
+      if (this.isconfig) return;
       if (this[4].items && this[4].length != 0) {
         // console.log("333333333",this[4],this.usingOption)
-        this.usingOption = []
+        this.usingOption = [];
         this.options.forEach((item) => {
           this[4].items.forEach((p) => {
             if (item.id == p.id) {
@@ -85,32 +85,38 @@ export default {
         });
         this.usingOption[0].classname1 = "status02";
         this.usingOption[0].classname2 = "status01";
-        this.current = this.usingOption[0].id
-        this.isconfig = true
+        this.current = this.usingOption[0].id;
+        this.isconfig = true;
         // console.log("333333333",this[4],this.usingOption)
       } else {
-        this.usingOption = [{
-          id: 2,
-          routerpath: "/demand/waitDemand",
-          name: "待办事项",
-          classname1: "status02",
-          classname2: "status01",
-        },
-        {
-          id: 3,
-          routerpath: "/demand/hasDoneDemand",
-          name: "已办事项",
-          classname1: "status12",
-          classname2: "status11",
-        }]
-        this.current = this.usingOption[0].id
+        this.usingOption = [
+          {
+            id: 2,
+            routerpath: "/demand/waitDemand",
+            name: "待办事项",
+            classname1: "status02",
+            classname2: "status01",
+          },
+          {
+            id: 3,
+            routerpath: "/demand/hasDoneDemand",
+            name: "已办事项",
+            classname1: "status12",
+            classname2: "status11",
+          },
+        ];
+        for (let i = 0; i < this.usingOption.length; i++) {
+          if (location.hash == "#" + this.usingOption[i].routerpath) {
+            this.current = this.usingOption[i].id;
+          }
+        }
+        this.current = this.usingOption[0].id;
         // this.isconfig = true
       }
-
     },
   },
   computed: {
-    ...mapState("config", ["currentRouterPath", "4"]),
+    ...mapState("config", ["currentRouterPath", "4", "identity"]),
   },
   watch: {
     currentRouterPath(newValue, oldValue) {
@@ -123,10 +129,33 @@ export default {
     4() {
       this.change();
     },
-    usingOption(){
-      if(location.hash == "#"+this.usingOption[0].routerpath) return
-      this.$router.push(this.usingOption[0].routerpath)
-    }
+    usingOption() {
+      // console.log(location.hash,this.usingOption)
+      for (let i = 0; i < this.usingOption.length; i++) {
+          if (location.hash == "#" + this.usingOption[i].routerpath) {
+            this.current = this.usingOption[i].id;
+            return;
+          }
+        }
+      // if (this.identity == 2) {
+      //   for (let i = 0; i < this.usingOption.length; i++) {
+      //     if (location.hash == "#" + this.usingOption[i].routerpath && this.isconfig == true) {
+      //       this.current = this.usingOption[i].id;
+      //       return;
+      //     }
+      //   }
+      // } else {
+      //   for (let i = 0; i < this.usingOption.length; i++) {
+      //     if (location.hash == "#" + this.usingOption[i].routerpath) {
+      //       this.current = this.usingOption[i].id;
+      //       return;
+      //     }
+      //   }
+      // }
+
+      // if(location.hash == "#"+this.usingOption[0].routerpath) return
+      this.$router.push(this.usingOption[0].routerpath);
+    },
   },
 };
 </script>

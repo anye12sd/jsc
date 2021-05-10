@@ -59,6 +59,12 @@ export default {
           // this.togetmenu();
           // this.$router.push("/demand");
           return;
+        } else if (access_token == "eeee") {
+          //模型开发人员
+          this.$store.commit("config/setidentity", 2);
+          // this.togetmenu();
+          // this.$router.push("/demand");
+          return;
         }
       }
 
@@ -133,9 +139,13 @@ export default {
         this.$store.commit("config/setShowTopBar", false);
       } else {
         this.$store.commit("config/setShowTopBar", true);
-        this.togetmenu()
       }
     },
+    showtopbar(newValue){
+      if(newValue) {
+        this.togetmenu()
+      }
+    }
   },
 };
 </script>

@@ -8,44 +8,58 @@
       @clear="clear"
     ></searchdemo>
     <div class="add" @click="addNew">新增需求</div>
-    <div class="list">
-      <div class="line topline">
-        <div class="num">序号</div>
-        <div class="name">需求名称</div>
-        <div class="time">处理时间</div>
-        <div class="status">状态</div>
-        <div class="actions">操作</div>
+    <div class="listfolder">
+      <div class="folder">
+        <el-tree
+          :data="data"
+          :props="defaultProps"
+          @node-click="handleNodeClick"
+        ></el-tree>
       </div>
-      <div
-        v-if="list.length == 0"
-        style="text-align: center; height: 50px; line-height: 50px; color: gray"
-      >
-        暂无数据
-      </div>
-      <div
-        v-for="(k, index) in list"
-        :key="index"
-        class="line"
-        @click="showdetail(k.id)"
-      >
-        <div class="num">{{ k.id }}</div>
-        <div class="name" :title="k.demand_name">{{ k.demand_name }}</div>
-        <div class="time" :title="k.create_time">{{ k.create_time }}</div>
-        <div class="status" :title="k.tit">{{ st[k.status - 1] }}</div>
-        <div class="actions">
-          <span @click.stop="dedit(k)" v-if="k.status == 5">编辑</span>
-          <span @click.stop="delet(k)" v-if="k.status == 5">删除</span>
-          <span @click.stop="editsub(k)" v-if="k.status == 5">提交</span>
-          <span v-if="k.status != 5">没有操作</span>
+      <div class="list">
+        <div class="line topline">
+          <div class="num">序号</div>
+          <div class="name">需求名称</div>
+          <div class="time">处理时间</div>
+          <div class="status">状态</div>
+          <div class="actions">操作</div>
+        </div>
+        <div
+          v-if="list.length == 0"
+          style="
+            text-align: center;
+            height: 50px;
+            line-height: 50px;
+            color: gray;
+          "
+        >
+          暂无数据
+        </div>
+        <div
+          v-for="(k, index) in list"
+          :key="index"
+          class="line"
+          @click="showdetail(k.id)"
+        >
+          <div class="num">{{ k.id }}</div>
+          <div class="name" :title="k.demand_name">{{ k.demand_name }}</div>
+          <div class="time" :title="k.create_time">{{ k.create_time }}</div>
+          <div class="status" :title="k.tit">{{ st[k.status - 1] }}</div>
+          <div class="actions">
+            <span @click.stop="dedit(k)" v-if="k.status == 5">编辑</span>
+            <span @click.stop="delet(k)" v-if="k.status == 5">删除</span>
+            <span @click.stop="editsub(k)" v-if="k.status == 5">提交</span>
+            <span v-if="k.status != 5">没有操作</span>
+          </div>
         </div>
       </div>
     </div>
     <el-pagination
-      backgrounds
+      background
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-size="11"
+      :page-size="10"
       layout="total, prev, pager, next, jumper"
       :total="total"
       class="pagination"
@@ -160,7 +174,13 @@
 // 新增需求
 import searchdemo from "@/components/searchdemo.vue";
 import { demanduser } from "@/api/managa.js";
-import { demandlist, appbranch, demandadd, getdemand } from "@/api/list.js";
+import {
+  demandlist,
+  appbranch,
+  demandadd,
+  getdemand,
+  appCategory,
+} from "@/api/list.js";
 import { demandedit, demanddel } from "@/api/managa.js";
 export default {
   name: "addNewDemand",
@@ -188,15 +208,29 @@ export default {
         demand_describe: "",
         branch_id: 0,
       },
+      data: [],
+      queryId: null,
+      defaultProps: {
+        children: "item",
+        label: "category_name",
+      },
     };
   },
   mounted() {
     this.getdata(1);
+    appCategory().then((res) => {
+      this.data = res.data.data;
+    });
   },
   components: {
     searchdemo,
   },
   methods: {
+    handleNodeClick(data) {
+      this.queryId = data.id;
+      this.currentPage = 1;
+      this.handleCurrentChange(this.currentPage);
+    },
     editsub(k) {
       this.editform.demand_name = k.demand_name;
       this.editform.branch_id = k.branch_id;
@@ -220,7 +254,7 @@ export default {
         status: 3,
       }).then((res) => {
         if (res.data.status == 200) {
-          this.handleCurrentChange(this.currentPage)
+          this.handleCurrentChange(this.currentPage);
           this.hideedit();
         }
       });
@@ -241,7 +275,7 @@ export default {
       }).then((res) => {
         // console.log(res);
         if (res.data.status == 200) {
-          this.handleCurrentChange(this.currentPage)
+          this.handleCurrentChange(this.currentPage);
           this.hideedit();
         }
       });
@@ -266,7 +300,7 @@ export default {
     delet(k) {
       demanddel(k.id).then((res) => {
         if (res.data.status == 200) {
-          this.handleCurrentChange(this.currentPage)
+          this.handleCurrentChange(this.currentPage);
         }
       });
     },
@@ -298,7 +332,7 @@ export default {
       });
     },
     clear() {
-      this.querymesg = null
+      this.querymesg = null;
     },
     hidedemand() {
       this.showdemand = false;
@@ -340,12 +374,12 @@ export default {
             company: null,
             describe: null,
           };
-          this.getdata(this.currentPage)
+          this.getdata(this.currentPage);
         }
       });
     },
-    getdata(page) {
-      demandlist("page="+page+"&type=1").then((res) => {
+    getdata(page, str) {
+      demandlist("page=" + page + "&type=1" + str).then((res) => {
         // console.log("我发起的", res);
         if (res.data.status == 200) {
           this.total = res.data.data.count;
@@ -387,6 +421,9 @@ export default {
       } else {
         str = "type=1&page=" + val;
       }
+      if (this.queryId) {
+        str = str + "&category_id=" + this.queryId;
+      }
       demandlist(str).then((res) => {
         if (res.data.status == 200) {
           this.total = res.data.data.count;
@@ -402,6 +439,9 @@ export default {
 .addNewDemand {
   height: 91%;
   position: relative;
+  .pagination{
+    padding-left: 47%;
+  }
   .add {
     position: absolute;
     top: 2%;
@@ -415,55 +455,64 @@ export default {
     background-color: #017cf8;
     color: #fff;
   }
-  .list {
-    height: 86%;
-    .line {
-      // margin: 0.1% 0;
-      margin-top: 0.1%;
-      display: flex;
-      align-items: center;
-      height: 8%;
-      border: 1px solid #f5f6f9;
-      div {
-        // padding: 0.75% 0;
-        // padding: 0.45% 0;
-        font-family: MicrosoftYaHei;
-        font-size: 14px;
-        color: #666f8e;
-        text-align: center;
-        flex: 2;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      .num {
-        flex: 1;
-      }
-      .actions {
-        span {
-          color: #017cf8;
-          display: inline-block;
-          vertical-align: middle;
-          width: 70px;
-          background: #f5f4f7;
-          border: 1px solid #e5e6eb;
-          border-radius: 4px;
-          padding: 2px;
+  .listfolder {
+    display: flex;
+     height: 85%;
+    .folder {
+      width: 20%;
+      margin-top: 10px;
+    }
+    .list {
+      width: 80%;
+      .line {
+        // margin: 0.1% 0;
+        margin-top: 0.1%;
+        display: flex;
+        align-items: center;
+        height: 8%;
+        border: 1px solid #f5f6f9;
+        div {
+          // padding: 0.75% 0;
+          // padding: 0.45% 0;
           font-family: MicrosoftYaHei;
           font-size: 14px;
-          cursor: pointer;
-          margin: 0 5px;
+          color: #666f8e;
+          text-align: center;
+          flex: 2;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .num {
+          flex: 1;
+        }
+        .actions {
+          span {
+            color: #017cf8;
+            display: inline-block;
+            vertical-align: middle;
+            width: 70px;
+            background: #f5f4f7;
+            border: 1px solid #e5e6eb;
+            border-radius: 4px;
+            padding: 2px;
+            font-family: MicrosoftYaHei;
+            font-size: 14px;
+            cursor: pointer;
+            margin: 0 5px;
+          }
+        }
+      }
+      .topline {
+        background: #f5f6f9;
+        margin: 0;
+        div {
+          padding: 0.5% 0;
         }
       }
     }
-    .topline {
-      background: #f5f6f9;
-      margin: 0;
-      div {
-        padding: 0.5% 0;
-      }
-    }
   }
+
   .write {
     position: fixed;
     width: 100%;

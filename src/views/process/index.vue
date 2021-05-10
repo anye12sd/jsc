@@ -106,7 +106,13 @@ export default {
       })
     },
     usingOption(){
-      if(location.hash == "#"+this.usingOption[0].routerpath) return
+      for(let i = 0;i < this.usingOption.length; i++) {
+        if(location.hash == "#"+this.usingOption[i].routerpath) {
+          this.current = this.usingOption[i].id
+          return
+        }
+      }
+      // if(location.hash == "#"+this.usingOption[0].routerpath) return
       this.$router.push(this.usingOption[0].routerpath)
     }
     // 5(){

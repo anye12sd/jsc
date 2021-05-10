@@ -7,31 +7,47 @@
       @feedback="justgoto"
       @clear="clear"
     ></searchdemo>
-    <div class="list">
-      <div class="line topline">
-        <div class="num">需求编号</div>
-        <div class="name">需求名称</div>
-        <div class="company">需求单位</div>
-        <div class="status">状态</div>
-        <div class="actions">操作</div>
+    <div class="listfolder">
+      <div class="folder">
+        <el-tree
+          :data="data"
+          :props="defaultProps"
+          @node-click="handleNodeClick"
+        ></el-tree>
       </div>
-      <div
-        v-if="list.length == 0"
-        style="text-align: center; height: 50px; line-height: 50px; color: gray"
-      >
-        暂无数据
-      </div>
-      <div v-for="(k, index) in list" :key="index" class="line">
-        <div class="num">{{ index }}</div>
-        <div class="name" :title="k.demand_name">{{ k.demand_name }}</div>
-        <div class="company" :title="k.branch_id">{{ k.get_branch_name }}</div>
-        <div class="status" :title="st[k.status - 1]">
-          {{ st[k.status - 1] }}
+      <div class="list">
+        <div class="line topline">
+          <div class="num">需求编号</div>
+          <div class="name">需求名称</div>
+          <div class="company">需求单位</div>
+          <div class="status">状态</div>
+          <div class="actions">操作</div>
         </div>
-        <div class="actions">
-          <span @click="selectPerson(index)">{{
-            k.status == 5 ? "已选择" : "选择开发人员"
-          }}</span>
+        <div
+          v-if="list.length == 0"
+          style="
+            text-align: center;
+            height: 50px;
+            line-height: 50px;
+            color: gray;
+          "
+        >
+          暂无数据
+        </div>
+        <div v-for="(k, index) in list" :key="index" class="line">
+          <div class="num">{{ index }}</div>
+          <div class="name" :title="k.demand_name">{{ k.demand_name }}</div>
+          <div class="company" :title="k.branch_id">
+            {{ k.get_branch_name }}
+          </div>
+          <div class="status" :title="st[k.status - 1]">
+            {{ st[k.status - 1] }}
+          </div>
+          <div class="actions">
+            <span @click="selectPerson(index)">{{
+              k.status == 5 ? "已选择" : "选择开发人员"
+            }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -40,7 +56,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page.sync="currentPage"
-      :page-size="11"
+      :page-size="10"
       layout="total, prev, pager, next, jumper"
       :total="total"
       class="pagination"
@@ -72,7 +88,7 @@
 <script>
 // 需求处理
 import searchdemo from "@/components/searchdemo.vue";
-import { demandlist, demandstatus } from "@/api/list.js";
+import { demandlist, demandstatus, appCategory } from "@/api/list.js";
 import { demanduser } from "@/api/managa.js";
 export default {
   name: "demandHandle",
@@ -87,25 +103,40 @@ export default {
       list: [],
       actionPeoples: [],
       waitchosePerson: 0,
-      querymesg:null
+      querymesg: null,
+      data: [],
+      queryId: null,
+      defaultProps: {
+        children: "item",
+        label: "category_name",
+      },
     };
   },
   mounted() {
     this.getdata();
+    appCategory().then((res) => {
+      this.data = res.data.data;
+    });
   },
   components: {
     searchdemo,
   },
   methods: {
-    justgoto(p1,p2){
+    handleNodeClick(data) {
+      // console.log(data);
+      this.queryId = data.id;
+      this.currentPage = 1;
+      this.handleCurrentChange(this.currentPage);
+    },
+    justgoto(p1, p2) {
       // console.log(p1,p2)
       this.querymesg = {};
       this.querymesg.demand_name = p1;
-      this.querymesg.branch_id = p2
-      this.handleCurrentChange(this.currentPage)
+      this.querymesg.branch_id = p2;
+      this.handleCurrentChange(this.currentPage);
     },
-    clear(){
-      this.querymesg = null
+    clear() {
+      this.querymesg = null;
     },
     getdata() {
       demandlist("page=1&type=3&status=4").then((res) => {
@@ -121,11 +152,20 @@ export default {
     },
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
-      let str = ''
-      if(this.querymesg) {
-        str = "status=4&type=3&page=" + val +"&demand_name="+this.querymesg.demand_name+"&branch_id="+this.querymesg.branch_id
+      let str = "";
+      if (this.querymesg) {
+        str =
+          "status=4&type=3&page=" +
+          val +
+          "&demand_name=" +
+          this.querymesg.demand_name +
+          "&branch_id=" +
+          this.querymesg.branch_id;
       } else {
-        str = "status=4&type=3&page=" + val
+        str = "status=4&type=3&page=" + val;
+      }
+      if (this.queryId) {
+        str = str + "&category_id=" + this.queryId;
       }
       demandlist(str).then((res) => {
         if (res.data.status == 200) {
@@ -161,7 +201,7 @@ export default {
     confirm() {
       // console.log(this.waitchosePerson);
       demandstatus(
-        `id=${this.list[this.activeNum].id}&status=5&execute=${
+        `id=${this.list[this.activeNum].id}&status=4&execute=${
           this.actionPeoples[this.waitchosePerson].user_id
         }`
       ).then((res) => {
@@ -195,56 +235,68 @@ export default {
 <style scoped lang="less">
 .demandHandle {
   height: 91%;
-  .list {
+  .pagination{
+    padding-left: 47%;
+  }
+  .listfolder {
+    display: flex;
     height: calc(91% - 35px);
-    .line {
-      // margin: 0.1% 0;
-      margin-top: 0.1%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 8%;
-      border: 1px solid #f5f6f9;
-      div {
-        font-family: MicrosoftYaHei;
-        font-size: 14px;
-        color: #666f8e;
-        text-align: center;
-        flex: 2;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      .num {
-        flex: 1;
-      }
-      .actions {
-        // flex: 1;
-        text-align: center;
-        span {
-          // display: flex;
-          // align-items: center;
-          display: inline-block;
-          vertical-align: middle;
-          width: 100px;
-          background: #f5f4f7;
-          border: 1px solid #e5e6eb;
-          border-radius: 4px;
-          padding: 2px;
+    .folder {
+      width: 20%;
+      margin-top: 10px;
+    }
+    .list {
+      width: 80%;
+      .line {
+        // margin: 0.1% 0;
+        margin-top: 0.1%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 8%;
+        border: 1px solid #f5f6f9;
+        div {
           font-family: MicrosoftYaHei;
           font-size: 14px;
-          cursor: pointer;
+          color: #666f8e;
+          text-align: center;
+          flex: 2;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .num {
+          flex: 1;
+        }
+        .actions {
+          // flex: 1;
+          text-align: center;
+          span {
+            // display: flex;
+            // align-items: center;
+            display: inline-block;
+            vertical-align: middle;
+            width: 100px;
+            background: #f5f4f7;
+            border: 1px solid #e5e6eb;
+            border-radius: 4px;
+            padding: 2px;
+            font-family: MicrosoftYaHei;
+            font-size: 14px;
+            cursor: pointer;
+          }
+        }
+      }
+      .topline {
+        background: #f5f6f9;
+        margin: 0;
+        div {
+          padding: 0.5% 0;
         }
       }
     }
-    .topline {
-      background: #f5f6f9;
-      margin: 0;
-      div {
-        padding: 0.5% 0;
-      }
-    }
   }
+
   .tip {
     position: fixed;
     width: 100%;
