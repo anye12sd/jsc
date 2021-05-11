@@ -175,7 +175,7 @@
 import searchdemo from "@/components/searchdemo.vue";
 import { demanduser } from "@/api/managa.js";
 import {
-  demandlist,
+  demandhandlelist,
   appbranch,
   demandadd,
   getdemand,
@@ -316,7 +316,7 @@ export default {
         this.querymesg.start_time = p2[0].getTime() / 1000;
         this.querymesg.end_time = p2[1].getTime() / 1000;
       }
-      demandlist(
+      demandhandlelist(
         "page=1&type=1&demand_name=" +
           this.querymesg.demand_name +
           "&start_time=" +
@@ -379,7 +379,7 @@ export default {
       });
     },
     getdata(page, str) {
-      demandlist("page=" + page + "&type=1" + str).then((res) => {
+      demandhandlelist("page=" + page + "&type=1" + str).then((res) => {
         // console.log("我发起的", res);
         if (res.data.status == 200) {
           this.total = res.data.data.count;
@@ -424,7 +424,7 @@ export default {
       if (this.queryId) {
         str = str + "&category_id=" + this.queryId;
       }
-      demandlist(str).then((res) => {
+      demandhandlelist(str).then((res) => {
         if (res.data.status == 200) {
           this.total = res.data.data.count;
           this.list = res.data.data.list;

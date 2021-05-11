@@ -257,3 +257,10 @@ export function getdemand (id) {
         url:"/demand?id="+id
     })
 }
+
+export function demandhandlelist(str){
+    return request ({
+        method:"get",
+        url:"/demand/handle/list?"+str
+    })
+}

@@ -45,7 +45,7 @@
           </div>
           <div class="actions">
             <span @click="selectPerson(index)">{{
-              k.status == 5 ? "已选择" : "选择开发人员"
+              k.execute_id != 0 ? "已选择" : "选择开发人员"
             }}</span>
           </div>
         </div>
@@ -88,7 +88,7 @@
 <script>
 // 需求处理
 import searchdemo from "@/components/searchdemo.vue";
-import { demandlist, demandstatus, appCategory } from "@/api/list.js";
+import { demandhandlelist, demandstatus, appCategory } from "@/api/list.js";
 import { demanduser } from "@/api/managa.js";
 export default {
   name: "demandHandle",
@@ -139,7 +139,7 @@ export default {
       this.querymesg = null;
     },
     getdata() {
-      demandlist("page=1&type=3&status=4").then((res) => {
+      demandhandlelist("page=1&type=3&status=4").then((res) => {
         // console.log("需求处理", res);
         if (res.data.status == 200) {
           this.total = res.data.data.count;
@@ -167,7 +167,7 @@ export default {
       if (this.queryId) {
         str = str + "&category_id=" + this.queryId;
       }
-      demandlist(str).then((res) => {
+      demandhandlelist(str).then((res) => {
         if (res.data.status == 200) {
           this.total = res.data.data.count;
           this.list = res.data.data.list;
@@ -175,7 +175,7 @@ export default {
       });
     },
     selectPerson(idx) {
-      if (this.list[idx].status == 5) {
+      if (this.list[idx].execute_id != 0) {
         this.$message({
           message: "你已选择开发人员",
           type: "success",

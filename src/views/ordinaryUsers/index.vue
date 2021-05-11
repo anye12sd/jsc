@@ -1,7 +1,7 @@
 <template>
   <div :class="className[current] + ' oridinaryUsers'">
     <div class="top">
-      <div class="time">{{ date1 }}&nbsp;&nbsp;{{ date2 }}</div>
+      <div class="time">{{ date1 }}&nbsp;&nbsp;{{ date2 }}&nbsp;&nbsp;{{ week[day] }}</div>
       <div class="tit">数字驾驶舱桌面版</div>
       <div class="user">
         <span
@@ -10,7 +10,6 @@
           @click="goafter"
           >前往管理平台</span
         >
-        <span>{{ week[day] }}</span>
         <img src="../../assets/oridinary/portrait.png" alt=" " />
         <span>{{ userid[identity] }}</span>
         <span style="cursor: pointer" @click="signout">退出</span>
