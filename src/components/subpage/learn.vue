@@ -49,7 +49,7 @@ export default {
   name: "learn",
   data() {
     return {
-      baseUrl: "http://10.21.197.236:8080",
+      baseUrl: "http://10.21.197.236:9000",
       sxdata: {},
       sxchart: [],
     };

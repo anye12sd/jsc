@@ -28,7 +28,7 @@
           @click="plus"
         />
       </div>
-      <div class="allPage"></div>
+      <!-- <div class="allPage"></div> -->
     </div>
   </div>
 </template>
@@ -84,7 +84,9 @@ export default {
     if (location.hash.includes("/oridinaryUsers/detail")) {
       this.current = 2;
     }
-    this.getTime();
+    setInterval(() => {
+      this.getTime();
+    }, 5000);
   },
   components: {
     // pcdrive,
@@ -222,7 +224,7 @@ export default {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 13%;
+    height: 6%;
     box-sizing: border-box;
     z-index: 50;
     .page {

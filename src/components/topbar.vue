@@ -139,8 +139,9 @@ export default {
     gobefore(){
       this.$router.push("/oridinaryUsers")
     },
-    chose(index, path) {
-      this.current = index;
+    chose(id, path) {
+      if(this.current == id) return
+      this.current = id;
       this.$router.push(path);
     },
     getTime() {

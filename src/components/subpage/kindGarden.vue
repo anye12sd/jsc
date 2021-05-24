@@ -34,7 +34,7 @@ export default {
   name: "kindGarden",
   data() {
     return {
-      baseUrl: "http://10.21.197.236:8080",
+      baseUrl: "http://10.21.197.236:9000",
       yezt_yeyycyj1: {},
       yezt_yeyycyj2: [],
     };

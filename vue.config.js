@@ -11,5 +11,6 @@ module.exports = {
 			}
 		}
 	},
-	assetsDir:'resources'
+	assetsDir:'resources',
+	productionSourceMap:false, // 打包后去掉生成的map文件
 }

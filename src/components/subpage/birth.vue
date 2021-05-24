@@ -22,7 +22,7 @@ export default {
   name: "birth",
   data() {
     return {
-      baseUrl: "http://10.21.197.236:8080",
+      baseUrl: "http://10.21.197.236:9000",
       yezt_cs: null,
       yezt_cs2: [],
     };

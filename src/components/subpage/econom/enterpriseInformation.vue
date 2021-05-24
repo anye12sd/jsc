@@ -38,7 +38,7 @@ export default {
       qyzh_qyxx: {},
       qyzh_qyxx1: [],
       qyzh_qyxx2: [],
-      baseUrl: "http://10.21.197.236:8080",
+      baseUrl: "http://10.21.197.236:9000",
     };
   },
   mounted() {

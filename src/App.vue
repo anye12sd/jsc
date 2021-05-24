@@ -87,7 +87,7 @@ export default {
           }
           // this.$store.commit("config/setLogin",true)
         });
-        
+
         // console.log(this.isLogin);
       }
     },
@@ -138,14 +138,72 @@ export default {
       } else if (to.fullPath.includes("oridinaryUsers")) {
         this.$store.commit("config/setShowTopBar", false);
       } else {
+        if (this.identity == 3) {
+          this.$message({
+            message: "您无权查看该页面",
+            type: "warning",
+          });
+          this.$router.go(-1);
+          return;
+        }
+        if (this.identity == 4) {
+          if (
+            to.fullPath != "/demand/waitDemand" &&
+            to.fullPath != "/demand/hasDoneDemand"
+          ) {
+            this.$message({
+              message: "您无权查看该页面",
+              type: "warning",
+            });
+            this.$router.go(-1);
+            return;
+          }
+        }
+        if (this.identity == 2) {
+          let arr = [
+            "/pcCockpit/distribution",
+            "/supermarket/modelManaga",
+            "/demand/addNewDemand",
+            "/demand/demandHandle",
+            "/process/waitDoing",
+            "/process/hasDoing",
+            "/process/iStarted",
+          ];
+          if (!arr.includes(to.fullPath)) {
+            this.$message({
+              message: "您无权查看该页面",
+              type: "warning",
+            });
+            this.$router.go(-1);
+            return;
+          }
+        }
+        if (this.identity == 1) {
+          let arr = [
+            "/pcCockpit/distribution",
+            "/supermarket/modelManaga",
+            "/process/waitDoing",
+            "/process/hasDoing",
+            "/userAuthorization/userManaga",
+            "/userAuthorization/roleAssignment",
+          ];
+          if (!arr.includes(to.fullPath)) {
+            this.$message({
+              message: "您无权查看该页面",
+              type: "warning",
+            });
+            this.$router.go(-1);
+            return;
+          }
+        }
         this.$store.commit("config/setShowTopBar", true);
       }
     },
-    showtopbar(newValue){
-      if(newValue) {
-        this.togetmenu()
+    showtopbar(newValue) {
+      if (newValue) {
+        this.togetmenu();
       }
-    }
+    },
   },
 };
 </script>

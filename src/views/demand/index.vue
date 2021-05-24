@@ -137,23 +137,6 @@ export default {
             return;
           }
         }
-      // if (this.identity == 2) {
-      //   for (let i = 0; i < this.usingOption.length; i++) {
-      //     if (location.hash == "#" + this.usingOption[i].routerpath && this.isconfig == true) {
-      //       this.current = this.usingOption[i].id;
-      //       return;
-      //     }
-      //   }
-      // } else {
-      //   for (let i = 0; i < this.usingOption.length; i++) {
-      //     if (location.hash == "#" + this.usingOption[i].routerpath) {
-      //       this.current = this.usingOption[i].id;
-      //       return;
-      //     }
-      //   }
-      // }
-
-      // if(location.hash == "#"+this.usingOption[0].routerpath) return
       this.$router.push(this.usingOption[0].routerpath);
     },
   },

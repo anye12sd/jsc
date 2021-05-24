@@ -6,6 +6,19 @@ import store from "../store"
 
 
 Vue.use(VueRouter)
+const originalPush = VueRouter.prototype.push;
+const originalReplace = VueRouter.prototype.replace;
+VueRouter.prototype.push = function push(location, onResolve, onReject) {
+  if (onResolve || onReject)
+    return originalPush.call(this, location, onResolve, onReject);
+  return originalPush.call(this, location).catch(err => err);
+};
+//replace
+VueRouter.prototype.replace = function push(location, onResolve, onReject) {
+  if (onResolve || onReject)
+    return originalReplace.call(this, location, onResolve, onReject);
+  return originalReplace.call(this, location).catch(err => err);
+};
 
 const routes = [
   {
@@ -30,21 +43,21 @@ const routes = [
         path: "",
         redirect: "distribution"
       },
-      {
-        path: 'pageShow',
-        name: "PageShow",
-        component: () => import("@/views/pcCockpit/pageshow")
-      },
-      {
-        path: "approval",
-        name: "Apprival",
-        component: () => import("@/views/pcCockpit/approval")
-      },
-      {
-        path: "subScribe",
-        name: "SubScribe",
-        component: () => import("@/views/pcCockpit/subscribe")
-      },
+      // {
+      //   path: 'pageShow',
+      //   name: "PageShow",
+      //   component: () => import("@/views/pcCockpit/pageshow")
+      // },
+      // {
+      //   path: "approval",
+      //   name: "Apprival",
+      //   component: () => import("@/views/pcCockpit/approval")
+      // },
+      // {
+      //   path: "subScribe",
+      //   name: "SubScribe",
+      //   component: () => import("@/views/pcCockpit/subscribe")
+      // },
       {
         path:"distribution",
         name:"Distribution",
@@ -65,28 +78,28 @@ const routes = [
         name: "Modelmanaga",
         component: () => import("@/views/supermarket/modelManaga")
       },
-      {
-        path: "modelDownload",
-        name: "ModelDownload",
-        component: () => import("@/views/supermarket/modelDownload")
-      },
-      {
-        path: "modelPuton",
-        name: "ModelPuton",
-        component: () => import("@/views/supermarket/modelPuton")
-      },
-      {
-        path: "modelSubsc",
-        name: "ModelSubsc",
-        component: () => import("@/views/supermarket/modelSubsc")
-      }
+      // {
+      //   path: "modelDownload",
+      //   name: "ModelDownload",
+      //   component: () => import("@/views/supermarket/modelDownload")
+      // },
+      // {
+      //   path: "modelPuton",
+      //   name: "ModelPuton",
+      //   component: () => import("@/views/supermarket/modelPuton")
+      // },
+      // {
+      //   path: "modelSubsc",
+      //   name: "ModelSubsc",
+      //   component: () => import("@/views/supermarket/modelSubsc")
+      // }
     ]
   },
-  {
-    path: "/modelIntroduce",
-    name: "ModelIntroduce",
-    component: () => import('../views/modelIntroduce')
-  },
+  // {
+  //   path: "/modelIntroduce",
+  //   name: "ModelIntroduce",
+  //   component: () => import('../views/modelIntroduce')
+  // },
   {
     path: "/process",
     // name:"Process",

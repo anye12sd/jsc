@@ -30,7 +30,7 @@ export default {
   name: "topRanking",
   data() {
     return {
-      baseUrl: "http://10.21.197.236:8080",
+      baseUrl: "http://10.21.197.236:9000",
       xxflag: { name: "1" },
       qyzh_qypm: {},
       qyzh_qypm1: [],

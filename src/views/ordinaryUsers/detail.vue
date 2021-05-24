@@ -1,7 +1,7 @@
 <template>
   <div class="detail">
+    <div class="back" @click="goback">返回模型超市</div>
     <div class="left">
-      <div class="back" @click="goback">返回模型超市</div>
       <div class="model">
         <!-- <img
           :src="
@@ -12,7 +12,11 @@
           alt=""
         /> -->
         <div class="modulename">
-          <img src="@/assets/oridinary/modelIcon.png" alt="" style="height:70%">
+          <img
+            src="@/assets/oridinary/modelIcon.png"
+            alt=""
+            style="height: 70%"
+          />
           <span>{{ modelInfo.modulename }}</span>
         </div>
         <div class="type">
@@ -23,7 +27,7 @@
               @click="showdetail(name)"
               :class="active == name ? 'active' : ''"
             >
-              {{ value }}
+              <span>{{ value.slice(0,4) }} <br v-if="value.length > 4"/>{{ value.slice(4) }} </span>
             </div>
           </div>
           <div class="ro">
@@ -33,7 +37,7 @@
               @click="showdetail(name)"
               :class="active == name ? 'active' : ''"
             >
-              {{ value }}
+              <span>{{ value.slice(0,4) }} <br v-if="value.length>4" />{{ value.slice(4) }}</span>
             </div>
           </div>
         </div>
@@ -42,10 +46,6 @@
             <span class="tit">所属单位</span>
             <span class="con">{{ modelInfo.get_branch_name }}</span>
           </div>
-          <!-- <div style="text-align: left;width:50%;">
-            <span class="tit">类型</span>
-            <span class="con">{{ modelInfo.module_type }}</span>
-          </div> -->
           <div style="text-align: left; width: 100%">
             <span class="tit">模型修改时间</span>
             <span class="con">{{ modelInfo.update_time }}</span>
@@ -57,7 +57,11 @@
     <div class="right">
       <div class="icon"></div>
       <div class="title">{{ opt[active] }}</div>
-      <div class="content">{{ info[active] }}</div>
+      <div class="content" v-if="info[active]">
+        <div v-for="(p,index) in info[active].split('\n')" :key="index">
+          {{p}}
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -69,31 +73,37 @@ export default {
   name: "detail",
   data() {
     return {
-      k: {
-        name: "模型名称",
-        branch: "质监局",
-        type: "SQL类型",
-        time: "2021-01-20 12:30:00",
-      },
       info: {},
-      active: "background",
+      active: "definition",
       leftopt: {
-        background: "模型背景",
-        results: "应用成效",
-        source: "数据来源",
+        definition: "任务定义",
+        dismantling: "逐级拆解至最小任务项",
+        synergy: "确定牵头/协同关系",
+        system: "建立指标体系",
+        requirements: "确定数据需求",
+        source: "确定数源系统",
       },
       rightopt: {
-        result: "计算结果",
-        logic: "处理逻辑",
-        process: "加工过程",
+        collaboration: "任务整体画像",
+        integration: "集成流程监控",
+        business: "智能分析",
+        analysis: "业务集成数据集成",
+        monitoring: "确定数据集成流程",
+        portrait: "确定业务协同流程",
       },
       opt: {
-        background: "模型背景",
-        results: "应用成效",
-        source: "数据来源",
-        result: "计算结果",
-        logic: "处理逻辑",
-        process: "加工过程",
+        definition: "任务定义",
+        dismantling: "逐级拆解至最小任务项",
+        synergy: "确定牵头/协同关系",
+        system: "建立指标体系",
+        requirements: "确定数据需求",
+        source: "确定数源系统",
+        collaboration: "任务整体画像",
+        integration: "集成流程监控",
+        business: "智能分析",
+        analysis: "业务集成数据集成",
+        monitoring: "确定数据集成流程",
+        portrait: "确定业务协同流程",
       },
     };
   },
@@ -103,7 +113,7 @@ export default {
   mounted() {
     // console.log(this.$route.params, this.modelInfo);
     introduce(this.$route.params.id).then((res) => {
-      // console.log(res);
+      console.log(res);
       this.info = res.data.data;
     });
   },
@@ -128,38 +138,42 @@ export default {
   box-sizing: border-box;
   padding: 5px 0;
   display: flex;
+  flex-wrap: wrap;
+  .back {
+    width: 100%;
+    height: 25px;
+    line-height: 25px;
+    font-family: SourceHanSansCN-Bold;
+    font-size: 14px;
+    color: #ffffff;
+    letter-spacing: 0;
+    text-shadow: 0 0 9px rgba(109, 227, 255, 0.59);
+    padding-left: 110px;
+    background: url("../../assets/oridinary/toback.png") no-repeat;
+    background-position: 50px center;
+    background-size: 185px 100%;
+    cursor: pointer;
+  }
   .left {
     width: 48%;
     background: url("../../assets/oridinary/bigborder.png"),
       url("../../assets/oridinary/center.png");
     background-repeat: no-repeat, no-repeat;
-    background-size: 100% 85%, 30% 40%;
+    background-size: 100% 100%, 30% 40%;
     background-position: center center, 55% 67%;
-    .back {
-      height: 25px;
-      line-height: 25px;
-      font-family: SourceHanSansCN-Bold;
-      font-size: 14px;
-      color: #ffffff;
-      letter-spacing: 0;
-      text-shadow: 0 0 9px rgba(109, 227, 255, 0.59);
-      padding-left: 20%;
-      background: url("../../assets/oridinary/toback.png") no-repeat;
-      background-position: 15% center;
-      background-size: 32% 100%;
-      cursor: pointer;
-    }
+    display: flex;
+    align-items: center;
     .model {
       width: 100%;
-      height: 76%;
-      margin-top: 6%;
+      height: 93%;
+      // margin-top: 6%;
       > img {
         display: block;
         height: 20%;
         margin: 0 auto;
       }
       > .modulename {
-        height: 20%;
+        height: 70px;
         width: 100%;
         display: flex;
         align-items: center;
@@ -168,15 +182,22 @@ export default {
         color: #fff;
       }
       > .type {
-        width: 80%;
-        height: 50%;
-        margin: 0 auto;
+        width: 85%;
+        height: calc(100% - 180px);
+        margin-left: 4%;
         display: flex;
         > div {
           width: 50%;
-          display: flex;
-          align-content: space-between;
-          flex-wrap: wrap;
+          >div{
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            >span{
+              display: block;
+              text-align: center;
+              width:100%;
+            }
+          }
         }
         .lo {
           div {
@@ -187,15 +208,29 @@ export default {
             text-align: center;
             padding: 6px 0;
             cursor: pointer;
+            height: 11%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 4px;
           }
           > div:nth-of-type(1) {
-            margin-left: 20%;
+            margin-left: 10%;
           }
           > div:nth-of-type(2) {
-            margin-left: 36%;
+            margin-left: 20%;
           }
           > div:nth-of-type(3) {
-            margin-left: 52%;
+            margin-left: 30%;
+          }
+          > div:nth-of-type(4) {
+            margin-left: 40%;
+          }
+          > div:nth-of-type(5) {
+            margin-left: 50%;
+          }
+          > div:nth-of-type(6) {
+            margin-left: 60%;
           }
           > .active {
             background: url("../../assets/oridinary/checkleft.png") no-repeat;
@@ -212,15 +247,29 @@ export default {
             text-align: center;
             padding: 6px 0;
             cursor: pointer;
+            height: 11%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 4px;
           }
           > div:nth-of-type(1) {
-            margin-left: 52%;
+            margin-left: 60%;
           }
           > div:nth-of-type(2) {
-            margin-left: 36%;
+            margin-left: 50%;
           }
           > div:nth-of-type(3) {
+            margin-left: 40%;
+          }
+          > div:nth-of-type(4) {
+            margin-left: 30%;
+          }
+          > div:nth-of-type(5) {
             margin-left: 20%;
+          }
+          > div:nth-of-type(6) {
+            margin-left: 10%;
           }
           > .active {
             background: url("../../assets/oridinary/checkright.png") no-repeat;
@@ -230,7 +279,7 @@ export default {
         }
         div {
           font-family: SourceHanSansCN-Regular;
-          font-size: 20px;
+          font-size: 12px;
           color: #ffffff;
           letter-spacing: 0;
           text-shadow: 0 2px 1px #072026;
@@ -264,8 +313,9 @@ export default {
         width: 64%;
         margin-left: 6%;
         padding: 0 10px;
+        height: 50px;
         box-sizing: border-box;
-        margin-top: 7%;
+        margin-top: 30px;
         .tit {
           font-family: SourceHanSansCN-Medium;
           font-size: 12px;
@@ -292,11 +342,11 @@ export default {
   .right {
     width: 48%;
     background: url("../../assets/oridinary/bigborder.png") no-repeat;
-    background-size: 100% 85%;
+    background-size: 100% 100%;
     background-position: center center;
     padding: 5% 4%;
     box-sizing: border-box;
-
+    height: calc(100% - 25px);
     .icon {
       width: 64px;
       height: 5px;

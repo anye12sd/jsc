@@ -84,7 +84,7 @@ export default {
   name: "comEducation",
   data() {
     return {
-      baseUrl: "http://10.21.197.236:8080",
+      baseUrl: "http://10.21.197.236:9000",
       qnzt_ywzj1: [],
       qnzt_ywzj2: [],
       qnzt_ywzj3: [],

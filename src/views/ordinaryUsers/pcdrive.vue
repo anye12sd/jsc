@@ -22,12 +22,6 @@
             <component
                 :is="models[k - 1].view_code"
               ></component>
-            <!-- <threeHigh v-if="models[k.id - 1].view_code == 'threeHigh'"></threeHigh>
-            <disease v-if="models[k - 1].view_code == 'disease'"></disease> -->
-              <!-- <component
-                :is="models[k.id - 1].view_code"
-                v-if="models[k - 1].view_code != 'disease' && models[k - 1].view_code != 'threeHigh'"
-              ></component> -->
             </div>
           </div>
         </div>
@@ -65,13 +59,6 @@
             <component
                 :is="models[k + 2].view_code"
               ></component>
-            <!-- <threeHigh></threeHigh> -->
-            <!-- <threeHigh v-if="models[k + 2].view_code == 'threeHigh'"></threeHigh>
-            <disease v-if="models[k + 2].view_code == 'disease'"></disease> -->
-              <!-- <component
-                :is="models[k.id + 2].view_code"
-                v-if="models[k.id + 2].view_code != 'disease' && models[k + 2].view_code != 'threeHigh'"
-              ></component> -->
             </div>
           </div>
         </div>
@@ -198,7 +185,7 @@ export default {
     goto(page) {
       // 请求获取的数组
       portaluser("page="+page+"&pageSize=6&category_id="+this.opt[this.current].category_id).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.status == 200) {
           this.total = res.data.data.count;
           this.models = res.data.data.list;
@@ -223,7 +210,7 @@ export default {
 .pcdrive {
   .pagination {
     position: absolute;
-    bottom: 3%;
+    bottom: 9%;
     width: 100%;
     z-index: 100;
     .el-pagination {
@@ -297,37 +284,37 @@ export default {
       }
     }
     .left > div:nth-of-type(1):hover {
-      transform: scale(1.5, 1.5);
+      transform: scale(1.8, 1.8);
       transform-origin: top left;
       position: relative;
       z-index: 10;
     }
     .left > div:nth-of-type(2):hover {
-      transform: scale(1.5, 1.5);
+      transform: scale(1.8, 1.8);
       transform-origin: center left;
       position: relative;
       z-index: 10;
     }
     .left > div:nth-of-type(3):hover {
-      transform: scale(1.5, 1.5);
+      transform: scale(1.8, 1.8);
       transform-origin: bottom left;
       position: relative;
       z-index: 10;
     }
     .right > div:nth-of-type(1):hover {
-      transform: scale(1.5, 1.5);
+      transform: scale(1.8, 1.8);
       transform-origin: top right;
       position: relative;
       z-index: 10;
     }
     .right > div:nth-of-type(2):hover {
-      transform: scale(1.5, 1.5);
+      transform: scale(1.8, 1.8);
       transform-origin: center right;
       position: relative;
       z-index: 10;
     }
     .right > div:nth-of-type(3):hover {
-      transform: scale(1.5, 1.5);
+      transform: scale(1.8, 1.8);
       transform-origin: bottom right;
       position: relative;
       z-index: 10;

@@ -57,7 +57,7 @@ export default {
   name: "industryShare",
   data() {
     return {
-      baseUrl: "http://10.21.197.236:8080",
+      baseUrl: "http://10.21.197.236:9000",
       cyhl_bzqk: {},
     };
   },

@@ -72,7 +72,7 @@ export default {
   name: "job",
   data() {
     return {
-      baseUrl: "http://10.21.197.236:8080",
+      baseUrl: "http://10.21.197.236:9000",
       cnzt_jy: {},
       cnzt_jy1: {},
     };

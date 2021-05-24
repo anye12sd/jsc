@@ -310,13 +310,13 @@ export default {
     },
     intro(id) {
       introduce(id).then((res) => {
-        // console.log(res);
+        console.log(res);
         if (res.data.status == 200 && res.data.data.length == 0) {
           this.waitchange = false;
           this.showModify = true;
           this.module_id = id;
         }
-        if (res.data.data.background) {
+        if (res.data.data.module_id) {
           this.showModify = true;
           this.module_id = id;
           this.waitchange = res.data.data;

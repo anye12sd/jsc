@@ -5,17 +5,6 @@
       <div class="tit">
         {{ changeAble ? "修改模型" : "模型介绍" }}
       </div>
-      <!-- <div>
-        <label for="titname">模型名称</label>
-        <input
-          type="text"
-          class="kkk"
-          id="titname"
-          v-model="titname"
-          @blur="titblur('模型名称在4到12字符之间', $event)"
-          placeholder="输入名称，最长14字符，最短4字符"
-        />
-      </div> -->
       <div v-for="k in explain" :key="k.name">
         <label for="">{{ k.name }}</label>
         <textarea
@@ -25,9 +14,7 @@
           rows="5"
           placeholder="最多500个字符"
           v-model="k.content"
-          @blur="
-            explainblur(k.name + '必填且不能多于500字符', k.content, $event)
-          "
+          @blur="explainblur(k.name + '不能多于500字符', k.content, $event)"
         ></textarea>
       </div>
       <div>
@@ -39,7 +26,7 @@
             alt="点击上传"
             :class="'uploadIcon ' + (hasImg ? 'dd' : '')"
           />
-          <p v-if="!hasImg">请先上传图片</p>
+          <p v-if="!hasImg">请上传图片</p>
           <input
             type="file"
             class="file"
@@ -76,29 +63,65 @@ export default {
       changeImge: false,
       explain: [
         {
-          name: "模型背景",
+          name: "任务定义",
           content: "",
+          field: "definition",
         },
         {
-          name: "数据来源",
+          name: "逐级拆解至最小任务项",
           content: "",
+          field: "dismantling",
         },
         {
-          name: "处理逻辑",
+          name: "确定牵头/协同关系",
           content: "",
+          field: "synergy",
         },
         {
-          name: "应用成效",
+          name: "建立指标体系",
           content: "",
+          field: "system",
         },
         {
-          name: "计算结果",
+          name: "确定数据需求",
           content: "",
+          field: "requirements",
         },
         {
-          name: "加工过程",
+          name: "确定数源系统",
           content: "",
+          field: "source",
         },
+        {
+          name: "确定业务协同流程",
+          content: "",
+          field: "portrait",
+        },
+        {
+          name: "确定数据集成流程",
+          content: "",
+          field: "monitoring",
+        },
+        {
+          name: "业务集成数据集成",
+          content: "",
+          field: "analysis",
+        },
+        {
+          name: "智能分析",
+          content: "",
+          field: "business",
+        },
+        {
+          name: "集成流程监控",
+          content: "",
+          field: "integration",
+        },
+        {
+          name: "任务整体画像",
+          content: "",
+          field: "collaboration",
+        },  
       ],
     };
   },
@@ -109,7 +132,6 @@ export default {
     module_id: {},
   },
   mounted() {
-    // console.log(this.changeAble);
     if (typeof FileReader === "undefined") {
       this.$message({
         message: "抱歉，你的浏览器不支持 FileReader，请使用现代浏览器操作！",
@@ -119,24 +141,21 @@ export default {
     }
     if (this.changeAble) {
       // this.userImg = ...
-      this.hasImg = true;
+      if (this.changeAble.img_url.length != 0) {
+        this.hasImg = true;
+      }
+      console.log(this.changeAble)
       // this.titname = this.changeAble.modulename;
       // this.area = this.changeAble.introduce;
-      this.explain[0].content = this.changeAble.background;
-      this.explain[3].content = this.changeAble.results;
-      this.explain[1].content = this.changeAble.source;
-      this.explain[4].content = this.changeAble.result;
-      this.explain[2].content = this.changeAble.logic;
-      this.explain[5].content = this.changeAble.process;
+      this.explain.forEach((item) => {
+        item.content = this.changeAble[item.field];
+      });
       this.userImg = "http://10.21.197.237" + this.changeAble.img_url;
     }
   },
   methods: {
     hide() {
       this.$emit("justHide");
-    },
-    handleChange(file, fileList) {
-      console.log(file, fileList);
     },
     goup() {
       // console.log(this.$refs.upfile);
@@ -145,23 +164,8 @@ export default {
         this.$refs.upfile.click();
       }
     },
-    titblur(str, event) {
-      console.log(event);
-      if (this.titname.length > 12 || this.titname.length < 4) {
-        this.$message({
-          message: str,
-          type: "warning",
-        });
-        // this.is1 = true;
-        event.target.classList.add("unqualified");
-      } else {
-        // this.is2 = false;
-        event.target.classList.remove("unqualified");
-      }
-    },
     explainblur(str, content, event) {
-      // console.log(event);
-      if (content.length > 500 || content.length <= 0) {
+      if (content.length > 500) {
         this.$message({
           message: str,
           type: "warning",
@@ -179,6 +183,7 @@ export default {
       this.canUpimg = false;
 
       let file = this.$refs.upfile.files[0];
+
       if (!/image\/\w+/.test(file.type)) {
         this.$message({
           message: "只能选择图片",
@@ -200,7 +205,7 @@ export default {
       this.$refs.upfile.click();
     },
     edit(url) {
-      console.log("0000")
+      console.log("0000");
       let data = new FormData();
       if (this.changeImge) {
         data.append("image", this.$refs.upfile.files[0]);
@@ -208,12 +213,9 @@ export default {
         data.append("img_url", this.changeAble.img_url);
       }
       data.append("module_id", this.module_id);
-      data.append("background", this.explain[0].content);
-      data.append("results", this.explain[3].content);
-      data.append("source", this.explain[1].content);
-      data.append("result", this.explain[4].content);
-      data.append("logic", this.explain[2].content);
-      data.append("process", this.explain[5].content);
+      this.explain.forEach((item) => {
+        data.append(item.field, item.content);
+      });
       data.append("access_token", location.search.split("=")[1]);
       data.append("id", this.changeAble.id);
       this.$axios({
@@ -242,21 +244,22 @@ export default {
     addnew(url) {
       let data = new FormData();
       if (!this.changeImge) {
-        this.$message({
-          message: "请上传图片",
-          type: "warning",
-        });
-        return;
+        data.append("image", "");
+      } else {
+        data.append("image", this.$refs.upfile.files[0]);
       }
       data.append("module_id", this.module_id);
-      data.append("background", this.explain[0].content);
-      data.append("results", this.explain[3].content);
-      data.append("source", this.explain[1].content);
-      data.append("result", this.explain[4].content);
-      data.append("logic", this.explain[2].content);
-      data.append("process", this.explain[5].content);
+      // data.append("definition", this.explain[0].content);
+      // data.append("dismantling", this.explain[1].content);
+      // data.append("synergy", this.explain[2].content);
+      // data.append("system", this.explain[3].content);
+      // data.append("requirements", this.explain[4].content);
+      // data.append("source", this.explain[5].content);
+      this.explain.forEach((item) => {
+        data.append(item.field, item.content);
+      });
       data.append("access_token", location.search.split("=")[1]);
-      data.append("image", this.$refs.upfile.files[0]);
+
       this.$axios({
         method: "post",
         headers: { "Content-Type": "multipart/form-data" },
@@ -280,21 +283,8 @@ export default {
       });
     },
     confirm() {
-      // if (
-      //   this.titname.length > 12 ||
-      //   this.titname.length < 4
-      // ) {
-      //   this.$message({
-      //     message: "请按要求填写",
-      //     type: "warning",
-      //   });
-      //   return;
-      // }
       for (let i = 0; i < this.explain.length; i++) {
-        if (
-          this.explain[i].content.length <= 0 ||
-          this.explain[i].content.length > 500
-        ) {
+        if (this.explain[i].content.length > 500) {
           this.$message({
             message: "请按要求填写",
             type: "warning",

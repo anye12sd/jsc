@@ -107,7 +107,7 @@ export default {
 .modelmarket {
   .pagination {
     position: absolute;
-    bottom: 3%;
+    bottom: 9%;
     width: 100%;
     z-index: 100;
     .el-pagination {
@@ -131,7 +131,6 @@ export default {
 .modelmarket {
   height: 92%;
   width: 100%;
-  position: relative;
   .main {
     min-width: 1100px;
     width: 78%;

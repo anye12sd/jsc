@@ -14,7 +14,7 @@ export default {
   name: "fixedAssets",
   data() {
     return {
-      baseUrl: "http://10.21.197.236:8080",
+      baseUrl: "http://10.21.197.236:9000",
       cyhl_gdzc: [],
       cyhl_gdzc1: [],
     };

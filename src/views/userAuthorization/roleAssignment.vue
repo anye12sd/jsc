@@ -137,7 +137,7 @@ export default {
   mounted() {
     this.getdata(1);
     userRloe().then((res) => {
-      console.log(res);
+      // console.log(res);
       if (res.data.status == 200) {
         this.peopleOption = res.data.data;
       }

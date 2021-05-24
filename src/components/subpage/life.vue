@@ -34,7 +34,7 @@ export default {
   naem: "life",
   data() {
     return {
-      baseUrl: "http://10.21.197.236:8080",
+      baseUrl: "http://10.21.197.236:9000",
       lnzt_sw: {},
       lnzt_sw1: [],
     };
