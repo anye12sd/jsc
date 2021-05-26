@@ -20,6 +20,17 @@ export default {
   mounted() {
     this.init();
   },
+  activated() {
+    let access_token = location.search.split("=")[1];
+    if (!access_token) {
+      if (process.env.NODE_ENV == "development") {
+        location.href = "http://localhost:9000";
+      }
+      if (process.env.NODE_ENV == "production") {
+        location.href = "http://10.21.197.237";
+      }
+    }
+  },
   methods: {
     init() {
       let access_token = location.search.split("=")[1];
@@ -124,7 +135,7 @@ export default {
         // this.$router.push("/login");
         // console.log("false");
         if (process.env.NODE_ENV == "development") {
-          location.href = "http://localhost:8080";
+          location.href = "http://localhost:9000";
         }
         if (process.env.NODE_ENV == "production") {
           location.href = "http://10.21.197.237";
@@ -159,8 +170,9 @@ export default {
             return;
           }
         }
+        let arr
         if (this.identity == 2) {
-          let arr = [
+          arr = [
             "/pcCockpit/distribution",
             "/supermarket/modelManaga",
             "/demand/addNewDemand",
@@ -169,17 +181,9 @@ export default {
             "/process/hasDoing",
             "/process/iStarted",
           ];
-          if (!arr.includes(to.fullPath)) {
-            this.$message({
-              message: "您无权查看该页面",
-              type: "warning",
-            });
-            this.$router.go(-1);
-            return;
-          }
         }
         if (this.identity == 1) {
-          let arr = [
+          arr = [
             "/pcCockpit/distribution",
             "/supermarket/modelManaga",
             "/process/waitDoing",
@@ -187,7 +191,8 @@ export default {
             "/userAuthorization/userManaga",
             "/userAuthorization/roleAssignment",
           ];
-          if (!arr.includes(to.fullPath)) {
+        }
+        if (!arr.includes(to.fullPath)) {
             this.$message({
               message: "您无权查看该页面",
               type: "warning",
@@ -195,7 +200,6 @@ export default {
             this.$router.go(-1);
             return;
           }
-        }
         this.$store.commit("config/setShowTopBar", true);
       }
     },

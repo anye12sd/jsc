@@ -30,11 +30,11 @@ const routes = [
     name: "Login",
     component: () => import('../views/login')
   },
-  {
-    path: "/loading",
-    name: "Loading",
-    component: () => import('../views/login/loading')
-  },
+  // {
+  //   path: "/loading",
+  //   name: "Loading",
+  //   component: () => import('../views/login/loading')
+  // },
   {
     path: "/pcCockpit",
     component: PcCokpit,

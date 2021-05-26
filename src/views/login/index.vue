@@ -1,8 +1,13 @@
 <template>
   <div id="login">
-    <div class="tit">登录</div>
-    <div v-if="!hasToken" id="scanCode"></div>
-    <div v-else class="loading" v-loading="hasToken">登录中</div>
+    <div class="tit">长兴数据驾驶舱平台</div>
+    <div class="pack">
+      <div class="tip">手机扫码登录</div>
+      <div class="bag">
+        <div id="scanCode"></div>
+      </div>
+    </div>
+    <div v-if="hasToken" class="loading" v-loading="hasToken">登录中</div>
   </div>
 </template>
 
@@ -37,7 +42,7 @@ export default {
       }
       let str;
       if (process.env.NODE_ENV == "development") {
-        str = "http://localhost:8080";
+        str = "http://localhost:9000";
       }
       if (process.env.NODE_ENV == "production") {
         str = "http://10.21.197.237";
@@ -77,49 +82,56 @@ export default {
 #login {
   width: 100%;
   height: 100%;
-  // background: #fff;
-  background-image: url("../../assets/oridinary/head.png"),
-    url("../../assets/oridinary/leftside.png"),
-    url("../../assets/oridinary/rightside.png"),
-    url("../../assets/oridinary/bottom.png"),
-    url("../../assets/oridinary/line.png");
-  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
-  background-size: 98% auto, auto 65%, auto 65%, 56% auto, 100% auto;
-  background-position: center top, left 26%, right 26%, center bottom,
-    center bottom;
+  background-image: url("../../assets/loginbg.png");
+  background-size: 100% 100%;
+  text-align: right;
+  overflow: hidden;
   .tit {
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0 30px;
-    height: 8%;
-    box-sizing: border-box;
-    padding-top: 1.1%;
-    font-family: Helvetica;
-    font-size: 28px;
+    width: 382px;
+    margin-left: 70%;
+    font-family: SourceHanSerifSC-Heavy;
+    font-size: 36px;
     color: #ffffff;
     letter-spacing: 4px;
+    text-align: center;
+    margin-top: 5%;
+    margin-bottom: 32px;
   }
+  .pack {
+    width: 382px;
+    height: 436px;
+    background-image: url("../../assets/codebg.png");
+    background-size: 100% 100%;
+    margin-left: 70%;
+    overflow: hidden;
+    .tip {
+      background-image: url("../../assets/left.png"),
+        url("../../assets/right.png");
+      background-repeat: no-repeat;
+      background-position: left center, right center;
+      font-family: SourceHanSerifSC-Heavy;
+      font-size: 20px;
+      color: #ffffff;
+      text-align: center;
+      width: 190px;
+      margin: 30px auto;
+    }
+  }
+  .bag {
+    margin: 0 auto 0 auto;
+    overflow: hidden;
+    text-align: center;
+    position: relative;
+    width: 190px;
+    height: 190px;
 
-  #scanCode {
-    height: 400px;
-    width: 50%;
-    margin: 80px auto 0 auto;
-    text-align: center;
-  }
-  .loading {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    background: #fff;
-    text-align: center;
-    font-size: 25px;
-    font-weight: 500;
-    line-height: 300px;
-    font-weight: 600;
+    #scanCode {
+      position: absolute;
+      top: -90px;
+      left: -16px;
+      height: 300px;
+      width: 220px;
+    }
   }
 }
 </style>

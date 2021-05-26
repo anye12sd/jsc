@@ -130,7 +130,7 @@ export default {
     },
     signout() {
       if (process.env.NODE_ENV == "development") {
-        window.location.href = "http://localhost:8080/#/login"
+        window.location.href = "http://localhost:9000/#/login"
       }
       if (process.env.NODE_ENV == "production") {
         window.location.href = "http://10.21.197.237"

@@ -1,6 +1,6 @@
 import axios from 'axios'
-import store from '@/store'
-import router from '@/router'
+import router from './router'
+import { Message } from 'element-ui';
 
 
 let baseURL = null;
@@ -14,24 +14,24 @@ const request = axios.create({
 	baseURL
 	// timeout:5000
 })
-// console.log(location)
 let access_token = location.search.split("=")[1]
-// console.log(location,access_token)
 request.interceptors.request.use(
 	config => {
-		// console.log("请求拦截器")
-		// console.log(config)
-		// if(config.params)
-		// let access_token = "cccc";
+
 		if (access_token) {
 			if (config.data) {
 				// console.log(typeof config.data)
 				config.data.access_token = access_token
 			} else {
 				// console.log(access_token)
-				config.params = {
-					access_token
-				}
+				if(config.url.includes("?")) {
+                    config.url = config.url + "&access_token="+access_token
+                } else {
+                    config.url = config.url + "?access_token="+access_token
+                }
+				// config.params = {
+				// 	access_token
+				// }
 			}
 		}
 
@@ -43,6 +43,21 @@ request.interceptors.request.use(
 )
 request.interceptors.response.use(
 	response => {
+		console.log(response)
+		if(response.data.status == 400) {
+			if(response.data.message) {
+				Message.warning({
+					message:response.data.message
+				})
+			}
+			if (process.env.NODE_ENV == "development") {
+				window.location.href = 'http://localhost:9000'
+			}
+			if (process.env.NODE_ENV == "production") {
+				window.location.href = 'http://10.21.197.237'
+			}
+			return
+		}
 		return response
 	},
 	err => {
