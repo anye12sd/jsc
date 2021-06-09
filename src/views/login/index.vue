@@ -127,8 +127,8 @@ export default {
 
     #scanCode {
       position: absolute;
-      top: -82px;
-      left: 1px;
+      top: -90px;
+      left: -14px;
       height: 300px;
       width: 220px;
     }
