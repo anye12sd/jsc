@@ -1,8 +1,19 @@
 <template>
   <div :class="className[current] + ' oridinaryUsers'">
     <div class="top">
-      <div class="time">{{ date1 }}&nbsp;&nbsp;{{ date2 }}&nbsp;&nbsp;{{ week[day] }}</div>
-      <div class="tit">数字驾驶舱桌面版</div>
+      <div class="time">
+        <div>{{ date1 }}&nbsp;&nbsp;{{ date2 }}&nbsp;&nbsp;{{ week[day] }}</div>
+        <!-- <div class="switpage" @click="showtablist = !showtablist">
+          <span>{{ pages[current].name }}</span>
+          <img src="@/assets/img/down.png" alt="" />
+          <div class="tabList" v-show="showtablist">
+            <div v-for="p in 2" :key="p" @click="swit(p - 1)">
+              {{ pages[p - 1].name }}
+            </div>
+          </div>
+        </div> -->
+      </div>
+      <div class="tit">数据应用成果超市</div>
       <div class="user">
         <span
           class="goafter"
@@ -17,19 +28,7 @@
     </div>
     <!-- <component :is="pages[current].componentName"></component> -->
     <router-view></router-view>
-    <div class="bottom">
-      <div class="page">
-        <img src="@/assets/oridinary/direction.png" alt=" " @click="reduce" />
-        <div class="currentPageName">{{ pages[current].name }}</div>
-        <img
-          src="@/assets/oridinary/direction.png"
-          alt=" "
-          class="rr"
-          @click="plus"
-        />
-      </div>
-      <!-- <div class="allPage"></div> -->
-    </div>
+
   </div>
 </template>
 
@@ -59,6 +58,7 @@ export default {
         5: "星期五",
         6: "星期六",
       },
+      showtablist: false,
       iden: {},
       current: 0,
       className: ["pc", "mo", "mo"],
@@ -96,12 +96,17 @@ export default {
     ...mapState("config", ["identity"]),
   },
   methods: {
+    swit(val) {
+      if (this.current == val) return;
+      this.current = val;
+      this.$router.push(this.pages[this.current].path);
+    },
     signout() {
       if (process.env.NODE_ENV == "development") {
-        window.location.href = "http://localhost:9000/#/login"
+        window.location.href = "http://localhost:9000/#/login";
       }
       if (process.env.NODE_ENV == "production") {
-        window.location.href = "http://10.21.197.237"
+        window.location.href = "http://10.21.197.237";
       }
     },
     goafter() {
@@ -148,15 +153,22 @@ export default {
 <style scoped lang="less">
 .pc {
   background-image: url("../../assets/oridinary/head.png"),
-    url("../../assets/oridinary/leftside.png"),
-    url("../../assets/oridinary/rightside.png"),
-    url("../../assets/oridinary/bottom.png"),
-    url("../../assets/oridinary/line.png");
-  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
-  background-size: 98% auto, auto 65%, auto 65%, 56% auto, 65% auto;
-  background-position: center top, left 26%, right 26%, center bottom,
-    center bottom;
+    url("../../assets/img/pcbg.png");
+  background-repeat: no-repeat, no-repeat;
+  background-size: 98% auto, 100% 100%;
+  background-position: center top, center center;
 }
+// .pc {
+//   background-image: url("../../assets/oridinary/head.png"),
+//     url("../../assets/oridinary/leftside.png"),
+//     url("../../assets/oridinary/rightside.png"),
+//     url("../../assets/oridinary/bottom.png"),
+//     url("../../assets/oridinary/line.png");
+//   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+//   background-size: 98% auto, auto 65%, auto 65%, 56% auto, 65% auto;
+//   background-position: center top, left 26%, right 26%, center bottom,
+//     center bottom;
+// }
 .mo {
   background-image: url("../../assets/oridinary/head.png"),
     url("../../assets/oridinary/leftside.png"),
@@ -181,7 +193,7 @@ export default {
     height: 8%;
     box-sizing: border-box;
     padding-top: 1.1%;
-    div {
+    > div {
       flex: 1;
     }
     .tit {
@@ -199,6 +211,44 @@ export default {
       display: flex;
       align-items: center;
       justify-content: flex-start;
+      > div {
+        display: inline-block;
+      }
+      > .switpage {
+        background-image: url("../../assets/img/tab.png");
+        background-size: 100% 100%;
+        background-position: center center;
+        background-repeat: no-repeat;
+        font-family: MicrosoftYaHei;
+        font-size: 12px;
+        color: #00eaff;
+        position: relative;
+        padding: 3px 25px;
+        margin-left: 20px;
+        cursor: pointer;
+        * {
+          vertical-align: middle;
+          position: relative;
+          left: 3px;
+        }
+        > .tabList {
+          position: absolute;
+          top: 26px;
+          left: 0;
+          width: 84%;
+          text-align: center;
+          z-index: 100;
+          > div {
+            cursor: pointer;
+            background-image: linear-gradient(
+              179deg,
+              rgba(6, 101, 160, 0.17) 0%,
+              rgba(3, 84, 103, 0.7) 100%
+            );
+            // border-bottom: 1px solid #00eaff;
+          }
+        }
+      }
     }
     .user {
       font-family: MicrosoftYaHei;

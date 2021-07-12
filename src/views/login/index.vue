@@ -31,11 +31,11 @@ export default {
       let access_token = location.search.split("=")[1];
       console.log(access_token);
       if (access_token) {
-        if (this.identity == 4) {
-          this.$router.push("/demand");
-        } else {
-          this.$router.push("/oridinaryUsers");
-        }
+        // if (this.identity == 4) {
+        //   this.$router.push("/demand");
+        // } else {
+        //   this.$router.push("/oridinaryUsers");
+        // }
         this.hasToken = true;
         // this.$router.push("/oridinaryUsers");
         return;

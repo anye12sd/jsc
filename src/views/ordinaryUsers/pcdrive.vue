@@ -1,87 +1,81 @@
 <template>
   <div class="pcdrive">
-    <div class="main">
-      <div class="left">
-        <div v-for="k in 3" :key="k">
-          <!-- 为什么这里不直接传宽高？这需求又改了，新样式，这代码可以少写点 -->
-          <div class="name">
-            <span>{{ models[k - 1] ? models[k - 1].view_name:'模型名称' }}</span>
-          </div>
-          <div class="item" ref="item" >
-            <div
-             v-if="models[k - 1]"
-              :style="
-                'width:650px;height:350px;' +
-                'transform:scale(' +
-                widper +
-                ',' +
-                heiper +
-                ');transform-origin:0% 0%;'
-              "
-            >
-            <component
-                :is="models[k - 1].view_code"
-              ></component>
-            </div>
-          </div>
+    <div class="cen">
+      <div class="each model">
+        <div
+          v-if="models[0]"
+          :style="
+            'width:650px;height:350px;' +
+            'transform:scale(' +
+            widper +
+            ',' +
+            heiper +
+            ');transform-origin:0% 0%;'
+          "
+        >
+          <component :is="models[0].view_code"></component>
         </div>
       </div>
-      <div class="cen">
-        <div>
-          <div
-            v-for="(k, index) in opt"
-            :key="k.name"
-            :class="current == index ? 'each' : 'each light'"
-            @click="changtype(index)"
+      <div class="each menu" ref="each">
+        <div
+          v-for="(k, index) in opt"
+          :key="k.name"
+          :class="current == index ? 'op' : 'op light'"
+          @click="changtype(index)"
+        >
+          <img :src="k.img" alt=" " />
+          <div>{{ k.name }}</div>
+        </div>
+        <div class="pagination">
+          <el-pagination
+            layout=" pager"
+            :page-size="8"
+            :current-page.sync="currentPage"
+            :total="total"
+            @current-change="handleCurrentChange"
           >
-            <img :src="k.img" alt=" " />
-            <div>{{ k.name }}</div>
-          </div>
+          </el-pagination>
         </div>
       </div>
-      <div class="right">
-        <div v-for="k in 3" :key="k" ref="item">
-          <div class="name">
-            <span>{{ models[k + 2] ? models[k + 2].view_name:'模型名称' }}</span>
-          </div>
-          <div class="item" ref="item">
-            <div
-            v-if="models[k + 2]"
-              :style="
-                'width:650px;height:350px;' +
-                'transform:scale(' +
-                widper +
-                ',' +
-                heiper +
-                ');transform-origin:0% 0%;'
-              "
-            >
-            <component
-                :is="models[k + 2].view_code"
-              ></component>
-            </div>
-          </div>
+      <div class="each model">
+        <div
+          v-if="models[1]"
+          :style="
+            'width:650px;height:350px;' +
+            'transform:scale(' +
+            widper +
+            ',' +
+            heiper +
+            ');transform-origin:0% 0%;'
+          "
+        >
+          <component :is="models[1].view_code"></component>
         </div>
       </div>
-    </div>
-    <div class="pagination">
-      <el-pagination
-        layout=" pager"
-        :page-size="6"
-        :current-page.sync="currentPage"
-        :total="total"
-        @current-change="handleCurrentChange"
-      >
-      </el-pagination>
+      <div v-for="p in 6" class="each model" :key="p">
+        <div
+          v-if="models[p + 1]"
+          :style="
+            'width:650px;height:350px;' +
+            'transform:scale(' +
+            widper +
+            ',' +
+            heiper +
+            ');transform-origin:0% 0%;'
+          "
+        >
+          <component :is="models[p + 1].view_code"></component>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import f1 from "@/assets/oridinary/f1.png";
-import f2 from "@/assets/oridinary/f2.png";
-import f3 from "@/assets/oridinary/f3.png";
-import f4 from "@/assets/oridinary/f4.png";
+import f1 from "@/assets/img/f1.png";
+import f2 from "@/assets/img/f2.png";
+import f3 from "@/assets/img/f3.png";
+import f4 from "@/assets/img/f4.png";
 import { portaluser } from "@/api/list.js";
 
 const modulesFiles = require.context(
@@ -104,24 +98,20 @@ export default {
       heiper: 1,
       total: 1,
       current: 0,
-      page:1,
-      f1,
-      f2,
-      f3,
-      f4,
-      num:[
+      page: 1,
+      num: [
         {
-          id:1,
-          ke:"a"
+          id: 1,
+          ke: "a",
         },
         {
-          id:2,
-          ke:"b"
+          id: 2,
+          ke: "b",
         },
         {
-          id:3,
-          ke:"c"
-        }
+          id: 3,
+          ke: "c",
+        },
       ],
       opt: [
         {
@@ -142,49 +132,45 @@ export default {
           name: "生态文明",
           img: f3,
         },
-        
       ],
-      currentPage:1,
+      currentPage: 1,
       models: [],
     };
   },
   mounted() {
-    // console.log(this.$refs.item.clientWidth, this.$refs.item.clientHeight);
-    // let width =
-    //   window.getComputedStyle(this.$refs.item).width.split("px")[0] * 1;
-    // let height =
-    //   window.getComputedStyle(this.$refs.item).height.split("px")[0] * 1;
-    this.widper =
-      Math.floor((this.$refs.item[0].clientWidth / 650) * 100) / 100;
-    this.heiper =
-      Math.floor((this.$refs.item[0].clientHeight / 350) * 100) / 100;
     this.goto(1);
+    this.changesize();
     window.onresize = () => {
       this.changesize();
     };
   },
   methods: {
     changtype(index) {
-      if(index == 2 || index == 3) {
+      if (index == 2 || index == 3) {
         this.$message({
-              message: "此分类暂无",
-              type: "warning",
-            });
-        return
+          message: "此分类暂无",
+          type: "warning",
+        });
+        return;
       }
-      
+
       this.current = index;
-      this.currentPage = 1
-      this.goto(1)
+      this.currentPage = 1;
+      this.goto(1);
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
       this.page = val;
-      this.goto(val)
+      this.goto(val);
     },
     goto(page) {
       // 请求获取的数组
-      portaluser("page="+page+"&pageSize=6&category_id="+this.opt[this.current].category_id).then((res) => {
+      portaluser(
+        "page=" +
+          page +
+          "&pageSize=8&category_id=" +
+          this.opt[this.current].category_id
+      ).then((res) => {
         // console.log(res);
         if (res.data.status == 200) {
           this.total = res.data.data.count;
@@ -193,11 +179,11 @@ export default {
       });
     },
     changesize() {
-      if (this.$refs.item) {
-        this.widper =
-          Math.floor((this.$refs.item.clientWidth / 650) * 100) / 100;
-        this.heiper =
-          Math.floor((this.$refs.item.clientHeight / 350) * 100) / 100;
+      if (this.$refs.each) {
+        let wid = this.$refs.each.clientWidth - 20;
+        let hei = this.$refs.each.clientHeight - 8;
+        this.widper = Math.floor((wid / 650) * 100) / 100;
+        this.heiper = Math.floor((hei / 350) * 100) / 100;
       }
     },
   },
@@ -209,7 +195,7 @@ export default {
 <style lang="less">
 .pcdrive {
   .pagination {
-    position: absolute;
+    // position: absolute;
     bottom: 9%;
     width: 100%;
     z-index: 100;
@@ -234,6 +220,64 @@ export default {
 .pcdrive {
   height: 92%;
   width: 100%;
+  .cen {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-content: center;
+    flex-wrap: wrap;
+    > .each {
+      width: 31.3333%;
+      margin: 0 1%;
+      height: 33%;
+      padding: 4px 10px;
+      box-sizing: border-box;
+    }
+    > .menu {
+      background-image: url("../../assets/img/mainbg.png");
+      background-repeat: no-repeat;
+      background-size: 85% 83%;
+      background-position: center center;
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      > div:nth-child(1),
+      > div:nth-child(4) {
+        margin-bottom: 20px;
+      }
+      > div:nth-child(2),
+      > div:nth-child(3) {
+        margin-bottom: 0px;
+      }
+      > .light {
+        opacity: 0.6;
+      }
+      > .op {
+        width: 16%;
+        font-family: SourceHanSerifSC-Heavy;
+        font-size: 18px;
+        color: #ffffff;
+        letter-spacing: 0;
+        text-align: center;
+        img {
+          width: 100%;
+          cursor: pointer;
+        }
+        > div {
+          cursor: pointer;
+        }
+      }
+    }
+    > .model {
+      background-image: url("../../assets/img/modelborder.png");
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      background-position: center center;
+    }
+  }
+
   .main {
     width: 100%;
     display: flex;
@@ -253,7 +297,7 @@ export default {
         padding: 1% 1%;
         transition: all;
         cursor: pointer;
-        >.name {
+        > .name {
           width: 100%;
           height: 20%;
           padding-left: 12%;
@@ -261,12 +305,12 @@ export default {
           padding-top: 3.5%;
           box-sizing: border-box;
           position: relative;
-          >span {
+          > span {
             position: absolute;
             bottom: 7px;
           }
         }
-        >.item {
+        > .item {
           width: 90%;
           height: 73%;
           // width: 650px;

@@ -42,6 +42,7 @@ export default {
             userName: "系统",
             role_id: 1,
           });
+          this.$router.push("/oridinaryUsers");
           // this.togetmenu();
           // this.$router.push("/oridinaryUsers");
           return;
@@ -51,6 +52,7 @@ export default {
             userName: "单位",
             role_id: 2,
           });
+          this.$router.push("/oridinaryUsers");
           // this.togetmenu();
           // this.$router.push("/oridinaryUsers");
           return;
@@ -61,31 +63,41 @@ export default {
             userName: "普通",
             role_id: 3,
           });
+          this.$router.push("/oridinaryUsers");
           // this.$router.push("/oridinaryUsers");
           // this.togetmenu();
           return;
         } else if (access_token == "dddd") {
           //模型开发人员
           this.$store.commit("config/setidentity", 4);
+          this.$router.push("/demand");
           // this.togetmenu();
           // this.$router.push("/demand");
           return;
         } else if (access_token == "eeee") {
           //模型开发人员
           this.$store.commit("config/setidentity", 2);
+          this.$router.push("/oridinaryUsers");
           // this.togetmenu();
           // this.$router.push("/demand");
           return;
         }
       }
 
-      if (access_token) {
+      if (access_token && !sessionStorage.getItem("hasLogin")) {
         // console.log("user");
         tologin().then((res) => {
           if (res.data.status == 200) {
             this.$store.commit("config/setUsetInfo", res.data.data);
             this.$store.commit("config/setidentity", res.data.data.role_id);
-
+            sessionStorage.setItem("hasLogin", "1");
+            setTimeout(() => {
+              if (this.identity == 4) {
+                this.$router.push("/demand");
+              } else {
+                this.$router.push("/oridinaryUsers");
+              }
+            },500);
             // if(res.data.data.role_id != 3) {
             //   this.togetmenu();
             // }
@@ -170,7 +182,7 @@ export default {
             return;
           }
         }
-        let arr
+        let arr;
         if (this.identity == 2) {
           arr = [
             "/pcCockpit/distribution",
@@ -193,13 +205,13 @@ export default {
           ];
         }
         if (!arr.includes(to.fullPath)) {
-            this.$message({
-              message: "您无权查看该页面",
-              type: "warning",
-            });
-            this.$router.go(-1);
-            return;
-          }
+          this.$message({
+            message: "您无权查看该页面",
+            type: "warning",
+          });
+          this.$router.go(-1);
+          return;
+        }
         this.$store.commit("config/setShowTopBar", true);
       }
     },

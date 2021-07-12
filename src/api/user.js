@@ -3,7 +3,7 @@ import request from "@/request.js"
 export function getMenu(){
     return request({
         method:'get',
-        url:'menu'
+        url:'/menu'
     })
 }
 

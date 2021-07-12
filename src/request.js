@@ -43,7 +43,7 @@ request.interceptors.request.use(
 )
 request.interceptors.response.use(
 	response => {
-		console.log(response)
+		// console.log(response)
 		if(response.data.status == 400) {
 			if(response.data.message) {
 				Message.warning({
