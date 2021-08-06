@@ -169,19 +169,19 @@ export default {
           this.$router.go(-1);
           return;
         }
-        if (this.identity == 4) {
-          if (
-            to.fullPath != "/demand/waitDemand" &&
-            to.fullPath != "/demand/hasDoneDemand"
-          ) {
-            this.$message({
-              message: "您无权查看该页面",
-              type: "warning",
-            });
-            this.$router.go(-1);
-            return;
-          }
-        }
+        // if (this.identity == 4) {
+        //   if (
+        //     to.fullPath != "/demand/waitDemand" &&
+        //     to.fullPath != "/demand/hasDoneDemand"
+        //   ) {
+        //     this.$message({
+        //       message: "您无权查看该页面",
+        //       type: "warning",
+        //     });
+        //     this.$router.go(-1);
+        //     return;
+        //   }
+        // }
         let arr;
         if (this.identity == 2) {
           arr = [

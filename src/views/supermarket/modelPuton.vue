@@ -18,10 +18,10 @@
         <div style="width: 60%">
           <el-select v-model="value" clearable placeholder="请选择">
             <el-option
-              v-for="(item, index) in options"
+              v-for="(item) in options"
               :key="item.id"
-              :label="item.nickname"
-              :value="index"
+              :label="item.userName"
+              :value="item.user_id"
             >
             </el-option>
           </el-select>

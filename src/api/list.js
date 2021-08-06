@@ -264,3 +264,28 @@ export function demandhandlelist(str){
         url:"/demand/handle/list?"+str
     })
 }
+
+export function getAppTime(){
+    return request ({
+        method:"get",
+        url:"/app/time"
+    })
+}
+
+export function postFormJr(data){
+    return request ({
+        method:"post",
+        url:"/app/data_jr",
+        data,
+        responseType: 'blob'
+    })
+}
+
+export function postFormWg(data){
+    return request ({
+        method:"post",
+        url:"/app/data_wg",
+        data,
+        responseType: 'blob'
+    })
+}
