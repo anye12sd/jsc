@@ -8,10 +8,10 @@
             alt=""
           />
           <div>{{ k.modulename }}</div>
-          <span v-if="k.sql_type == 1 || k.sql_type == 2" class="modelDownload" @click.stop="todownload(k.id, k.sql_type, k.modular_type)">
+          <span v-if="k.sql_type == 1 || k.sql_type == 2" class="modelDownload" @click.stop="todownload(k.id, k.sql_type, k.modular_type, k)">
             数据下载
           </span>
-          <span v-else-if="k.sql_type == 3" class="modelDownload" @click.stop="download(k.id, k.sql_type)"
+          <span v-else-if="k.sql_type == 3" class="modelDownload" @click.stop="download(k.id, k.sql_type, k)"
             >数据下载</span
           >
         </div>
@@ -28,10 +28,10 @@
         <div class="top unchecked">
           <img src="@/assets/oridinary/modelIcon.png" alt="" />
           <div>模型名称</div>
-          <span v-if="k.sql_type == 1 || k.sql_type == 2" class="modelDownload" @click.stop="todownload(k.id, k.sql_type)">
+          <span v-if="k.sql_type == 1 || k.sql_type == 2" class="modelDownload" @click.stop="todownload(k.id, k.sql_type, k)">
             数据下载
           </span>
-          <span v-else-if="k.sql_type == 3" class="modelDownload" @click.stop="download(k.id, k.sql_type, k.modular_type)"
+          <span v-else-if="k.sql_type == 3" class="modelDownload" @click.stop="download(k.id, k.sql_type, k.modular_type, k)"
           >数据下载</span
           >
         </div>
@@ -78,7 +78,7 @@
         >
           <el-input v-model="content.value" style="width: calc(100% - 90px); margin-right: 18px"></el-input><el-button v-if="index == 0" type="primary" @click="addDomain">新增</el-button><el-button v-else type="danger" @click.prevent="removeDomain(content)">删除</el-button>
         </el-form-item>
-        <el-form-item label="上传excel" v-if="sql_type == 1 && (modular_type == 2 || modular_type ==3)">
+        <el-form-item class="url-content" label="上传excel" v-if="sql_type == 1 && (modular_type == 2 || modular_type ==3)">
           <el-upload
               class="upload-demo"
               ref="upload"
@@ -93,6 +93,7 @@
             <div slot="tip" class="el-upload__tip">只能上传excel文件</div>
           </el-upload>
 <!--          <input type="file" id="file">-->
+          <a class="url" v-if="sql_type == 1 && (modular_type == 2 || modular_type ==3)" :href="'http://10.21.197.237' + excel_url">下载模版</a>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -126,6 +127,7 @@ export default {
       total: 1,
       appTime: 0,
       dialogVisible: false ,
+      excel_url: '',
       loading: false,
       sql_type: '',
       modular_type: '',
@@ -172,7 +174,8 @@ export default {
       this.$router.push("/oridinaryUsers/detail/" + item.id);
       this.$store.commit("jurisdiction/setModelInfo", item);
     },
-    todownload(id, type, modular_type){
+    todownload(id, type, modular_type, k){
+      this.excel_url = k.excel_url
       this.modular_type = modular_type
       this.dialogVisible = true
       this.sql_type = type
@@ -221,11 +224,6 @@ export default {
       });
     },
     submitForm(formName) {
-      // let file = document.getElementById('file')
-      // console.log(file.files[0])
-      // if(this.id == 36){
-      //   return
-      // }
       this.$refs[formName].validate((valid) => {
         this.form.sql_type = this.sql_type
         this.form.date1 = new Date(this.form.date1).getTime()
@@ -300,8 +298,13 @@ export default {
       console.log(formData)
       this.loading = true
       postFormJr(formData).then((res) => {
-        console.log(res)
+        // console.log(res)
         if(res.status == 200){
+            this.$message({
+              message: "即将开始下载，请勿关闭窗口",
+              type: "success",
+              duration: 5000
+            });
           let blob = new Blob([res.data], {type: 'application/vnd.ms-excel'});
           // let objectUrl = URL.createObjectURL(blob);
           var downloadA = document.createElement('a');
@@ -311,6 +314,7 @@ export default {
           window.URL.revokeObjectURL(downloadA.href);
           this.loading = false
           this.dialogVisible = false
+          this.form = this.$options.data().form
           // if (res.status == 200) {
           //   this.$message({
           //     message: "即将开始下载，请勿关闭窗口",
@@ -326,7 +330,7 @@ export default {
         }
         else {
           this.$message({
-            message: "无法下载请联系管理员",
+            message: "无法下载，请联系管理员",
             type: "error",
             duration: 3000
           });
@@ -347,8 +351,13 @@ export default {
       console.log(formData)
       this.loading = true
       postFormWg(formData).then((res) => {
-        console.log(res)
+        // console.log(res)
         if(res.status == 200){
+          this.$message({
+            message: "即将开始下载，请勿关闭窗口",
+            type: "success",
+            duration: 5000
+          });
           let blob = new Blob([res.data], {type: 'application/vnd.ms-excel'});
           // let objectUrl = URL.createObjectURL(blob);
           var downloadA = document.createElement('a');
@@ -358,10 +367,11 @@ export default {
           window.URL.revokeObjectURL(downloadA.href);
           this.loading = false
           this.dialogVisible = false
+          this.form = this.$options.data().form
         }
         else {
           this.$message({
-            message: "无法下载请联系管理员",
+            message: "下载失败，请联系管理员",
             type: "error",
             duration: 3000
           });
@@ -371,7 +381,6 @@ export default {
       });
     },
     onChange(file, fileList){
-      console.log(file)
       this.form.file = fileList
     },
     // submitUpload() {
@@ -382,48 +391,52 @@ export default {
     },
     handleExport(id, type) {
       let url
-      if(type == 3) {
-        url = "http://10.21.197.237/app/sql?id=" +
-            id +
-            "&access_token=" +
-            location.search.split("=")[1] +
-            "&sql_type=" + type
-      }
-      else if(type == 1) {
-        url = "http://10.21.197.237/app/sql?id=" +
-            id +
-            "&access_token=" +
-            location.search.split("=")[1] +
-            "&sql_type=" + type +
-            "&start_time=" + this.form.date1 +
-            "&end_time=" + this.form.date2
-      }
-      var elemIF = document.createElement('iframe')
-      elemIF.src = url
-      elemIF.style.display = 'none'
-      elemIF.onload = function () {
-        document.body.removeChild(elemIF)
-      }
-      document.body.appendChild(elemIF)
-    //   let URL = "http://10.21.197.237/app/sql?id=" +
-    //             id +
-    //             "&access_token=" +
-    //             location.search.split("=")[1] +
-    //             "&sql_type=" + type +
-    //             "&start_time=" + this.form.date1 +
-    //             "&end_time=" + this.form.date2
-    //   let me = this
-    //   singleaxios.get(URL).then(function (response) {
-    //     if (response === '200') {
-    //       console.log('下载成功')
-    //       // me.$message.success('下载成功！')
-    //     } else {
-    //       console.log('下载失败')
-    //       // me.$message.warning('下载失败！')
-    //     }
-    //   }).catch(function (response) {
-    //     console.log(response);
-    //   });
+      // if(type == 3) {
+      //   url = "http://10.21.197.237/app/sql?id=" +
+      //       id +
+      //       "&access_token=" +
+      //       location.search.split("=")[1] +
+      //       "&sql_type=" + type
+      // }
+      // else if(type == 1) {
+      //   url = "http://10.21.197.237/app/sql?id=" +
+      //       id +
+      //       "&access_token=" +
+      //       location.search.split("=")[1] +
+      //       "&sql_type=" + type +
+      //       "&start_time=" + this.form.date1 +
+      //       "&end_time=" + this.form.date2
+      // }
+      // var elemIF = document.createElement('iframe')
+      // elemIF.src = url
+      // elemIF.style.display = 'none'
+      // elemIF.onload = function () {
+      //   document.body.removeChild(elemIF)
+      // }
+      // document.body.appendChild(elemIF)
+      this.loading = true
+      let URL = "http://10.21.197.237/app/sql?id=" +
+                id +
+                "&access_token=" +
+                location.search.split("=")[1] +
+                "&sql_type=" + type +
+                "&start_time=" + this.form.date1 +
+                "&end_time=" + this.form.date2
+      let me = this
+      singleaxios.get(URL).then(function (response) {
+        if (response === '200') {
+          // console.log('下载成功')
+          me.form = me.$options.data().form()
+          me.loading = false
+          me.$message.success('即将开始下载，请勿关闭窗口')
+        } else {
+          // console.log('下载失败')
+          me.loading = false
+          me.$message.warning('下载失败，请联系管理员')
+        }
+      }).catch(function (response) {
+        console.log(response);
+      });
     },
   },
 };
@@ -452,6 +465,16 @@ export default {
       }
     }
   }
+}
+.url-content{
+  position: relative;
+}
+.url{
+  position: absolute;
+  top: 0;
+  left: 100px;
+  color: #409eff;
+  text-decoration: none;
 }
 </style>
 <style scoped lang="less">
