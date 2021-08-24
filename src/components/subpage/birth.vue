@@ -1,14 +1,24 @@
 <template>
-  <div id="birth" :class="size?'fix':'unfix'">
-    <div class="bigtit">出生</div>
+  <div id="birth">
+    <div class="bigtit">
+      <div class="tag"></div>
+      <div>出生</div>
+    </div>
     <div class="current">
+        <img src="@/assets/subpage/number.png" alt="图片缺失" style="height:100%;margin-right:5%;">
       <div>
-        <div>当年出生人数</div>
+        <div style="font-size: 1.6rem;">当年出生人数</div>
         <div>{{ yezt_cs ? yezt_cs.bncsrs : "" }}</div>
       </div>
       <div>
-        <div>较上年增长</div>
-        <div v-if="yezt_cs" :class="yezt_cs.sntb.slice(0, 1) == '+' ? 'more' : 'reduce'">{{ yezt_cs ? yezt_cs.sntb : "" }}</div>
+        <div>较上年</div>
+        <div v-if="yezt_cs">
+          <img
+            :src="yezt_cs.sntb.slice(0, 1) == '+' ? increase : reduce"
+            alt="图片缺失"
+          />
+          <span :style="yezt_cs.sntb.slice(0, 1) == '+'? '':'color:#fa6400;'">{{ yezt_cs ? yezt_cs.sntb : "" }}</span>
+        </div>
       </div>
     </div>
     <div id="udvgrj"></div>
@@ -18,23 +28,26 @@
 <script>
 // 出生
 import echarts from "echarts";
+import increase from "@/assets/subpage/increase.png";
+import reduce from "@/assets/subpage/reduce.png";
+
 export default {
   name: "birth",
   data() {
     return {
+      increase,
+      reduce,
       baseUrl: "http://10.21.197.236:9000",
       yezt_cs: null,
       yezt_cs2: [],
+      chart:null,
     };
-  },
-  props:{
-    size:{
-      type:Boolean,
-      default:false
-    }
   },
   mounted() {
     this.getdata();
+    window.addEventListener("resize", () => {
+      this.drawing();
+    });
   },
   methods: {
     getdata() {
@@ -58,7 +71,11 @@ export default {
         });
     },
     drawing() {
+      if (this.chart) {
+        this.chart.dispose();
+      }
       let lsrkqs = this.$echarts.init(document.getElementById("udvgrj"));
+      this.chart = lsrkqs;
       var x = [];
       var y = [];
       this.yezt_cs2.map((item, index) => {
@@ -66,7 +83,6 @@ export default {
         y.push(item.bncsrs);
       });
       var option = {
-        // backgroundColor: "#05224d",
         title: {
           text: "历年人口变化趋势图",
           // "subtext": "BY MICVS",
@@ -75,7 +91,7 @@ export default {
 
           textStyle: {
             color: "#fff",
-            fontSize: "16",
+            fontSize:(14 / 1080) * document.body.scrollHeight ,
           },
           subtextStyle: {
             color: "#90979c",
@@ -86,7 +102,7 @@ export default {
         grid: {
           top: "20%",
           left: "1%",
-          right: "1%",
+          right: "5%",
           bottom: "5%",
           containLabel: true,
         },
@@ -103,6 +119,7 @@ export default {
               symbolOffset: [0, 8],
               lineStyle: {
                 color: "#rgba(0,145,255,1)",
+                fontSize:(14 / 1080) * document.body.scrollHeight 
               },
             },
             //箭头一端没效果,一端箭头
@@ -150,6 +167,7 @@ export default {
               margin: 20,
               textStyle: {
                 color: "#d1e6eb",
+                fontSize:(14 / 1080) * document.body.scrollHeight 
               },
             },
             axisTick: {
@@ -160,12 +178,13 @@ export default {
         series: [
           {
             name: "注册总量",
-            type: "line",
+            type: "bar",
             // smooth: true, //是否平滑曲线显示
             // 			symbol:'circle',  // 默认是空心圆（中间是白色的），改成实心圆
             showAllSymbol: true,
             symbol: "emptyCircle",
             symbolSize: 6,
+            barWidth:16,
             lineStyle: {
               normal: {
                 color: "#4BF0FF", // 线条颜色
@@ -173,7 +192,7 @@ export default {
               borderColor: "#f0f",
             },
             label: {
-              show: true,
+              show: false,
               position: "top",
               textStyle: {
                 color: "#fff",
@@ -185,7 +204,7 @@ export default {
               },
             },
             tooltip: {
-              show: false,
+              show: true,
             },
             areaStyle: {
               //区域填充样式
@@ -224,53 +243,37 @@ export default {
 </script>
 
 <style scoped lang="less">
-.fix{
-  width: 650px;
-  height: 350px;
-}
-.infix{
+#birth {
   width: 100%;
   height: 100%;
-}
-#birth {
-  
-  padding: 5px;
   color: #fff;
   box-sizing: border-box;
-  .bigtit {
-    width: 100%;
-    font-family: SourceHanSansCN-Heavy;
-    font-weight: 600;
-    font-size: 16px;
-    color: #fff;
-  }
+  
   .current {
+    height: 17%;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    align-items: center;
   }
-  .current>div{
-      width: 35%;
-      text-align: center;
+  .current > div {
+    width: 30%;
+    text-align: left;
   }
-  .current>div>div:nth-of-type(2){
-      height: 40px;
-      line-height: 40px;
-      margin-top: 5px;
-  }
-  .current > div:nth-of-type(2) {
-    .more {
-      background-image: url("../../assets/subpage/xj.png");
-      background-repeat: no-repeat;
-      background-position: center center;
+  .current > div > div:nth-of-type(2) {
+    img{
+      width: 2rem;
+      vertical-align: middle;
     }
-    .reduce{
-      background-image: url("../../assets/subpage/ss.png");
-      background-repeat: no-repeat;
-      background-position: center center;
-    }
+    vertical-align: middle;
+    font-family: DINPro-Regular;
+    font-size: 1.8px;
+    color: #14fc8c;
+    height: 30px;
+    line-height: 30px;
+    margin-top: 5px;
   }
   #udvgrj {
-    height: 250px;
+    height:70%;
   }
 }
 </style>

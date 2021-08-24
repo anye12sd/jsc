@@ -1,18 +1,21 @@
 <template>
   <div class="further">
-    <div class="tit">学前（上年）</div>
+    <div class="bigtit">
+      <div class="tag"></div>
+      <div>学前</div>
+    </div>
     <div class="content">
       <div>
-        <div class="cycolor">全县幼儿园</div>
         <div class="cynumber">{{ xueqiandata.yeysl }}</div>
+        <div class="cycolor">全县幼儿园</div>
       </div>
       <div>
-        <div class="cycolor">幼儿园老师</div>
         <div class="cynumber">{{ xueqiandata.jssl }}</div>
+        <div class="cycolor">幼儿园老师</div>
       </div>
       <div>
-        <div class="cycolor">幼儿园学生</div>
         <div class="cynumber">{{ xueqiandata.xssl }}</div>
+        <div class="cycolor">幼儿园学生</div>
       </div>
     </div>
     <div id="zspblnqk"></div>
@@ -29,21 +32,25 @@ export default {
       baseUrl: "http://10.21.197.236:9000",
       xueqiandata: {},
       xueqianechart: [],
+      chart:null
     };
   },
   mounted() {
-      this.getdata()
+    this.getdata();
+    window.addEventListener("resize", () => {
+      this.drawing();
+    });
   },
   methods: {
     getdata() {
       this.$axios({
         method: "post",
-        url: this.baseUrl+"/index/home/yezt_xq",
+        url: this.baseUrl + "/index/home/yezt_xq",
         // data: data,
       })
         .then((res) => {
           let optionsdata = res.data;
-        //   console.log(optionsdata)
+          //   console.log(optionsdata)
           if (optionsdata.code == 200) {
             this.xueqiandata = optionsdata.data[0][0];
             this.xueqianechart = optionsdata.data[1];
@@ -57,7 +64,11 @@ export default {
         });
     },
     drawing() {
+      if (this.chart) {
+        this.chart.dispose();
+      }
       let zspblnqk = this.$echarts.init(document.getElementById("zspblnqk"));
+      this.chart = zspblnqk;
       var x = [];
       var y = [];
       this.xueqianechart.map((item) => {
@@ -74,18 +85,18 @@ export default {
 
           textStyle: {
             color: "#fff",
-            fontSize: "16",
-          },
-          subtextStyle: {
-            color: "#90979c",
-            fontSize: "13",
+            fontSize:(14 / 1080) * window.innerHeight ,
           },
         },
-        tooltip: {},
+        tooltip: {
+          trigger: "axis",
+          show: true,
+          formatter: "{b} {c}",
+        },
         grid: {
-          top: "22%",
+          top: "25%",
           left: "1%",
-          right: "1%",
+          right: "6%",
           bottom: "2%",
           containLabel: true,
         },
@@ -112,6 +123,7 @@ export default {
               textStyle: {
                 color: "#d1e6eb",
                 margin: 15,
+                fontSize:(14 / 1080) * window.innerHeight ,
               },
             },
             axisTick: {
@@ -143,6 +155,7 @@ export default {
               symbolOffset: [0, 8],
               lineStyle: {
                 color: "#979797",
+                fontSize:(14 / 1080) * window.innerHeight ,
               },
             },
             axisLabel: {
@@ -167,7 +180,7 @@ export default {
             symbolSize: 6,
             lineStyle: {
               normal: {
-                color: "#50EB45", // 线条颜色
+                color: "#67FFF5", // 线条颜色
               },
               borderColor: "#f0f",
             },
@@ -180,11 +193,8 @@ export default {
             },
             itemStyle: {
               normal: {
-                color: "#50EB45",
+                color: "#67FFF5",
               },
-            },
-            tooltip: {
-              show: false,
             },
             areaStyle: {
               //区域填充样式
@@ -198,16 +208,16 @@ export default {
                   [
                     {
                       offset: 0,
-                      color: "#50EB45",
+                      color: "#67FFF5",
                     },
                     {
                       offset: 1,
-                      color: "rgba(0,0,0, 0)",
+                      color: "rgba(103,255,245,0.00)",
                     },
                   ],
                   false
                 ),
-                shadowColor: "#50EB45", //阴影颜色
+                shadowColor: "rgba(255,255,255,0)", //阴影颜色
                 shadowBlur: 20, //shadowBlur设图形阴影的模糊大小。配合shadowColor,shadowOffsetX/Y, 设置图形的阴影效果。
               },
             },
@@ -226,35 +236,41 @@ export default {
 .further {
   width: 100%;
   height: 100%;
-  padding: 5px;
   color: #fff;
   box-sizing: border-box;
-  .tit {
-    font-family: SourceHanSansCN-Heavy;
-    font-weight: 600;
-    font-size: 16px;
-    color: #ffffff;
-  }
   .content {
     display: flex;
-    justify-content: space-around;
-    margin-top: 5px;
-    div {
-      text-align: center;
-    }
-    .cycolor {
-      font-family: SourceHanSansCN-Regular;
-      font-size: 13px;
-    }
+    justify-content: center;
+    height: 20%;
+    position: relative;
+    top: -2rem;
     .cynumber {
       font-family: DINAlternate-Bold;
-      font-size: 19px;
+      font-size: 2.22vh;
+      color: #ffee72;
+      letter-spacing: 0;
+      text-shadow: 0 0 4px #ffee72;
+    }
+    .cycolor {
+      font-family: MicrosoftYaHei;
+      font-size: 1.4rem;
+      color: #ffffff;
+      letter-spacing: 0;
+      padding: 0 4px;
+      background-image: url("../../assets/subpage/group.png");
+      background-size: 100% 100%;
+    }
+    > div {
+      text-align: center;
+      margin: 0 10px;
     }
   }
-  #zspblnqk{
-      width: 100%;
-      height: 250px;
-      margin-top: 15px;
+  #zspblnqk {
+    width: 100%;
+    height: 73%;
+    position: relative;
+    top: -2rem;
+    
   }
 }
 </style>

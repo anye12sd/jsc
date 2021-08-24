@@ -184,7 +184,7 @@ const routes = [
     children:[
       {
         path:'',
-        redirect:"modelmarket"
+        redirect:"pcdrive"
       },
       {
         path:"pcdrive",
@@ -195,6 +195,11 @@ const routes = [
         path:'modelmarket',
         name:"Modelmarket",
         component:()=>import("../views/ordinaryUsers/modelmarket")
+      },
+      {
+        path:"application",
+        name:"Application",
+        component:()=>import('../views/ordinaryUsers/application')
       },
       {
         path:"detail/:id",

@@ -3,17 +3,9 @@
     <div class="top">
       <div class="time">
         <div>{{ date1 }}&nbsp;&nbsp;{{ date2 }}&nbsp;&nbsp;{{ week[day] }}</div>
-        <!-- <div class="switpage" @click="showtablist = !showtablist">
-          <span>{{ pages[current].name }}</span>
-          <img src="@/assets/img/down.png" alt="" />
-          <div class="tabList" v-show="showtablist">
-            <div v-for="p in 2" :key="p" @click="swit(p - 1)">
-              {{ pages[p - 1].name }}
-            </div>
-          </div>
-        </div> -->
+        <tabs @jump="swit"></tabs>
       </div>
-      <div class="tit">数据应用成果超市</div>
+      <div class="tit" v-show="current == 0">数字驾驶舱PC端</div>
       <div class="user">
         <span
           class="goafter"
@@ -26,7 +18,6 @@
         <span style="cursor: pointer" @click="signout">退出</span>
       </div>
     </div>
-    <!-- <component :is="pages[current].componentName"></component> -->
     <router-view></router-view>
 
   </div>
@@ -34,6 +25,7 @@
 
 <script>
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
+import tabs from './tabs.vue'
 // import pcdrive from "./pcdrive";
 // import modelmarket from "./modelmarket";
 export default {
@@ -62,33 +54,30 @@ export default {
       iden: {},
       current: 0,
       className: ["pc", "mo", "mo"],
-      pages: [
-        {
-          name: "PC驾驶舱",
-          path: "/oridinaryUsers/pcdrive",
-        },
-        {
-          name: "模型超市",
-          path: "/oridinaryUsers/modelmarket",
-        },
-        {
-          name: "模型详情",
-        },
-      ],
     };
   },
   mounted() {
-    if (location.hash == "#/oridinaryUsers/modelmarket") {
-      this.current = 1;
-    }
-    if (location.hash.includes("/oridinaryUsers/detail")) {
-      this.current = 2;
-    }
+    let hash = window.location.hash;
+      switch (hash) {
+        case "#/oridinaryUsers/pcdrive":
+          this.current = 0;
+          break;
+        case "#/oridinaryUsers/application":
+          this.current = 1;
+          break;
+        case "#/oridinaryUsers/modelmarket":
+          this.current = 2;
+          break;
+        default:
+          this.current = 0;
+          break;
+      }
     setInterval(() => {
       this.getTime();
     }, 5000);
   },
   components: {
+    tabs
     // pcdrive,
     // modelmarket,
   },
@@ -99,7 +88,6 @@ export default {
     swit(val) {
       if (this.current == val) return;
       this.current = val;
-      this.$router.push(this.pages[this.current].path);
     },
     signout() {
       if (process.env.NODE_ENV == "development") {
@@ -119,23 +107,6 @@ export default {
       this.date2 = date.getHours() + ":" + date.getMinutes();
       this.day = date.getDay();
     },
-    plus() {
-      if (this.current >= 1) {
-        this.current = 0;
-      } else {
-        this.current++;
-      }
-      // console.log(this.pages[this.current].path)
-      this.$router.push(this.pages[this.current].path);
-    },
-    reduce() {
-      if (this.current <= 0) {
-        this.current = this.pages.length - 2;
-      } else {
-        this.current--;
-      }
-      this.$router.push(this.pages[this.current].path);
-    },
   },
   watch: {
     $route(to, from) {
@@ -152,33 +123,16 @@ export default {
 
 <style scoped lang="less">
 .pc {
-  background-image: url("../../assets/oridinary/head.png"),
-    url("../../assets/img/pcbg.png");
-  background-repeat: no-repeat, no-repeat;
-  background-size: 98% auto, 100% 100%;
-  background-position: center top, center center;
+  background-image: url("../../assets/oridinary/pcdrivebg.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position:  center center;
 }
-// .pc {
-//   background-image: url("../../assets/oridinary/head.png"),
-//     url("../../assets/oridinary/leftside.png"),
-//     url("../../assets/oridinary/rightside.png"),
-//     url("../../assets/oridinary/bottom.png"),
-//     url("../../assets/oridinary/line.png");
-//   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
-//   background-size: 98% auto, auto 65%, auto 65%, 56% auto, 65% auto;
-//   background-position: center top, left 26%, right 26%, center bottom,
-//     center bottom;
-// }
 .mo {
-  background-image: url("../../assets/oridinary/head.png"),
-    url("../../assets/oridinary/leftside.png"),
-    url("../../assets/oridinary/rightside.png"),
-    url("../../assets/oridinary/bottom.png"),
-    url("../../assets/oridinary/modelbg.png");
-  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
-  background-size: 98% auto, auto 65%, auto 65%, 56% auto, 100% 100%;
-  background-position: center top, left 26%, right 26%, center bottom,
-    center center;
+  background-image: url("../../assets/oridinary/modelbg.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center center;
 }
 .oridinaryUsers {
   width: 100%;
@@ -206,54 +160,20 @@ export default {
     .time {
       text-align: left;
       font-family: MicrosoftYaHei;
-      font-size: 10px;
-      color: #00eaff;
+      font-size: 16px;
+      color: #fff;
       display: flex;
       align-items: center;
       justify-content: flex-start;
       > div {
         display: inline-block;
       }
-      > .switpage {
-        background-image: url("../../assets/img/tab.png");
-        background-size: 100% 100%;
-        background-position: center center;
-        background-repeat: no-repeat;
-        font-family: MicrosoftYaHei;
-        font-size: 12px;
-        color: #00eaff;
-        position: relative;
-        padding: 3px 25px;
-        margin-left: 20px;
-        cursor: pointer;
-        * {
-          vertical-align: middle;
-          position: relative;
-          left: 3px;
-        }
-        > .tabList {
-          position: absolute;
-          top: 26px;
-          left: 0;
-          width: 84%;
-          text-align: center;
-          z-index: 100;
-          > div {
-            cursor: pointer;
-            background-image: linear-gradient(
-              179deg,
-              rgba(6, 101, 160, 0.17) 0%,
-              rgba(3, 84, 103, 0.7) 100%
-            );
-            // border-bottom: 1px solid #00eaff;
-          }
-        }
-      }
+
     }
     .user {
       font-family: MicrosoftYaHei;
-      font-size: 10px;
-      color: #00eaff;
+      font-size: 16px;
+      color: #fff;
       display: flex;
       align-items: center;
       text-align: right;

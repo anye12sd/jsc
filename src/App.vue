@@ -18,6 +18,13 @@ export default {
     };
   },
   mounted() {
+     let html = document.querySelector("html");
+      html.style.fontSize = (10 / 1080) * document.body.scrollHeight + "px";
+      window.addEventListener("resize", function () {
+        console.log(111)
+        let html = document.querySelector("html");
+        html.style.fontSize = (10 / 1080) * document.body.scrollHeight + "px";
+      });
     this.init();
   },
   activated() {
@@ -251,7 +258,7 @@ html {
 .white {
   background-color: #f0f2f9;
 }
-@media screen and (max-height: 620px) {
+@media screen and (max-height: 640px) {
   #app {
     height: 730px;
   }

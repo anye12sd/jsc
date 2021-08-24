@@ -1,24 +1,28 @@
 <template>
   <div class="social">
-    <div>低收入人群保障（迄今为止）</div>
-    <el-row class="shbzdiv">
-      <el-col :span="6">
-        <div class="qyxxtitle">城镇低保</div>
-        <div class="qyxxnumber">{{ lnzt_shbz.czdbs }}</div>
-      </el-col>
-      <el-col :span="6">
-        <div class="qyxxtitle">农村低保</div>
-        <div class="qyxxnumber">{{ lnzt_shbz.ncdbs }}</div>
-      </el-col>
-      <el-col :span="6">
-        <div class="qyxxtitle">临时救助</div>
-        <div class="qyxxnumber">{{ lnzt_shbz.lsjzs }}</div>
-      </el-col>
-      <el-col :span="6">
-        <div class="qyxxtitle">养老机构</div>
-        <div class="qyxxnumber">{{ lnzt_shbz.yljgs }}</div>
-      </el-col>
-    </el-row>
+    <div class="ea">
+      <div class="qyxxtitle">城镇低保</div>
+      <div class="qyxxnumber">{{ lnzt_shbz.czdbs }}</div>
+    </div>
+    <div class="ea">
+      <div class="qyxxtitle">农村低保</div>
+      <div class="qyxxnumber">{{ lnzt_shbz.ncdbs }}</div>
+    </div>
+    <div class="ea">
+      <div class="qyxxtitle">临时救助</div>
+      <div class="qyxxnumber">{{ lnzt_shbz.lsjzs }}</div>
+    </div>
+    <div>
+      <img
+        src="@/assets/subpage/number.png"
+        alt="图片缺失"
+        style="height: 100%; margin-right: 5%"
+      />
+    </div>
+    <div class="old">
+      <div class="qyxxtitle">养老机构</div>
+      <div class="qyxxnumber">{{ lnzt_shbz.yljgs }}</div>
+    </div>
   </div>
 </template>
 
@@ -33,7 +37,7 @@ export default {
     };
   },
   mounted() {
-      this.getdata()
+    this.getdata();
   },
   methods: {
     getdata() {
@@ -59,13 +63,49 @@ export default {
 <style scoped lang="less">
 .social {
   width: 100%;
-  height: 100%;
-  padding: 5px;
+  height: 89%;
   color: #fff;
   box-sizing: border-box;
-  .shbzdiv{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img {
+    height: 3rem;
+    margin: 0 10px;
+  }
+  > .old {
+    margin-left: 20px;
+    > div:nth-child(1) {
+      font-family: MicrosoftYaHei;
+      font-size: 1.6rem;
+      color: #ffffff;
+    }
+    > div:nth-child(2) {
+      font-family: DINPro-Medium;
+      font-size: 2.6rem;
+      color: #00eaff;
+    }
+  }
+  > .ea {
+    padding: 3rem 20px;
+    background: rgba(32, 97, 188, 0.31);
+    border: 1px solid rgba(148, 193, 255, 0.31);
+    border-radius: 2px;
+    margin-left: 4%;
+    > div:nth-child(1) {
+      font-family: MicrosoftYaHei;
+      font-size: 1.4rem;
+      color: rgba(255, 255, 265, 0.7);
       text-align: center;
-      margin-top: 30px;
+      white-space: nowrap;
+    }
+    > div:nth-child(2) {
+      font-family: DINPro-Medium;
+      font-size: 2rem;
+      color: #ffffff;
+      text-align: center;
+      margin-top: 1.3rem;
+    }
   }
 }
 </style>

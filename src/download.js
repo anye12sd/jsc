@@ -51,7 +51,7 @@ export const downloadUrl = (url) => {
 // )
 
 axios.interceptors.response.use(res => {
-    console.log(res)
+    // console.log(res)
     if (res.data.status && res.data.status === 300) {
         return '300' // 链接正确，下载失败
     } else {

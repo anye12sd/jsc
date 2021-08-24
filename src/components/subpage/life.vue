@@ -1,30 +1,26 @@
 <template>
   <div class="life">
-    <div class="tit">寿命</div>
-    <el-row class="lnsw">
-      <el-col :span="24" class="txt">
-        <el-col :span="6">
-          <div class="qyxxtitle4">上年全国平均寿命</div>
-          <div class="qyxxnumber">{{ lnzt_sw.qgrjsm }}</div>
-        </el-col>
-        <el-col :span="6">
-          <div class="qyxxtitle4">上年男平均寿命</div>
-          <div class="qyxxnumber">{{ lnzt_sw.nxrjsm }}</div>
-        </el-col>
-        <el-col :span="6">
-          <div class="qyxxtitle4">上年长兴人均寿命</div>
-          <div class="qyxxnumber">{{ lnzt_sw.cxrjsm }}</div>
-        </el-col>
-        <el-col :span="6">
-          <div class="qyxxtitle4">上年女平均寿命</div>
-          <div class="qyxxnumber">{{ lnzt_sw.vxrjsm }}</div>
-        </el-col>
-      </el-col>
-      <el-col :span="24">
-        <div class="tit">历年平均年龄变化</div>
-        <div id="pjnlbh"></div>
-      </el-col>
-    </el-row>
+    <div class="left">
+      <div>
+        <div class="qyxxtitle4">上年全国平均寿命</div>
+        <div class="qyxxnumber">{{ lnzt_sw.qgrjsm }}</div>
+      </div>
+      <div>
+        <div class="qyxxtitle4">上年男平均寿命</div>
+        <div class="qyxxnumber">{{ lnzt_sw.nxrjsm }}</div>
+      </div>
+      <div>
+        <div class="qyxxtitle4">上年长兴人均寿命</div>
+        <div class="qyxxnumber">{{ lnzt_sw.cxrjsm }}</div>
+      </div>
+      <div>
+        <div class="qyxxtitle4">上年女平均寿命</div>
+        <div class="qyxxnumber">{{ lnzt_sw.vxrjsm }}</div>
+      </div>
+    </div>
+    <div class="right">
+      <div id="pjnlbh"></div>
+    </div>
   </div>
 </template>
 
@@ -37,10 +33,14 @@ export default {
       baseUrl: "http://10.21.197.236:9000",
       lnzt_sw: {},
       lnzt_sw1: [],
+      chart:null,
     };
   },
   mounted() {
     this.getdata();
+    window.addEventListener("resize", () => {
+      this.drawing();
+    });
   },
   methods: {
     getdata() {
@@ -62,7 +62,11 @@ export default {
         });
     },
     drawing() {
+      if (this.chart) {
+        this.chart.dispose();
+      }
       let pjnlbh = this.$echarts.init(document.getElementById("pjnlbh"));
+      this.chart = pjnlbh
       var x = [];
       var y = [];
       var y2 = [];
@@ -76,33 +80,28 @@ export default {
       });
 
       var option = {
-        // title: {
-        //   text: "历年平均年龄变化",
-        //   // "subtext": "BY MICVS",
-        //   x: "0%",
-        //   y: "0%",
+        title: {
+          text: "历年平均年龄变化",
+          x: "0%",
+          y: "0%",
 
-        //   textStyle: {
-        //     color: "#fff",
-        //     fontSize: "20",
-        //   },
-        //   subtextStyle: {
-        //     color: "#90979c",
-        //     fontSize: "16",
-        //   },
-        // },
+          textStyle: {
+            color: "#fff",
+            fontSize:(14 / 1080) * document.body.scrollHeight ,
+          },
+        },
         tooltip: {
           trigger: "axis",
           backgroundColor: "rgba(255,255,255,.4)",
           textStyle: {
             color: "#fff",
-            fontSize: 18,
+            fontSize:(14 / 1080) * document.body.scrollHeight ,
           },
           // formatter: '{a}<br/>{c}' + '%',
         },
         grid: {
           top: "20%",
-          left: "10%",
+          left: "15%",
           right: "1%",
           bottom: "12%",
           // containLabel: true,
@@ -112,7 +111,7 @@ export default {
           left: "center",
           textStyle: {
             color: "#fff",
-            fontSize: 12,
+            fontSize:(14 / 1080) * document.body.scrollHeight ,
           },
           icon: "circle",
           // right: "0",
@@ -299,18 +298,41 @@ export default {
 <style scoped lang="less">
 .life {
   width: 100%;
-  height: 100%;
-  padding: 5px;
+  height: 89%;
   color: #fff;
   box-sizing: border-box;
-  .txt{
-      padding: 20px 0;
-      text-align: center;
+  display: flex;
+  position: absolute;
+  .left {
+    width: 45%;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    > div {
+      width: 50%;
+      margin-bottom: 2rem;
+      > div {
+        padding-left: 10%;
+      }
+      > div:nth-child(1) {
+        font-family: MicrosoftYaHei;
+        font-size: 1.6rem;
+        color: #ffffff;
+      }
+      > div:nth-child(2) {
+        font-family: DINAlternate-Bold;
+        font-size: 2.6rem;
+        color: #00eaff;
+      }
+    }
+  }
+  .right {
+    width: 55%;
   }
   #pjnlbh {
-    width: 90%;
+    width: 100%;
+    height: 94%;
     margin: 5px auto 0 auto;
-    height: 210px;
   }
 }
 </style>

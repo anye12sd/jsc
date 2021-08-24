@@ -8,7 +8,8 @@ import echarts from 'echarts'
 import request from "./request.js"
 import 'element-ui/lib/theme-chalk/index.css';
 import Scroll from "vue-seamless-scroll"
-
+import '@/assets/css/public.less'
+import 'echarts-wordcloud'
 
 Vue.use(ElementUI);
 Vue.use(Scroll)
