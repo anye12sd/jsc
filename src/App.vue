@@ -21,7 +21,6 @@ export default {
      let html = document.querySelector("html");
       html.style.fontSize = (10 / 1080) * document.body.scrollHeight + "px";
       window.addEventListener("resize", function () {
-        console.log(111)
         let html = document.querySelector("html");
         html.style.fontSize = (10 / 1080) * document.body.scrollHeight + "px";
       });
@@ -41,6 +40,7 @@ export default {
   methods: {
     init() {
       let access_token = location.search.split("=")[1];
+      let hash =window.location.hash;
       if (!access_token) return;
       if (window.globalconfig == 0) {
         if (access_token == "aaaa") {
@@ -49,7 +49,9 @@ export default {
             userName: "系统",
             role_id: 1,
           });
-          this.$router.push("/oridinaryUsers");
+          if(hash == '#/login') {
+            this.$router.push("/oridinaryUsers");
+          }
           // this.togetmenu();
           // this.$router.push("/oridinaryUsers");
           return;
@@ -59,7 +61,9 @@ export default {
             userName: "单位",
             role_id: 2,
           });
-          this.$router.push("/oridinaryUsers");
+          if(hash == '#/login') {
+            this.$router.push("/oridinaryUsers");
+          }
           // this.togetmenu();
           // this.$router.push("/oridinaryUsers");
           return;
@@ -70,7 +74,9 @@ export default {
             userName: "普通",
             role_id: 3,
           });
-          this.$router.push("/oridinaryUsers");
+          if(hash == '#/login') {
+            this.$router.push("/oridinaryUsers");
+          }
           // this.$router.push("/oridinaryUsers");
           // this.togetmenu();
           return;
@@ -84,7 +90,9 @@ export default {
         } else if (access_token == "eeee") {
           //模型开发人员
           this.$store.commit("config/setidentity", 2);
-          this.$router.push("/oridinaryUsers");
+          if(hash == '#/login') {
+            this.$router.push("/oridinaryUsers");
+          }
           // this.togetmenu();
           // this.$router.push("/demand");
           return;

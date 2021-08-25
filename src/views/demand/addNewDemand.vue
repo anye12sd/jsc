@@ -9,13 +9,13 @@
     ></searchdemo>
     <div class="add" @click="addNew">新增需求</div>
     <div class="listfolder">
-      <div class="folder">
+      <!-- <div class="folder">
         <el-tree
           :data="data"
           :props="defaultProps"
           @node-click="handleNodeClick"
         ></el-tree>
-      </div>
+      </div> -->
       <div class="list">
         <div class="line topline">
           <div class="num">序号</div>
@@ -463,7 +463,7 @@ export default {
       margin-top: 10px;
     }
     .list {
-      width: 80%;
+      width: 100%;
       .line {
         // margin: 0.1% 0;
         margin-top: 0.1%;

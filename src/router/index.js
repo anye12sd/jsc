@@ -30,11 +30,6 @@ const routes = [
     name: "Login",
     component: () => import('../views/login')
   },
-  // {
-  //   path: "/loading",
-  //   name: "Loading",
-  //   component: () => import('../views/login/loading')
-  // },
   {
     path: "/pcCockpit",
     component: PcCokpit,
@@ -43,16 +38,6 @@ const routes = [
         path: "",
         redirect: "distribution"
       },
-      // {
-      //   path: 'pageShow',
-      //   name: "PageShow",
-      //   component: () => import("@/views/pcCockpit/pageshow")
-      // },
-      // {
-      //   path: "approval",
-      //   name: "Apprival",
-      //   component: () => import("@/views/pcCockpit/approval")
-      // },
       // {
       //   path: "subScribe",
       //   name: "SubScribe",
@@ -202,6 +187,11 @@ const routes = [
         component:()=>import('../views/ordinaryUsers/application')
       },
       {
+        path:'datamarket',
+        name:"Datamarket",
+        component:()=>import("../views/ordinaryUsers/datamarket")
+      },
+      {
         path:"detail/:id",
         name:"Detail",
         component:()=>import("../views/ordinaryUsers/detail")
@@ -215,10 +205,4 @@ const router = new VueRouter({
   routes
 })
 
-// router.beforeEach((to,from,next) => {
-//   if(to.fullPath != from.fullPath) {
-//     next();
-//   }
-
-// })
 export default router

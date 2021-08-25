@@ -1,65 +1,47 @@
 <template>
   <div class="detail">
-    <div class="back" @click="goback">返回模型超市</div>
+    <!-- <div class="back" @click="goback">返回模型超市</div> -->
+    <div class="toptit">
+      <img src="@/assets/img/dw.png" alt="图" />
+      <span>应用门户&nbsp;&nbsp;></span>
+      <span>{{ modelInfo.modulename }}</span>
+    </div>
     <div class="left">
-      <div class="model">
-        <!-- <img
-          :src="
-            info.img_url
-              ? 'http://10.21.197.237' + info.img_url
-              : '@/assets/oridinary/modelIcon.png'
-          "
-          alt=""
-        /> -->
-        <div class="modulename">
-          <img
-            src="@/assets/oridinary/modelIcon.png"
-            alt=""
-            style="height: 70%"
-          />
-          <span>{{ modelInfo.modulename }}</span>
+      <div class="lo">
+        <div
+          v-for="(value, name) in leftopt"
+          :key="name"
+          @click="showdetail(name)"
+          :class="active == name ? 'active' : ''"
+        >
+          <span
+            >{{ value.slice(0, 4) }} <br v-if="value.length > 4" />{{
+              value.slice(4)
+            }}
+          </span>
         </div>
-        <div class="type">
-          <div class="lo">
-            <div
-              v-for="(value, name) in leftopt"
-              :key="name"
-              @click="showdetail(name)"
-              :class="active == name ? 'active' : ''"
-            >
-              <span>{{ value.slice(0,4) }} <br v-if="value.length > 4"/>{{ value.slice(4) }} </span>
-            </div>
-          </div>
-          <div class="ro">
-            <div
-              v-for="(value, name) in rightopt"
-              :key="name"
-              @click="showdetail(name)"
-              :class="active == name ? 'active' : ''"
-            >
-              <span>{{ value.slice(0,4) }} <br v-if="value.length>4" />{{ value.slice(4) }}</span>
-            </div>
-          </div>
-        </div>
-        <div class="bot">
-          <div style="text-align: left; width: 100%">
-            <span class="tit">所属单位</span>
-            <span class="con">{{ modelInfo.get_branch_name }}</span>
-          </div>
-          <div style="text-align: left; width: 100%">
-            <span class="tit">模型修改时间</span>
-            <span class="con">{{ modelInfo.update_time }}</span>
-          </div>
+      </div>
+      <div class="ro">
+        <div
+          v-for="(value, name) in rightopt"
+          :key="name"
+          @click="showdetail(name)"
+          :class="active == name ? 'active' : ''"
+        >
+          <span
+            >{{ value.slice(0, 4) }} <br v-if="value.length > 4" />{{
+              value.slice(4)
+            }}</span
+          >
         </div>
       </div>
     </div>
-    <div class="center"></div>
     <div class="right">
       <div class="icon"></div>
       <div class="title">{{ opt[active] }}</div>
       <div class="content" v-if="info[active]">
-        <div v-for="(p,index) in info[active].split('\n')" :key="index">
-          {{p}}
+        <div v-for="(p, index) in info[active].split('\n')" :key="index">
+          {{ p }}
         </div>
       </div>
     </div>
@@ -138,6 +120,7 @@ export default {
   box-sizing: border-box;
   padding: 5px 0;
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   .back {
     width: 100%;
@@ -154,197 +137,163 @@ export default {
     background-size: 185px 100%;
     cursor: pointer;
   }
+  .toptit {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    > span:nth-child(2) {
+      opacity: 0.8;
+      font-family: MicrosoftYaHei;
+      font-size: 20px;
+      color: #ffffff;
+      letter-spacing: 0;
+    }
+    > span:nth-child(3) {
+      font-family: MicrosoftYaHei-Bold;
+      font-size: 20px;
+      color: #ffffff;
+      letter-spacing: 0;
+    }
+  }
   .left {
-    width: 48%;
-    background: url("../../assets/oridinary/bigborder.png"),
-      url("../../assets/oridinary/center.png");
-    background-repeat: no-repeat, no-repeat;
-    background-size: 100% 100%, 30% 40%;
-    background-position: center center, 55% 67%;
+    width: 40%;
+    margin-right: 30px;
     display: flex;
     align-items: center;
-    .model {
-      width: 100%;
-      height: 93%;
-      // margin-top: 6%;
-      > img {
-        display: block;
-        height: 20%;
-        margin: 0 auto;
+    display: flex;
+    > div {
+      width: 50%;
+      height: 90%;
+      > div {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        > span {
+          display: block;
+          text-align: center;
+          width: 100%;
+        }
       }
-      > .modulename {
-        height: 70px;
-        width: 100%;
+    }
+    .lo {
+      div {
+        background: url("../../assets/oridinary/normalleft.png") no-repeat;
+        background-size: 100% 100%;
+        background-position: center center;
+        width: 45%;
+        text-align: center;
+        padding: 6px 0;
+        cursor: pointer;
+        height: 11%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 20px;
-        color: #fff;
+        margin-top: 4px;
       }
-      > .type {
-        width: 85%;
-        height: calc(100% - 180px);
-        margin-left: 4%;
+      > div:nth-of-type(1) {
+        margin-left: 10%;
+      }
+      > div:nth-of-type(2) {
+        margin-left: 20%;
+      }
+      > div:nth-of-type(3) {
+        margin-left: 30%;
+      }
+      > div:nth-of-type(4) {
+        margin-left: 40%;
+      }
+      > div:nth-of-type(5) {
+        margin-left: 50%;
+      }
+      > div:nth-of-type(6) {
+        margin-left: 60%;
+      }
+      > .active {
+        background: url("../../assets/oridinary/checkleft.png") no-repeat;
+        background-size: 100% 100%;
+        background-position: center center;
+      }
+    }
+    .ro {
+      div {
+        background: url("../../assets/oridinary/normalright.png") no-repeat;
+        background-size: 100% 100%;
+        background-position: center center;
+        width: 45%;
+        text-align: center;
+        padding: 6px 0;
+        cursor: pointer;
+        height: 11%;
         display: flex;
-        > div {
-          width: 50%;
-          >div{
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            >span{
-              display: block;
-              text-align: center;
-              width:100%;
-            }
-          }
-        }
-        .lo {
-          div {
-            background: url("../../assets/oridinary/normalleft.png") no-repeat;
-            background-size: 100% 100%;
-            background-position: center center;
-            width: 45%;
-            text-align: center;
-            padding: 6px 0;
-            cursor: pointer;
-            height: 11%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 4px;
-          }
-          > div:nth-of-type(1) {
-            margin-left: 10%;
-          }
-          > div:nth-of-type(2) {
-            margin-left: 20%;
-          }
-          > div:nth-of-type(3) {
-            margin-left: 30%;
-          }
-          > div:nth-of-type(4) {
-            margin-left: 40%;
-          }
-          > div:nth-of-type(5) {
-            margin-left: 50%;
-          }
-          > div:nth-of-type(6) {
-            margin-left: 60%;
-          }
-          > .active {
-            background: url("../../assets/oridinary/checkleft.png") no-repeat;
-            background-size: 100% 100%;
-            background-position: center center;
-          }
-        }
-        .ro {
-          div {
-            background: url("../../assets/oridinary/normalright.png") no-repeat;
-            background-size: 100% 100%;
-            background-position: center center;
-            width: 45%;
-            text-align: center;
-            padding: 6px 0;
-            cursor: pointer;
-            height: 11%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 4px;
-          }
-          > div:nth-of-type(1) {
-            margin-left: 60%;
-          }
-          > div:nth-of-type(2) {
-            margin-left: 50%;
-          }
-          > div:nth-of-type(3) {
-            margin-left: 40%;
-          }
-          > div:nth-of-type(4) {
-            margin-left: 30%;
-          }
-          > div:nth-of-type(5) {
-            margin-left: 20%;
-          }
-          > div:nth-of-type(6) {
-            margin-left: 10%;
-          }
-          > .active {
-            background: url("../../assets/oridinary/checkright.png") no-repeat;
-            background-size: 100% 100%;
-            background-position: center center;
-          }
-        }
-        div {
-          font-family: SourceHanSansCN-Regular;
-          font-size: 12px;
-          color: #ffffff;
-          letter-spacing: 0;
-          text-shadow: 0 2px 1px #072026;
-        }
+        align-items: center;
+        justify-content: center;
+        margin-top: 4px;
       }
-      .top {
-        width: 100%;
-        display: flex;
-        height: 75%;
-        .main {
-          width: 64%;
-          margin-left: 6%;
-          display: flex;
-          align-content: center;
-          text-align: center;
-          flex-wrap: wrap;
-          background-size: 100% 100%;
-          cursor: pointer;
-          height: 100%;
-          > div {
-            width: 100%;
-            font-family: SourceHanSansCN-Medium;
-            font-size: 16px;
-            color: #ffffff;
-            letter-spacing: 0;
-            text-align: center;
-          }
-        }
+      > div:nth-of-type(1) {
+        margin-left: 60%;
       }
-      .bot {
+      > div:nth-of-type(2) {
+        margin-left: 50%;
+      }
+      > div:nth-of-type(3) {
+        margin-left: 40%;
+      }
+      > div:nth-of-type(4) {
+        margin-left: 30%;
+      }
+      > div:nth-of-type(5) {
+        margin-left: 20%;
+      }
+      > div:nth-of-type(6) {
+        margin-left: 10%;
+      }
+      > .active {
+        background: url("../../assets/oridinary/checkright.png") no-repeat;
+        background-size: 100% 100%;
+        background-position: center center;
+      }
+    }
+    div {
+      font-family: SourceHanSansCN-Regular;
+      font-size: 12px;
+      color: #ffffff;
+      letter-spacing: 0;
+      text-shadow: 0 2px 1px #072026;
+    }
+
+    .top {
+      width: 100%;
+      display: flex;
+      height: 75%;
+      .main {
         width: 64%;
         margin-left: 6%;
-        padding: 0 10px;
-        height: 50px;
-        box-sizing: border-box;
-        margin-top: 30px;
-        .tit {
+        display: flex;
+        align-content: center;
+        text-align: center;
+        flex-wrap: wrap;
+        background-size: 100% 100%;
+        cursor: pointer;
+        height: 100%;
+        > div {
+          width: 100%;
           font-family: SourceHanSansCN-Medium;
-          font-size: 12px;
+          font-size: 16px;
           color: #ffffff;
           letter-spacing: 0;
-          margin-right: 5px;
-        }
-        .con {
-          font-family: SourceHanSansCN-Medium;
-          font-size: 12px;
-          color: #32c5ff;
-          letter-spacing: 0;
-          box-sizing: border-box;
+          text-align: center;
         }
       }
     }
   }
-  .center {
-    width: 4%;
-    background: url("../../assets/oridinary/connect.png") no-repeat;
-    background-size: 100% 10%;
-    background-position: center center;
-  }
   .right {
-    width: 48%;
-    background: url("../../assets/oridinary/bigborder.png") no-repeat;
-    background-size: 100% 100%;
-    background-position: center center;
-    padding: 5% 4%;
+    width: 40%;
+    background: rgba(6, 26, 62, 0.4);
+    box-shadow: inset 0 1px 3px 0 rgba(0, 255, 234, 0.5),
+      inset 0 0 11px 0 #00b7ff;
+    border-radius: 20px;
+    padding: 2% 2%;
     box-sizing: border-box;
     height: calc(100% - 25px);
     .icon {

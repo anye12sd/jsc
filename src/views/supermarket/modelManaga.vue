@@ -5,24 +5,19 @@
       <span @click="addnew">新增模型</span>
     </div>
     <div class="listfolder" :style="ismanaga ? '' : 'margin-top:10px;'">
-      <div class="folder">
-        <!-- <el-tree
-          :data="data"
-          :props="defaultProps"
-          @node-click="handleNodeClick"
-        ></el-tree> -->
+      <!-- <div class="folder">
         <div class="addtype">
           <i class="addicon iconfont icon-tianjia" @click="addnewtype"></i>
         </div>
         <tree :data="data" @getdata="gettype" @chosetype="chosetype"></tree>
-      </div>
+      </div> -->
       <div class="list">
         <div class="line topline">
           <!-- <div>模型编号</div> -->
-          <div>模型名称</div>
-          <div>类型</div>
-          <div>所属单位</div>
-          <div>模型修改时间</div>
+          <div>应用名称</div>
+          <!-- <div>类型</div> -->
+          <!-- <div>所属单位</div> -->
+          <div>应用修改时间</div>
           <div class="actions">操作</div>
         </div>
         <div
@@ -39,8 +34,8 @@
         <div v-for="(k, index) in list" :key="index" class="line">
           <!-- <div :title="year+'000'+k.id">{{year+"000"+k.id }} </div> -->
           <div :title="k.modulename">{{ k.modulename }}</div>
-          <div :title="k.module_type">{{ k.module_type }}</div>
-          <div :title="k.branch_id">{{ k.get_branch_name }}</div>
+          <!-- <div :title="k.module_type">{{ k.module_type }}</div> -->
+          <!-- <div :title="k.branch_id">{{ k.get_branch_name }}</div> -->
           <div :title="k.update_time">{{ k.update_time }}</div>
           <div class="actions">
             <p @click="goup(k.id, index)" v-if="k.load == 2 || k.load == 3">
@@ -151,7 +146,7 @@ import off from "@/assets/listlogo/off.png";
 import puton from "@/assets/listlogo/puton.png";
 import modify from "./modify";
 import modelPuton from "./modelPuton";
-import tree from "@/components/tree.vue";
+// import tree from "@/components/tree.vue";
 // import searchdemo from "@/components/searchdemo.vue";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import {
@@ -213,10 +208,10 @@ export default {
       this.list = res.data.data.list;
       this.total = res.data.data.count;
     });
-    appCategory().then((res) => {
-      // console.log("分类", res);
-      this.data = res.data.data;
-    });
+    // appCategory().then((res) => {
+    //   // console.log("分类", res);
+    //   this.data = res.data.data;
+    // });
     // console.log(this[3]);
     if (this.identity == 2) {
       this.ismanaga = true;
@@ -225,7 +220,7 @@ export default {
   components: {
     modelPuton,
     modify,
-    tree,
+    // tree,
     // searchdemo,
   },
   methods: {
@@ -452,7 +447,7 @@ export default {
       }
     }
     .list {
-      width: 80%;
+      width: 100%;
     }
   }
   .pagination {

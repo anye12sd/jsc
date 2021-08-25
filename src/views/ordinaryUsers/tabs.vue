@@ -76,6 +76,11 @@ export default {
       this.$emit('jump',this.current)
     },
   },
+  watch:{
+    $route(){
+      this.init()
+    }
+  }
 };
 </script>
 
@@ -103,7 +108,7 @@ export default {
     transition: all 0.4s linear;
     > .each {
       font-family: MicrosoftYaHei-Bold;
-      font-size: 18px;
+      font-size: 1.8rem;
       color: #FFFFFF;
       letter-spacing: 0;
       height: 37px;

@@ -3,8 +3,7 @@
     <div class="cen">
       <div class="line">
         <div class="each" style="width:30%">
-          <!-- <component :is="allmodel[current][0]"></component> -->
-          <birth></birth>
+          <component :is="allmodel[current][0]"></component>
         </div>
         <div class="each menu" ref="each" style="width:38%">
           <div

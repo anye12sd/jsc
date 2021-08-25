@@ -1,13 +1,9 @@
 <template>
   <div class="modelmarket">
+    <div class="tit"><img src="@/assets/img/dm.png" alt="图" /></div>
     <div class="main">
-      <div v-for="(k, index) in models" :key="index" class="each">
-        <div class="top checked" @click="getdetail(k)">
-          <img
-            :src="k.img_url ? 'http://10.21.197.237' + k.img_url : modelImg"
-            alt=""
-          />
-          <div>{{ k.modulename }}</div>
+      <div v-for="(k, index) in models" :key="index" class="each" @click="getdetail(k)">
+        <div>
           <span
             v-if="k.sql_type == 1 || k.sql_type == 2"
             class="modelDownload"
@@ -22,16 +18,13 @@
             >数据下载</span
           >
         </div>
-        <div class="bot">
-          <div style="display: flex; justify-content: space-between">
-            <div>
-              <span class="tit">所属单位</span>
-              <span class="con">{{ k.get_branch_name }}</span>
-            </div>
-          </div>
+        <img :src="da" alt="图" />
+        <div>{{ k.modulename }}</div>
+        <div>
+          <span>所属单位:</span> <span>{{ k.get_branch_name }}</span>
         </div>
       </div>
-      <div
+      <!-- <div
         v-for="(k, index) in 9 - models.length"
         :key="9 - index"
         class="each"
@@ -61,7 +54,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
     <el-dialog
       v-loading="loading"
@@ -161,7 +154,7 @@
         >
       </span>
     </el-dialog>
-    <!-- <div class="pagination">
+    <div class="pagination">
       <el-pagination
         layout=" pager"
         :page-size="9"
@@ -169,7 +162,7 @@
         @current-change="handleCurrentChange"
       >
       </el-pagination>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -183,11 +176,13 @@ import {
 } from "@/api/list.js";
 import modelImg from "@/assets/oridinary/modelIcon.png";
 import { mapState } from "vuex";
-import singleaxios from "@/download";
+import axios from "axios";
+import da from "@/assets/img/da.png";
 export default {
   name: "modelmarket",
   data() {
     return {
+      da,
       modelImg,
       models: [],
       total: 1,
@@ -220,13 +215,13 @@ export default {
     ...mapState("config", ["identity"]),
   },
   mounted() {
-    // getlist("page=1&pageSize=9").then((res) => {
-    //   // console.log(res);
-    //   if (res.data.status == 200) {
-    //     this.models = res.data.data.list;
-    //     this.total = res.data.data.count;
-    //   }
-    // });
+    getlist("page=1&pageSize=9").then((res) => {
+      console.log(res);
+      if (res.data.status == 200) {
+        this.models = res.data.data.list;
+        this.total = res.data.data.count;
+      }
+    });
   },
   methods: {
     handleCurrentChange(val) {
@@ -237,6 +232,7 @@ export default {
         }
       });
     },
+    // 跳转v字模型
     getdetail(item) {
       // console.log(item);
       this.$router.push("/oridinaryUsers/detail/" + item.id);
@@ -511,18 +507,15 @@ export default {
         "&end_time=" +
         this.form.date2;
       let me = this;
-      singleaxios
+      axios
         .get(URL)
         .then(function (response) {
-          if (response === "200") {
-            // console.log('下载成功')
+          if (response.data.status && response.data.status === 300) {
+            me.$message.warning("下载失败，请联系管理员"); // 链接正确，下载失败
+          } else {
             me.form = me.$options.data().form();
             me.loading = false;
             me.$message.success("即将开始下载，请勿关闭窗口");
-          } else {
-            // console.log('下载失败')
-            me.loading = false;
-            me.$message.warning("下载失败，请联系管理员");
           }
         })
         .catch(function (response) {
@@ -572,74 +565,74 @@ export default {
 .modelmarket {
   height: 92%;
   width: 100%;
+  .tit {
+    text-align: center;
+    img {
+      margin: 0 auto;
+      width: 400px;
+    }
+  }
   .main {
     min-width: 1100px;
     width: 78%;
     height: 86%;
-    margin: 10px auto;
+    margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    img {
-      display: block;
-      margin: 0 auto;
-      height: 60%;
-    }
+    align-content: flex-start;
     > .each {
+      position: relative;
       font-family: SourceHanSansCN-Medium;
-      font-size: 16px;
-      color: #ffffff;
-      letter-spacing: 0;
-      width: 29%;
+      font-size: 1.6rem;
+      background-image: linear-gradient(46deg, #95d6ff 0%, #ffffff 100%);
+      border-radius: 6px;
+      box-sizing: border-box;
+      padding: 10px;
+      padding-left: 30px;
+      width: calc(25% - 20px);
       height: 28%;
-      margin: 0 2%;
-      > .checked {
-        background: url("../../assets/oridinary/modelborder.png") no-repeat;
-      }
-      > .unchecked {
-        background: url("../../assets/oridinary/notsale.png") no-repeat;
-      }
-      > .top {
-        display: flex;
-        align-content: center;
-        text-align: center;
-        flex-wrap: wrap;
-
-        background-size: 100% 100%;
-        cursor: pointer;
-        transition: transform;
-        height: 75%;
-        position: relative;
-        .modelDownload {
-          position: absolute;
-          right: 8%;
-          top: 12%;
-          background: #f5a623;
-          border-radius: 20px;
-          padding: 3px 9px;
-          font-size: 10px;
+      margin: 0 10px;
+      margin-bottom: 20px;
+      > div:nth-child(1) {
+        text-align: right;
+        > .modelDownload {
           cursor: pointer;
-        }
-        > div {
-          width: 100%;
-        }
-      }
-      > .top:hover {
-        transform: scale(1.3, 1.3);
-      }
-      > .bot {
-        padding: 0 10px;
-        .tit {
+          background: #f5a623;
+          border-radius: 4px;
           font-family: SourceHanSansCN-Medium;
-          font-size: 14px;
+          font-size: 1.6rem;
           color: #ffffff;
           letter-spacing: 0;
-          margin-right: 5px;
+          padding: 3px 5px;
         }
-        .con {
-          font-family: SourceHanSansCN-Medium;
-          font-size: 14px;
-          color: #32c5ff;
+      }
+      > img:nth-child(2) {
+        text-align: left;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+      }
+      > div:nth-child(3) {
+        font-family: MicrosoftYaHei-Bold;
+        font-size: 1.6rem;
+        color: #333333;
+        letter-spacing: 0;
+        font-weight: 600;
+        margin-top: 1rem;
+        margin-bottom: 2rem;
+      }
+      > div:nth-child(4) {
+        margin: 1rem 0;
+        > span:nth-child(1) {
+          font-family: MicrosoftYaHei;
+          font-size: 1.4rem;
+          color: #333333;
+          letter-spacing: 0;
+        }
+        > span:nth-child(2) {
+          font-family: MicrosoftYaHei;
+          font-size: 1.4rem;
+          color: #1987ff;
           letter-spacing: 0;
         }
       }
