@@ -10,7 +10,7 @@
         @blur="blur"
         :placeholder="two"
       />
-      <label for="time">{{ four == true ? "选择时间" : four }}</label>
+      <label for="time">{{ four == true ? "选择时间" : '' }}</label>
       <el-date-picker
         v-model="datetime"
         type="datetimerange"
@@ -21,7 +21,7 @@
         @blur="blur"
       >
       </el-date-picker>
-      <el-select v-model="company" :placeholder="three" clearable @blur="blur" v-else>
+      <!-- <el-select v-model="company" :placeholder="three" clearable @blur="blur" v-else>
         <el-option
           v-for="item in options"
           :key="item.id"
@@ -29,7 +29,7 @@
           :value="item.id"
         >
         </el-option>
-      </el-select>
+      </el-select> -->
       <!-- <input
         type="text"
         id="time"
@@ -90,10 +90,10 @@ export default {
   },
   mounted() {
     if (this.four != true) {
-      appbranch().then((res) => {
+      // appbranch().then((res) => {
 
-        this.options = res.data.data;
-      });
+      //   this.options = res.data.data;
+      // });
     }
   },
   methods: {
@@ -113,7 +113,8 @@ export default {
         // console.log(th)
         this.$emit("feedback", this.name, this.datetime);
       } else {
-        this.$emit("feedback", this.name, this.company);
+        // this.$emit("feedback", this.name, this.company);
+        this.$emit("feedback", this.name);
       }
     },
   },

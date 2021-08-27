@@ -218,9 +218,9 @@ export default {
   },
   mounted() {
     this.getdata(1);
-    appCategory().then((res) => {
-      this.data = res.data.data;
-    });
+    // appCategory().then((res) => {
+    //   this.data = res.data.data;
+    // });
   },
   components: {
     searchdemo,

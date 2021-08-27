@@ -2,21 +2,13 @@
   <div class="modelManaga">
     <!-- <searchdemo :four="true" one="模型编号" two="请输入模型编号"></searchdemo> -->
     <div class="addnew" v-if="ismanaga">
-      <span @click="addnew">新增模型</span>
+      <span @click="addnew">新增应用</span>
     </div>
     <div class="listfolder" :style="ismanaga ? '' : 'margin-top:10px;'">
-      <!-- <div class="folder">
-        <div class="addtype">
-          <i class="addicon iconfont icon-tianjia" @click="addnewtype"></i>
-        </div>
-        <tree :data="data" @getdata="gettype" @chosetype="chosetype"></tree>
-      </div> -->
       <div class="list">
         <div class="line topline">
-          <!-- <div>模型编号</div> -->
           <div>应用名称</div>
-          <!-- <div>类型</div> -->
-          <!-- <div>所属单位</div> -->
+          <div>当前应用图标</div>
           <div>应用修改时间</div>
           <div class="actions">操作</div>
         </div>
@@ -32,23 +24,24 @@
           暂无数据
         </div>
         <div v-for="(k, index) in list" :key="index" class="line">
-          <!-- <div :title="year+'000'+k.id">{{year+"000"+k.id }} </div> -->
-          <div :title="k.modulename">{{ k.modulename }}</div>
-          <!-- <div :title="k.module_type">{{ k.module_type }}</div> -->
-          <!-- <div :title="k.branch_id">{{ k.get_branch_name }}</div> -->
+          <div :title="k.modulename">{{ k.appName }}</div>
+          <div>
+            <img class="icon" v-if="k.app_ico" :src="'http://10.21.197.237'+k.app_ico" alt="">
+            <span v-else>无图标</span>
+          </div>
           <div :title="k.update_time">{{ k.update_time }}</div>
           <div class="actions">
-            <p @click="goup(k.id, index)" v-if="k.load == 2 || k.load == 3">
+            <p @click="goup(k.id, index)" v-if="k.load == 2 ">
               <img :src="change" alt="图片资源缺失" /> <span>上架</span>
             </p>
             <p @click="edit(k, index)">
               <img :src="off" alt="图片资源缺失" /> <span>修改</span>
             </p>
-            <p @click="godown(k.id, index)" v-if="k.load == 1 || k.load == 3">
+            <p @click="godown(k.id, index)" v-if="k.load == 1 ">
               <img :src="puton" alt="图片资源缺失" /> <span>下架</span>
             </p>
             <p @click="intro(k.id, index)">
-              <span>模型介绍</span>
+              <span>应用介绍</span>
             </p>
           </div>
         </div>
@@ -64,70 +57,25 @@
       class="pagination"
     >
     </el-pagination>
-    <div class="tip" v-show="showedit">
+    <div class="tip" v-if="showedit">
       <div class="mask" @click="hideedit"></div>
-      <div class="editcon">
-        <div class="ed">修改</div>
-        <div class="name">
-          <span>模型名称:</span>
-          <input type="text" v-model="waitEdit.modulename" />
-        </div>
-        <div class="name">
-          <span>类型:</span>
-          <!-- <input type="text" v-model="waitEdit.type" /> -->
-          <el-cascader
-            v-model="waitEdit.category_id"
-            :options="data"
-            :props="propopt"
-            @change="handleChange"
-          ></el-cascader>
-        </div>
-        <div class="ac">
-          <span @click="hideedit">取消</span>
-          <span @click="confirmedit">确定</span>
-        </div>
-      </div>
+      <modelPuton
+         v-if="showedit"
+        class="maincen"
+        @success="success"
+        @cancel="hideputon"
+        :edit='waitEdit'
+      ></modelPuton>
     </div>
     <div class="tip" v-if="showputon">
       <div class="mask" @click="hideputon"></div>
       <modelPuton
         v-if="showputon"
         class="maincen"
-        @success="hideputon"
+        @success="success"
         @cancel="hideputon"
-        :alltype="data"
+        :edit='false'
       ></modelPuton>
-    </div>
-    <div class="tip" v-show="shownewtype">
-      <div class="mask" @click="hideedit"></div>
-      <div class="newtype">
-        <div class="tit">新建分类</div>
-        <div class="in">
-          <span>分类名称:</span>
-          <input
-            type="text"
-            v-model="newtypename"
-            placeholder="请输入分类名称"
-          />
-        </div>
-        <div class="in">
-          <span>分类位置:</span>
-          <!-- <input type="text" v-model="newtypeaddress" /> -->
-          <el-select v-model="newtypeaddress" placeholder="请选择">
-            <el-option
-              v-for="item in data"
-              :key="item.id"
-              :label="item.category_name"
-              :value="item.id"
-            >
-            </el-option>
-          </el-select>
-        </div>
-        <div class="action">
-          <span class="cancel" @click="hidenewtype">取消</span>
-          <span class="confirm" @click="confirmadd">确定</span>
-        </div>
-      </div>
     </div>
     <modify
       v-if="showModify"
@@ -146,13 +94,10 @@ import off from "@/assets/listlogo/off.png";
 import puton from "@/assets/listlogo/puton.png";
 import modify from "./modify";
 import modelPuton from "./modelPuton";
-// import tree from "@/components/tree.vue";
-// import searchdemo from "@/components/searchdemo.vue";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 import {
   getlist,
   appload,
-  appCategory,
   introduce,
   categoryadd,
 } from "@/api/list.js";
@@ -161,40 +106,18 @@ export default {
   name: "modelManaga",
   data() {
     return {
-      propopt: {
-        expandTrigger: "hover",
-        children: "item",
-        label: "category_name",
-        value: "id",
-        checkStrictly: true,
-      },
       list: [],
-      year: 0,
       change,
       off,
       puton,
-      shownewtype: false,
       ismanaga: false,
       showModify: false,
       showputon: false,
       currentPage: 1,
       total: 0,
-      data: [],
-      defaultProps: {
-        children: "item",
-        label: "category_name",
-      },
-      queryId: null,
       waitchange: false,
       module_id: 0,
-      newtypename: "",
-      newtypeaddress: "",
-      waitEdit: {
-        modulename: "",
-        category_id: "",
-        id: 0,
-        index:0
-      },
+      waitEdit: false,
       showedit: false,
     };
   },
@@ -202,26 +125,17 @@ export default {
     ...mapState("config", ["identity"]),
   },
   mounted() {
-    this.year = new Date().getFullYear();
     getlist("page=1").then((res) => {
-      // console.log(res);
       this.list = res.data.data.list;
       this.total = res.data.data.count;
     });
-    // appCategory().then((res) => {
-    //   // console.log("分类", res);
-    //   this.data = res.data.data;
-    // });
-    // console.log(this[3]);
-    if (this.identity == 2) {
+    if (this.identity == 1) {
       this.ismanaga = true;
     }
   },
   components: {
     modelPuton,
     modify,
-    // tree,
-    // searchdemo,
   },
   methods: {
     hideedit() {
@@ -229,83 +143,12 @@ export default {
     },
     edit(k, index) {
       this.showedit = true;
-      this.waitEdit.modulename = k.modulename;
-      this.waitEdit.category_id = k.category_id;
-      this.waitEdit.id = k.id;
+      this.waitEdit = {...k}
       this.waitEdit.index = index;
-      // console.log(this.waitEdit.category_id);
-    },
-    handleChange(ids) {
-      // console.log(ids);
-      // console.log(this.waitEdit.category_id);
-    },
-    confirmedit() {
-      let category_id = 0;
-      if (typeof this.waitEdit.category_id == "number") {
-        category_id = this.waitEdit.category_id;
-      } else {
-        category_id = this.waitEdit.category_id[
-          this.waitEdit.category_id.length - 1
-        ];
-      }
-      // console.log(category_id)
-      let data = {
-        id: this.waitEdit.id,
-        modulename: this.waitEdit.modulename,
-        category_id,
-      };
-      appedit(data).then((res) => {
-        // console.log(res,this.waitEdit.index);
-        if(res.data.status == 200) {
-          this.list[this.waitEdit.index].modulename = res.data.data.modulename
-          this.list[this.waitEdit.index].category_id = res.data.data.category_id
-          this.showedit = false;
-        }
-      });
-    },
-    gettype() {
-      appCategory().then((res) => {
-        this.data = res.data.data;
-      });
-    },
-    confirmadd() {
-      if (this.newtypename === "") {
-        this.$message({
-          message: "请输入分类名称",
-          type: "warning",
-        });
-        return;
-      }
-      let str = "";
-      str = "category_name=" + this.newtypename;
-      // console.log(this.newtypeaddress);
-      // console.log(this.newtypeaddress !== "");
-      if (this.newtypeaddress !== "") {
-        str = str + "&pid=" + this.newtypeaddress;
-      }
-      categoryadd(str).then((res) => {
-        // console.log(res);
-        if (res.data.data == true) {
-          this.$message({
-            message: "添加成功",
-            type: "success",
-          });
-          this.gettype();
-          this.hidenewtype();
-        }
-      });
-    },
-    addnewtype() {
-      this.shownewtype = true;
-    },
-    hidenewtype() {
-      this.shownewtype = false;
-      this.newtypename = "";
-      this.newtypeaddress = "";
     },
     intro(id) {
       introduce(id).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.status == 200 && res.data.data.length == 0) {
           this.waitchange = false;
           this.showModify = true;
@@ -324,6 +167,12 @@ export default {
     },
     hideputon() {
       this.showputon = false;
+      this.showedit = false
+    },
+    success(){
+      this.handleCurrentChange(this.currentPage)
+      this.showputon = false;
+      this.showedit = false
     },
     subok() {
       this.showModify = false;
@@ -336,24 +185,6 @@ export default {
     },
     addnew() {
       this.showputon = true;
-    },
-    handleNodeClick(data) {
-      this.queryId = data.id;
-      let str = "category_id=" + data.id + "&page=1";
-      this.getdata(str);
-      this.currentPage = 1;
-    },
-    chosetype(id) {
-      // console.log(id);
-      this.queryId = id;
-      this.handleCurrentChange(1);
-    },
-    getdata(query) {
-      getlist(query).then((res) => {
-        //console.log(res);
-        this.list = res.data.data.list;
-        this.total = res.data.data.count;
-      });
     },
     goup(id, index) {
       appload("load=1&id=" + id).then((res) => {
@@ -374,11 +205,7 @@ export default {
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
       let queryStr = "";
-      if (this.queryId) {
-        queryStr = "category_id=" + this.queryId + "&page=" + val;
-      } else {
-        queryStr = "page=" + val;
-      }
+      queryStr = "page=" + val;
       getlist(queryStr).then((res) => {
         this.list = res.data.data.list;
         this.total = res.data.data.count;
@@ -462,6 +289,10 @@ export default {
       align-items: center;
       height: 8%;
       border: 1px solid #f5f6f9;
+      .icon{
+        height: 100%;
+        max-width: 100%;
+      }
       div {
         // padding: 0.45% 0;
         font-family: MicrosoftYaHei;
@@ -472,6 +303,10 @@ export default {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       .actions {
         flex: 2;

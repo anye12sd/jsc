@@ -1,13 +1,13 @@
 <template>
   <div class="distribution">
     <div class="listfolder">
-      <div class="folder">
+      <!-- <div class="folder">
         <el-tree
           :data="data"
           :props="defaultProps"
           @node-click="handleNodeClick"
         ></el-tree>
-      </div>
+      </div> -->
       <div class="list">
         <div class="line topline">
           <div class="pagename">页面名称</div>
@@ -241,10 +241,10 @@ export default {
         this.total = res.data.data.count;
         // console.log(this.total)
       });
-      appCategory().then((res) => {
-        // console.log("分类", res);
-        this.data = res.data.data;
-      });
+      // appCategory().then((res) => {
+      //   // console.log("分类", res);
+      //   this.data = res.data.data;
+      // });
     },
     search() {
       if (this.xm == null && this.company == null) return;

@@ -45,9 +45,10 @@ export default {
   },
   mounted() {
     this.getdata();
-    window.addEventListener("resize", () => {
-      this.drawing();
-    });
+    window.addEventListener("resize", this.drawing);
+  },
+  beforeDestroy(){
+    window.removeEventListener('resize',this.drawing)
   },
   methods: {
     getdata() {

@@ -1,6 +1,6 @@
 <template>
   <div class="supermarket">
-    <div class="tit">模型超市</div>
+    <div class="tit">应用门户</div>
     <div class="option">
       <div
         v-for="(k,index) in usingOption"

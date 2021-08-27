@@ -3,7 +3,7 @@
     <div class="mask"></div>
     <div class="main">
       <div class="tit">
-        {{ changeAble ? "修改模型" : "模型介绍" }}
+        {{ changeAble ? "修改应用" : "应用介绍" }}
       </div>
       <div v-for="k in explain" :key="k.name">
         <label for="">{{ k.name }}</label>
@@ -17,7 +17,7 @@
           @blur="explainblur(k.name + '不能多于500字符', k.content, $event)"
         ></textarea>
       </div>
-      <div>
+      <!-- <div>
         <span class="zzz">上传图片</span>
         <div class="uploadArea kkk" @click="goup">
           <span v-show="!canUpimg" @click="reup" class="reup">重新上传</span>
@@ -37,7 +37,7 @@
             @change="readFile"
           />
         </div>
-      </div>
+      </div> -->
       <div class="actions">
         <div class="cancel" @click="hide">取消</div>
         <div class="confirm" @click="confirm">确定</div>

@@ -63,6 +63,15 @@ export function demandadd(data){
         data
     })
 }
+
+export function appadd(data){
+    return request({
+        method:"post",
+        url:"/app/add",
+        data
+    })
+}
+
 // 其他人员
 export function introduce(id){
     return request({
@@ -287,5 +296,12 @@ export function postFormWg(data){
         url:"/app/data_wg",
         data,
         responseType: 'blob'
+    })
+}
+
+export function appimage(){
+    return request ({
+        method:"get",
+        url:"app/image",
     })
 }

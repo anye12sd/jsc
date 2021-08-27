@@ -7,14 +7,14 @@
       three="请输入所属单位"
     ></searchdemo>
     <div class="listfolder">
-      <div class="folder">
+      <!-- <div class="folder">
         <el-tree
           :data="data"
           :props="defaultProps"
           @node-click="handleNodeClick"
           :highlight-current="true"
         ></el-tree>
-      </div>
+      </div> -->
       <div class="list">
         <div class="line topline">
           <div class="name">模型名称</div>
@@ -88,14 +88,11 @@ export default {
       this.list = res.data.data.list;
       this.total = res.data.data.count;
     });
-    // this.$axios.get("/api/app/category").then(res=>{
-    //   console.log("分类",res.data)
-    //   this.data = res.data.data
-    // })
-    appCategory().then((res) => {
-      console.log("分类", res);
-      this.data = res.data.data;
-    });
+
+    // appCategory().then((res) => {
+    //   console.log("分类", res);
+    //   this.data = res.data.data;
+    // });
   },
   components: {
     searchdemo,
@@ -169,7 +166,7 @@ export default {
       width: 20%;
     }
     .list {
-      width: 80%;
+      width: 100%;
     }
   }
   .list {

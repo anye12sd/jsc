@@ -70,7 +70,7 @@ export default {
       widper: 1,
       heiper: 1,
       total: 1,
-      current: 0,
+      current: 1,
       page: 1,
       num: [
         {
@@ -134,11 +134,10 @@ export default {
         });
         return;
       }
-    if(index == 1) {
-        this.$router.push('/oridinaryUsers/pcdrive2')
-    }
-    //   this.current = index;
-    //   this.currentPage = 1;
+
+      if (index == 0) {
+        this.$router.push("/oridinaryUsers/pcdrive");
+      }
     },
     changesize() {
       if (this.$refs.each) {

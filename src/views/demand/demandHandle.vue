@@ -8,13 +8,13 @@
       @clear="clear"
     ></searchdemo>
     <div class="listfolder">
-      <div class="folder">
+      <!-- <div class="folder">
         <el-tree
           :data="data"
           :props="defaultProps"
           @node-click="handleNodeClick"
         ></el-tree>
-      </div>
+      </div> -->
       <div class="list">
         <div class="line topline">
           <div class="num">需求编号</div>
@@ -114,9 +114,9 @@ export default {
   },
   mounted() {
     this.getdata();
-    appCategory().then((res) => {
-      this.data = res.data.data;
-    });
+    // appCategory().then((res) => {
+    //   this.data = res.data.data;
+    // });
   },
   components: {
     searchdemo,
@@ -246,7 +246,7 @@ export default {
       margin-top: 10px;
     }
     .list {
-      width: 80%;
+      width: 100%;
       .line {
         // margin: 0.1% 0;
         margin-top: 0.1%;

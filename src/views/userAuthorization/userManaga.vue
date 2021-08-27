@@ -157,11 +157,10 @@ export default {
     searchdemo,
   },
   methods: {
-     justgoto(p1,p2){
+     justgoto(p1){
       // console.log(p1,p2)
       this.querymesg = {};
       this.querymesg.userName = p1;
-      this.querymesg.branch_id = p2 == null ? '' : p2
       this.handleCurrentChange(this.currentPage)
     },
     clear(){

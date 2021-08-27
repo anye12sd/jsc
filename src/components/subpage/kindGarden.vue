@@ -40,7 +40,6 @@ export default {
         // data: data
       })
         .then((res) => {
-          console.log(res)
           let optionsdata = res.data;
           if (optionsdata.code == 200) {
             this.yezt_yeyycyj = optionsdata.data[0].slice(0, 5);

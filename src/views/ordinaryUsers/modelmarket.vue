@@ -215,7 +215,7 @@ export default {
     ...mapState("config", ["identity"]),
   },
   mounted() {
-    getlist("page=1&pageSize=9").then((res) => {
+    getlist("load=1&page=1&pageSize=9").then((res) => {
       console.log(res);
       if (res.data.status == 200) {
         this.models = res.data.data.list;
@@ -225,7 +225,7 @@ export default {
   },
   methods: {
     handleCurrentChange(val) {
-      getlist("page=" + val + "&pageSize=9").then((res) => {
+      getlist("load=1&page=" + val + "&pageSize=9").then((res) => {
         if (res.data.status == 200) {
           this.models = res.data.data.list;
           this.total = res.data.data.count;

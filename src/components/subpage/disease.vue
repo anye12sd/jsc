@@ -66,11 +66,12 @@ export default {
   components:{
     life,social
   },
+  beforeDestroy(){
+    window.removeEventListener('resize',this.itMyChart5)
+  },
   mounted() {
     this.getdata();
-    window.addEventListener("resize", () => {
-      this.itMyChart5();
-    });
+    window.addEventListener("resize",this.itMyChart5);
   },
   methods: {
     change(val) {

@@ -52,8 +52,6 @@ export default {
           if(hash == '#/login') {
             this.$router.push("/oridinaryUsers");
           }
-          // this.togetmenu();
-          // this.$router.push("/oridinaryUsers");
           return;
         } else if (access_token == "bbbb") {
           this.$store.commit("config/setidentity", 2);
@@ -64,8 +62,6 @@ export default {
           if(hash == '#/login') {
             this.$router.push("/oridinaryUsers");
           }
-          // this.togetmenu();
-          // this.$router.push("/oridinaryUsers");
           return;
         } else if (access_token == "cccc") {
           //普通用户
@@ -77,24 +73,20 @@ export default {
           if(hash == '#/login') {
             this.$router.push("/oridinaryUsers");
           }
-          // this.$router.push("/oridinaryUsers");
-          // this.togetmenu();
           return;
         } else if (access_token == "dddd") {
           //模型开发人员
+          if(hash == '#/login') {
+            this.$router.push("/demand")
+          }
           this.$store.commit("config/setidentity", 4);
-          this.$router.push("/demand");
-          // this.togetmenu();
-          // this.$router.push("/demand");
+          this.$store.commit("config/setShowTopBar", true);
           return;
         } else if (access_token == "eeee") {
-          //模型开发人员
           this.$store.commit("config/setidentity", 2);
           if(hash == '#/login') {
             this.$router.push("/oridinaryUsers");
           }
-          // this.togetmenu();
-          // this.$router.push("/demand");
           return;
         }
       }
@@ -109,6 +101,7 @@ export default {
             setTimeout(() => {
               if (this.identity == 4) {
                 this.$router.push("/demand");
+                this.$store.commit("config/setShowTopBar", true);
               } else {
                 this.$router.push("/oridinaryUsers");
               }
@@ -170,7 +163,6 @@ export default {
       }
     },
     $route(to, from) {
-      // console.log(to,to.fullPath.includes("oridinaryUsers"))
       if (to.fullPath == "/login") {
         this.$store.commit("config/setShowTopBar", false);
       } else if (to.fullPath.includes("oridinaryUsers")) {
@@ -184,19 +176,6 @@ export default {
           this.$router.go(-1);
           return;
         }
-        // if (this.identity == 4) {
-        //   if (
-        //     to.fullPath != "/demand/waitDemand" &&
-        //     to.fullPath != "/demand/hasDoneDemand"
-        //   ) {
-        //     this.$message({
-        //       message: "您无权查看该页面",
-        //       type: "warning",
-        //     });
-        //     this.$router.go(-1);
-        //     return;
-        //   }
-        // }
         let arr;
         if (this.identity == 2) {
           arr = [
@@ -217,6 +196,12 @@ export default {
             "/process/hasDoing",
             "/userAuthorization/userManaga",
             "/userAuthorization/roleAssignment",
+          ];
+        }
+        if(this.identity == 4) {
+          arr = [
+            "/demand/waitDemand",
+            '/demand/hasDoneDemand'
           ];
         }
         if (!arr.includes(to.fullPath)) {

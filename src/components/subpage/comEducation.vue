@@ -117,9 +117,10 @@ export default {
   },
   mounted() {
     this.getdata();
-    window.addEventListener("resize", () => {
-      this.itMyChart3();
-    });
+    window.addEventListener("resize",this.itMyChart3y);
+  },
+  beforeDestroy(){
+    window.removeEventListener('resize',this.itMyChart3)
   },
   methods: {
     getdata() {

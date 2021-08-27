@@ -41,9 +41,10 @@ export default {
   },
   mounted() {
     this.getdata();
-    window.addEventListener("resize", () => {
-      this.itMyChart4();
-    });
+    window.addEventListener("resize", this.itMyChart4);
+  },
+  beforeDestroy(){
+    window.removeEventListener('resize',this.itMyChart4)
   },
   methods: {
     getdata() {
