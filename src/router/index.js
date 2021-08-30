@@ -162,6 +162,21 @@ const routes = [
     name:"SqlPreview",
     component:()=>import("../components/sqlPreview")
   },
+  {
+    path:'/datamarket',
+    component: () => import("../views/datamarket"),
+    children:[
+      {
+        path:'',
+        redirect:"modelma"
+      },
+      {
+        path:'modelma',
+        name:'Modelma',
+        component:()=>import('../views/datamarket/modelma')
+      }
+    ]
+  },
   // 普通用户页面
   {
     path:"/oridinaryUsers",

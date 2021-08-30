@@ -25,6 +25,7 @@ export default {
         html.style.fontSize = (10 / 1080) * document.body.scrollHeight + "px";
       });
     this.init();
+    // console.log(this.isLogin)
   },
   activated() {
     let access_token = location.search.split("=")[1];
@@ -49,6 +50,7 @@ export default {
             userName: "系统",
             role_id: 1,
           });
+          this.$store.commit("config/setLogin", true);
           if(hash == '#/login') {
             this.$router.push("/oridinaryUsers");
           }
@@ -59,12 +61,14 @@ export default {
             userName: "单位",
             role_id: 2,
           });
+          this.$store.commit("config/setLogin", true);
           if(hash == '#/login') {
             this.$router.push("/oridinaryUsers");
           }
           return;
         } else if (access_token == "cccc") {
           //普通用户
+          this.$store.commit("config/setLogin", true);
           this.$store.commit("config/setidentity", 3);
           this.$store.commit("config/setUsetInfo", {
             userName: "普通",
@@ -76,6 +80,7 @@ export default {
           return;
         } else if (access_token == "dddd") {
           //模型开发人员
+          this.$store.commit("config/setLogin", true);
           if(hash == '#/login') {
             this.$router.push("/demand")
           }
@@ -84,6 +89,7 @@ export default {
           return;
         } else if (access_token == "eeee") {
           this.$store.commit("config/setidentity", 2);
+          this.$store.commit("config/setLogin", true);
           if(hash == '#/login') {
             this.$router.push("/oridinaryUsers");
           }
@@ -92,9 +98,11 @@ export default {
       }
 
       if (access_token && !sessionStorage.getItem("hasLogin")) {
-        // console.log("user");
+        console.log("user");
         tologin().then((res) => {
+          console.log(res)
           if (res.data.status == 200) {
+            this.$store.commit("config/setLogin", true);
             this.$store.commit("config/setUsetInfo", res.data.data);
             this.$store.commit("config/setidentity", res.data.data.role_id);
             sessionStorage.setItem("hasLogin", "1");
@@ -106,9 +114,6 @@ export default {
                 this.$router.push("/oridinaryUsers");
               }
             },500);
-            // if(res.data.data.role_id != 3) {
-            //   this.togetmenu();
-            // }
           } else {
             this.$message({
               message: "获取信息失败请重新登录",
@@ -118,8 +123,6 @@ export default {
           }
           // this.$store.commit("config/setLogin",true)
         });
-
-        // console.log(this.isLogin);
       }
     },
     togetmenu() {
@@ -163,6 +166,9 @@ export default {
       }
     },
     $route(to, from) {
+      let path = document.location.hash;
+      this.$store.commit("config/setPath", path);
+      // console.log(this.identity)
       if (to.fullPath == "/login") {
         this.$store.commit("config/setShowTopBar", false);
       } else if (to.fullPath.includes("oridinaryUsers")) {
@@ -186,6 +192,7 @@ export default {
             "/process/waitDoing",
             "/process/hasDoing",
             "/process/iStarted",
+            '/datamarket/modelma'
           ];
         }
         if (this.identity == 1) {
@@ -196,6 +203,7 @@ export default {
             "/process/hasDoing",
             "/userAuthorization/userManaga",
             "/userAuthorization/roleAssignment",
+            '/datamarket/modelma'
           ];
         }
         if(this.identity == 4) {
@@ -205,10 +213,12 @@ export default {
           ];
         }
         if (!arr.includes(to.fullPath)) {
-          this.$message({
+          if(to.fullPath != '/demand/waitDemand') {
+            this.$message({
             message: "您无权查看该页面",
             type: "warning",
           });
+          }
           this.$router.go(-1);
           return;
         }

@@ -1,6 +1,6 @@
 <template>
   <div class="supermarket">
-    <div class="tit">应用门户</div>
+    <div class="tit">应用成果超市</div>
     <div class="option">
       <div
         v-for="(k,index) in usingOption"
@@ -28,7 +28,7 @@ export default {
         {
           id: 10,
           routerpath: "/supermarket/modelManaga",
-          name: "模型管理",
+          name: "应用管理",
           classname1: "status02",
           classname2: "status01",
         },

@@ -57,10 +57,10 @@ export default {
           path: "/supermarket",
         },
         {
-          id: 3,
+          id: 20,
           img: require("@/assets/topBar/introduce.png"),
-          name: "模型介绍",
-          path: "/modelIntroduce",
+          name: "数据成果超市",
+          path: "/datamarket",
         },
         {
           id: 4,
@@ -117,6 +117,9 @@ export default {
               "config/setuserAuthorization",
               op[index]
             );
+          } else if (item.id == 20) {
+            // setdatamarket
+            this.$store.commit("config/setdatamarket", op[index]);
           }
           this.option.forEach((k) => {
             if (item.id == k.id) {
@@ -156,7 +159,6 @@ export default {
     },
     $route(to, from) {
       let path = document.location.hash;
-      this.$store.commit("config/setPath", path);
       let flag = true;
       this.option.forEach((item) => {
         if (path.includes(item.path)) {
@@ -214,13 +216,9 @@ export default {
     text-align: center;
     // margin-left: 6%;
     display: flex;
-    // align-items: center;
     align-content: center;
     flex-wrap: wrap;
     justify-content: center;
-    img {
-      margin-bottom: 5px;
-    }
     p {
       width: 100%;
     }

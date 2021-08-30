@@ -1,15 +1,15 @@
 <template>
-  <div class="modelManaga">
+  <div class="modelma">
     <!-- <searchdemo :four="true" one="模型编号" two="请输入模型编号"></searchdemo> -->
-    <div class="addnew" v-if="ismanaga">
-      <span @click="addnew">新增应用</span>
+    <div class="addnew">
+      <span @click="addnew">新增模型</span>
     </div>
-    <div class="listfolder" :style="ismanaga ? '' : 'margin-top:10px;'">
+    <div class="listfolder" >
       <div class="list">
         <div class="line topline">
-          <div>应用名称</div>
-          <div>当前应用图标</div>
-          <div>应用修改时间</div>
+          <div>模型名称</div>
+          <div>所属单位</div>
+          <div>模型修改时间</div>
           <div class="actions">操作</div>
         </div>
         <div
@@ -24,24 +24,18 @@
           暂无数据
         </div>
         <div v-for="(k, index) in list" :key="index" class="line">
-          <div :title="k.appName">{{ k.appName }}</div>
-          <div>
-            <img class="icon" v-if="k.app_ico" :src="'http://10.21.197.237'+k.app_ico" alt="">
-            <span v-else>无图标</span>
-          </div>
+          <div :title="k.modulename">{{ k.modulename }}</div>
+          <div>{{k.get_branch_name}}</div>
           <div :title="k.update_time">{{ k.update_time }}</div>
           <div class="actions">
-            <p @click="goup(k.id, index)" v-if="k.load == 2 ">
+            <p @click="goup(k.id, index)" v-if="k.load == 2">
               <img :src="change" alt="图片资源缺失" /> <span>上架</span>
             </p>
             <p @click="edit(k, index)">
               <img :src="off" alt="图片资源缺失" /> <span>修改</span>
             </p>
-            <p @click="godown(k.id, index)" v-if="k.load == 1 ">
+            <p @click="godown(k.id, index)" v-if="k.load == 1">
               <img :src="puton" alt="图片资源缺失" /> <span>下架</span>
-            </p>
-            <p @click="intro(k.id, index)">
-              <span>应用介绍</span>
             </p>
           </div>
         </div>
@@ -60,11 +54,11 @@
     <div class="tip" v-if="showedit">
       <div class="mask" @click="hideedit"></div>
       <modelPuton
-         v-if="showedit"
+        v-if="showedit"
         class="maincen"
         @success="success"
         @cancel="hideputon"
-        :edit='waitEdit'
+        :edit="waitEdit"
       ></modelPuton>
     </div>
     <div class="tip" v-if="showputon">
@@ -74,17 +68,9 @@
         class="maincen"
         @success="success"
         @cancel="hideputon"
-        :edit='false'
+        :edit="false"
       ></modelPuton>
     </div>
-    <modify
-      v-if="showModify"
-      @justHide="justHide"
-      :module_id="module_id"
-      :changeAble="waitchange"
-      @changeConfirm="justHide"
-      @subok="subok"
-    ></modify>
   </div>
 </template>
 
@@ -92,28 +78,20 @@
 import change from "@/assets/listlogo/channge.png";
 import off from "@/assets/listlogo/off.png";
 import puton from "@/assets/listlogo/puton.png";
-import modify from "./modify";
-import modelPuton from "./modelPuton";
+import modelPuton from "./modelpo";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import {
-  getlist,
-  appload,
-  introduce,
-} from "@/api/list.js";
+import { getmodellist, modelload, } from "@/api/list.js";
 export default {
-  name: "modelManaga",
+  name: "modelma",
   data() {
     return {
       list: [],
       change,
       off,
       puton,
-      ismanaga: false,
-      showModify: false,
       showputon: false,
       currentPage: 1,
       total: 0,
-      waitchange: false,
       module_id: 0,
       waitEdit: false,
       showedit: false,
@@ -123,17 +101,16 @@ export default {
     ...mapState("config", ["identity"]),
   },
   mounted() {
-    getlist("page=1").then((res) => {
-      this.list = res.data.data.list;
-      this.total = res.data.data.count;
+    getmodellist("page=1").then((res) => {
+      // console.log(res);
+      if (res.data.status == 200) {
+        this.list = res.data.data.list;
+        this.total = res.data.data.count;
+      }
     });
-    if (this.identity == 1) {
-      this.ismanaga = true;
-    }
   },
   components: {
     modelPuton,
-    modify,
   },
   methods: {
     hideedit() {
@@ -141,51 +118,23 @@ export default {
     },
     edit(k, index) {
       this.showedit = true;
-      this.waitEdit = {...k}
+      this.waitEdit = { ...k };
       this.waitEdit.index = index;
-    },
-    intro(id) {
-      introduce(id).then((res) => {
-        // console.log(res);
-        if (res.data.status == 200 && res.data.data.length == 0) {
-          this.waitchange = false;
-          this.showModify = true;
-          this.module_id = id;
-        }
-        if (res.data.data.module_id) {
-          this.showModify = true;
-          this.module_id = id;
-          this.waitchange = res.data.data;
-        }
-      });
-    },
-    justHide() {
-      this.showModify = false;
-      this.waitchange = false;
     },
     hideputon() {
       this.showputon = false;
-      this.showedit = false
+      this.showedit = false;
     },
-    success(){
-      this.handleCurrentChange(this.currentPage)
+    success() {
+      this.handleCurrentChange(this.currentPage);
       this.showputon = false;
-      this.showedit = false
-    },
-    subok() {
-      this.showModify = false;
-      this.waitchange = false;
-      // this.init()
-    },
-    changeModel(k) {
-      this.showModify = true;
-      this.waitchange = k;
+      this.showedit = false;
     },
     addnew() {
       this.showputon = true;
     },
     goup(id, index) {
-      appload("load=1&id=" + id).then((res) => {
+      modelload("load=1&id=" + id).then((res) => {
         // console.log(res)
         if (res.data.status == 200) {
           this.list[index].load = res.data.data.load;
@@ -193,7 +142,7 @@ export default {
       });
     },
     godown(id, index) {
-      appload("load=2&id=" + id).then((res) => {
+      modelload("load=2&id=" + id).then((res) => {
         // console.log(res)
         if (res.data.status == 200) {
           this.list[index].load = res.data.data.load;
@@ -204,7 +153,7 @@ export default {
       // console.log(`当前页: ${val}`);
       let queryStr = "";
       queryStr = "page=" + val;
-      getlist(queryStr).then((res) => {
+      getmodellist(queryStr).then((res) => {
         this.list = res.data.data.list;
         this.total = res.data.data.count;
       });
@@ -214,7 +163,7 @@ export default {
 </script>
 
 <style lang="less">
-.modelManaga {
+.modelma {
   .editcon {
     .el-input--suffix .el-input__inner {
       border: 1px solid lightgray;
@@ -239,7 +188,7 @@ export default {
 }
 </style>
 <style scoped lang="less">
-.modelManaga {
+.modelma {
   height: 91%;
   .addnew {
     height: 35px;
@@ -287,7 +236,7 @@ export default {
       align-items: center;
       height: 8%;
       border: 1px solid #f5f6f9;
-      .icon{
+      .icon {
         height: 100%;
         max-width: 100%;
       }

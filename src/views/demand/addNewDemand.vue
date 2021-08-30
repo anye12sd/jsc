@@ -176,7 +176,7 @@ import searchdemo from "@/components/searchdemo.vue";
 import { demanduser } from "@/api/managa.js";
 import {
   demandhandlelist,
-  appbranch,
+  modulebranch,
   demandadd,
   getdemand,
   appCategory,
@@ -192,7 +192,8 @@ export default {
       issub: true,
       currentPage: 1,
       total: 1,
-      st: ["通过", "驳回", "无状态", "开发中", "草稿"],
+      // st: ["通过", "驳回", "无状态", "开发中", "草稿"],
+      st:['提交','驳回','草稿','管理员确认','开发','完成'],
       form: {
         demandName: null,
         company: null,
@@ -237,11 +238,11 @@ export default {
       this.editform.id = k.id;
       this.showedit = true;
       getdemand(k.id).then((res) => {
-        // console.log(res);
+        console.log(res);
         if (res.data.status == 200) {
           this.editform.demand_describe = res.data.data.demand_describe;
         }
-        appbranch().then((res) => {
+        modulebranch().then((res) => {
           this.showedit = true;
           this.options = res.data.data;
           this.issub = true;
@@ -271,7 +272,7 @@ export default {
     confirmedit() {
       demandedit({
         ...this.editform,
-        status: 5,
+        status: 3,
       }).then((res) => {
         // console.log(res);
         if (res.data.status == 200) {
@@ -290,7 +291,7 @@ export default {
         if (res.data.status == 200) {
           this.editform.demand_describe = res.data.data.demand_describe;
         }
-        appbranch().then((res) => {
+        modulebranch().then((res) => {
           this.showedit = true;
           this.options = res.data.data;
           this.issub = false;
@@ -359,7 +360,7 @@ export default {
         branch_id: this.form.company,
         demand_describe: this.form.describe,
         type: 3,
-        status: 5,
+        status: 3,
       }).then((res) => {
         // console.log(res);
         if (res.data.status == 200) {
@@ -389,7 +390,7 @@ export default {
     },
     addNew() {
       this.showWrite = true;
-      appbranch().then((res) => {
+      modulebranch().then((res) => {
         // console.log("单位", res);
         this.options = res.data.data;
       });

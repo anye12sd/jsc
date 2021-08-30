@@ -35,6 +35,13 @@ export function getlist(str) {
     })
 }
 
+export function getmodellist(str) {
+    return request({
+        method:"get",
+        url:"/module/list?"+str
+    })
+}
+
 export function appuser(str){
     return request({
         method:"get",
@@ -68,6 +75,15 @@ export function appadd(data){
     return request({
         method:"post",
         url:"/app/add",
+        data
+    })
+}
+
+// 改版后修改模型
+export function modeledit(data){
+    return request({
+        method:"post",
+        url:"/module/edit",
         data
     })
 }
@@ -125,10 +141,24 @@ export function appload(str){
     })
 }
 
+export function modelload(str){
+    return request({
+        method:"get",
+        url:"/module/load?"+str
+    })
+}
+
 export function appbranch(){
     return request({
         method:"get",
         url:"/app/branch"
+    })
+}
+
+export function modulebranch(){
+    return request({
+        method:"get",
+        url:"/module/branch"
     })
 }
 

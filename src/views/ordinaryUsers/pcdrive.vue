@@ -49,7 +49,6 @@ import f2 from "@/assets/img/f2.png";
 import f3 from "@/assets/img/f3.png";
 import f4 from "@/assets/img/f4.png";
 import { portaluser } from "@/api/list.js";
-import Birth from "../../components/subpage/birth.vue";
 
 const modulesFiles = require.context(
   "../../components/subpage",

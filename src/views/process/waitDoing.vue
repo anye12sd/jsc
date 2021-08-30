@@ -137,7 +137,8 @@ export default {
       isAll: false,
       selectedNumber: 0,
       drawer: false,
-      st: ["通过", "驳回", "无状态", "单位分配", "开发中"],
+      // st: ["通过", "驳回", "无状态", "单位分配", "开发中"],
+      st:['提交','驳回','草稿','管理员确认','开发','完成'],
       list: [],
       detail: [],
       detail2: null,
@@ -219,9 +220,9 @@ export default {
       this.drawer = false;
     },
     goon(id, index) {
-      let status = 1;
+      let status = 4;
       if (this.identity == 1) {
-        status = 4;
+        status = 5;
       }
       demandstatus("status=" + status + "&id=" + id).then((res) => {
         // console.log(res);
@@ -240,7 +241,7 @@ export default {
     },
     manygoon() {
       let ids = "";
-      let status = 1;
+      let status = 4;
       this.list.forEach((item, index) => {
         if (item.isSelect) {
           ids += item.id + ",";
@@ -249,7 +250,7 @@ export default {
       ids = ids.slice(0, ids.length - 1);
       // console.log(ids);
       if (this.identity == 1) {
-        status = 4;
+        status = 5;
       }
       demandstatusall("status=" + status + "&ids=" + ids).then((res) => {
         // console.log(res);
@@ -305,7 +306,7 @@ export default {
     },
     getdata() {
       demandlist("page=1&type=3").then((res) => {
-        // console.log("待处理", res);
+        console.log("待处理", res);
         if (res.data.status == 200) {
           this.total = res.data.data.count;
           this.list = res.data.data.list;

@@ -56,6 +56,9 @@ export default {
         case "#/oridinaryUsers/pcdrive":
           this.current = 0;
           break;
+        case "#/oridinaryUsers/pcdrive2":
+          this.current = 0;
+          break;
         case "#/oridinaryUsers/application":
           this.current = 1;
           break;
@@ -63,7 +66,7 @@ export default {
           this.current = 2;
           break;
         default:
-          this.current = 0;
+          this.current = 1;
           break;
       }
       this.$emit('jump',this.current)
@@ -78,6 +81,7 @@ export default {
   },
   watch:{
     $route(){
+      this.showmenu = false;
       this.init()
     }
   }

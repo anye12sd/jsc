@@ -2,7 +2,7 @@
   <div class="modelmarket">
     <div class="tit"><img src="@/assets/img/dm.png" alt="图" /></div>
     <div class="main">
-      <div v-for="(k, index) in models" :key="index" class="each" @click="getdetail(k)">
+      <div v-for="(k, index) in models" :key="index" class="each">
         <div>
           <span
             v-if="k.sql_type == 1 || k.sql_type == 2"
@@ -168,8 +168,7 @@
 
 <script>
 import {
-  getlist,
-  appuserlist,
+  getmodellist,
   getAppTime,
   postFormJr,
   postFormWg,
@@ -215,8 +214,9 @@ export default {
     ...mapState("config", ["identity"]),
   },
   mounted() {
-    getlist("load=1&page=1&pageSize=9").then((res) => {
-      console.log(res);
+    // getmodellist
+    getmodellist("load=1&page=1&pageSize=9").then((res) => {
+      // console.log(res);
       if (res.data.status == 200) {
         this.models = res.data.data.list;
         this.total = res.data.data.count;
@@ -225,7 +225,7 @@ export default {
   },
   methods: {
     handleCurrentChange(val) {
-      getlist("load=1&page=" + val + "&pageSize=9").then((res) => {
+      getmodellist("load=1&page=" + val + "&pageSize=9").then((res) => {
         if (res.data.status == 200) {
           this.models = res.data.data.list;
           this.total = res.data.data.count;

@@ -109,14 +109,7 @@ export default {
     },
   },
   watch: {
-    $route(to, from) {
-      if (to.name == "Detail") {
-        this.current = 2;
-      } else if (to.name == "Modelmarket") {
-        this.current = 1;
-        // console.log(this.current);
-      }
-    },
+
   },
 };
 </script>

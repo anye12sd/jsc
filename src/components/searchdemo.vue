@@ -57,7 +57,7 @@
 
 <script>
 import search from "@/assets/search.png";
-import { appbranch } from "@/api/list.js";
+import { modulebranch } from "@/api/list.js";
 export default {
   name: "searchdemo",
   data() {
@@ -90,7 +90,7 @@ export default {
   },
   mounted() {
     if (this.four != true) {
-      // appbranch().then((res) => {
+      // modulebranch().then((res) => {
 
       //   this.options = res.data.data;
       // });
@@ -130,11 +130,18 @@ export default {
 
 <style lang="less">
 .search {
+  .el-date-editor{
+    .el-range-separator{
+      height: 30px;
+      line-height: 30px;
+    }
+  }
   .el-input--suffix .el-input__inner {
     padding-right: 30px;
     width: 200px;
     height: 30px;
     line-height: 30px;
+    
   }
   .el-select .el-input .el-select__caret{
     position: relative;

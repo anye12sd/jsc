@@ -3,8 +3,8 @@
     <!-- <div class="back" @click="goback">返回模型超市</div> -->
     <div class="toptit">
       <img src="@/assets/img/dw.png" alt="图" />
-      <span>应用门户&nbsp;&nbsp;></span>
-      <span>{{ modelInfo.modulename }}</span>
+      <span style="cursor:pointer;" @click="back">应用门户&nbsp;&nbsp;></span>
+      <span>{{ appName }}</span>
     </div>
     <div class="left">
       <div class="lo">
@@ -57,6 +57,7 @@ export default {
     return {
       info: {},
       active: "definition",
+      appName:'',
       leftopt: {
         definition: "任务定义",
         dismantling: "逐级拆解至最小任务项",
@@ -93,11 +94,12 @@ export default {
     ...mapState("jurisdiction", ["modelInfo"]),
   },
   mounted() {
-    // console.log(this.$route.params, this.modelInfo);
     introduce(this.$route.params.id).then((res) => {
-      console.log(res);
       this.info = res.data.data;
     });
+     if(sessionStorage.getItem('appName')) {
+       this.appName = sessionStorage.getItem('appName')
+     }
   },
   methods: {
     showdetail(name) {
@@ -108,6 +110,9 @@ export default {
       // this.$router.go(-1);
       this.$router.push("/oridinaryUsers/modelmarket");
     },
+    back(){
+      this.$router.push('/oridinaryUsers/application')
+    }
   },
 };
 </script>
@@ -142,16 +147,20 @@ export default {
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    >img{
+      height: 2rem;
+      margin-right: 15px;
+    }
     > span:nth-child(2) {
       opacity: 0.8;
       font-family: MicrosoftYaHei;
-      font-size: 20px;
+      font-size: 2rem;
       color: #ffffff;
       letter-spacing: 0;
     }
     > span:nth-child(3) {
       font-family: MicrosoftYaHei-Bold;
-      font-size: 20px;
+      font-size: 2rem;
       color: #ffffff;
       letter-spacing: 0;
     }
@@ -313,6 +322,10 @@ export default {
       color: #ffffff;
       letter-spacing: 1px;
       margin-top: 5px;
+      div {
+        word-break: break-all;
+        word-wrap: break-word;
+      }
     }
   }
 }

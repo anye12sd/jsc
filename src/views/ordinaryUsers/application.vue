@@ -3,9 +3,9 @@
     <div class="tit"><img src="@/assets/img/appli.png" alt="图" /></div>
     <div class="main">
       <div v-for="p in option" :key="p.name">
-        <div><span @click="jump(p.app_url)">应用介绍</span></div>
+        <div><span @click="getdetail(p)">应用介绍</span></div>
         <div><img :src="'http://10.21.197.237'+p.app_ico" alt="图" /></div>
-        <div>{{ p.appName }}</div>
+        <div @click="jump(p.app_url)" style="cursor:pointer;">{{ p.appName }}</div>
       </div>
     </div>
     <div class="pagination">
@@ -33,7 +33,7 @@ export default {
   },
   mounted() {
     getlist("load=1&page=1&pageSize=6").then((res) => {
-      console.log(res);
+      // console.log(res);
       if(res.data.status == 200) {
         this.total = res.data.data.count
         this.option = res.data.data.list
@@ -55,7 +55,12 @@ export default {
         this.option = res.data.data.list
       }
       })
-    }
+    },
+    getdetail(item) {
+      this.$router.push("/oridinaryUsers/detail/" + item.id);
+      sessionStorage.setItem('appName',item.appName)
+      // this.$store.commit("jurisdiction/setModelInfo", item);
+    },
   },
 };
 </script>

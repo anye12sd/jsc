@@ -23,6 +23,8 @@ export default {
         5: [],
         // 用户授权管理
         6: [],
+        // 数据成果超市
+        20:[]
     },
     //修改state
     mutations: {
@@ -39,7 +41,7 @@ export default {
             state.topbararr = payload
         },
         setidentity(state, payload){
-            console.log("setidentity",payload)
+            // console.log("setidentity",payload)
             state.identity = payload
         },
         setPath(state, payload) {
@@ -65,6 +67,10 @@ export default {
                     }
                 })
             }
+        },
+        setdatamarket(state, payload){
+            let p = 20;
+            state[20] = payload
         },
         setprocess(state, payload) {
             let p = 5;

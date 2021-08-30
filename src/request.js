@@ -1,5 +1,6 @@
 import axios from 'axios'
 import router from './router'
+import store from '@/store'
 import { Message } from 'element-ui';
 
 
@@ -29,9 +30,6 @@ request.interceptors.request.use(
                 } else {
                     config.url = config.url + "?access_token="+access_token
                 }
-				// config.params = {
-				// 	access_token
-				// }
 			}
 		}
 
@@ -50,6 +48,7 @@ request.interceptors.response.use(
 					message:response.data.message
 				})
 			}
+			store.commit("config/setLogin", false);
 			if (process.env.NODE_ENV == "development") {
 				window.location.href = 'http://localhost:9000'
 			}
