@@ -307,14 +307,14 @@ export function demandhandlelist(str){
 export function getAppTime(){
     return request ({
         method:"get",
-        url:"/app/time"
+        url:"/module/time"
     })
 }
 
 export function postFormJr(data){
     return request ({
         method:"post",
-        url:"/app/data_jr",
+        url:"/module/data_jr",
         data,
         responseType: 'blob'
     })
@@ -323,7 +323,7 @@ export function postFormJr(data){
 export function postFormWg(data){
     return request ({
         method:"post",
-        url:"/app/data_wg",
+        url:"/module/data_wg",
         data,
         responseType: 'blob'
     })

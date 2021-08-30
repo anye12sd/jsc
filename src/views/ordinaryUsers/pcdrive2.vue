@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="line">
-        <div class="each" style="width: 30%">
+        <div class="each" style="width: 30%; height: 204%">
           <component :is="allmodel[2]"></component>
         </div>
         <div class="each" style="width: 38%">
@@ -32,11 +32,14 @@
         </div>
       </div>
       <div class="line">
-        <div class="each" style="width: 49.5%">
-          <component :is="allmodel[5]"></component>
+        <div class="each" style="width: 30%; opacity: 0; position: relative; z-index: -1">
+
         </div>
-        <div class="each" style="width: 49.5%">
+        <div class="each" style="width: 38%">
           <component :is="allmodel[6]"></component>
+        </div>
+        <div class="each" style="width: 30%">
+          <component :is="allmodel[7]"></component>
         </div>
       </div>
     </div>
@@ -52,7 +55,7 @@ import { portaluser } from "@/api/list.js";
 import Birth from "../../components/subpage/birth.vue";
 
 const modulesFiles = require.context(
-  "../../components/subpage",
+  "../../components/subpage/econom",
   true,
   /\.vue$/
 );
@@ -64,7 +67,7 @@ modulesFiles.keys().forEach((path) => {
   allpage[name] = c.default;
 }, {});
 export default {
-  name: "pcdrive",
+  name: "pcdrive2",
   data() {
     return {
       widper: 1,
@@ -109,13 +112,13 @@ export default {
       currentPage: 1,
       models: [],
       allmodel: [
-          "birth",
-          "learn",
-          "further",
+          "industry",
           "kindGarden",
+          "invest",
+          "carbon",
           "job",
           "comEducation",
-          "disease",
+          "GDP",
       ],
     };
   },

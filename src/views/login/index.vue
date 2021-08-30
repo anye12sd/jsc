@@ -34,10 +34,10 @@ export default {
         // if (this.identity == 4) {
         //   this.$router.push("/demand");
         // } else {
-        //   this.$router.push("/oridinaryUsers");
+        //   this.$router.push("/ordinaryUsers");
         // }
         this.hasToken = true;
-        // this.$router.push("/oridinaryUsers");
+        // this.$router.push("/ordinaryUsers");
         return;
       }
       let str;
@@ -71,7 +71,7 @@ export default {
       if (newValue == 4) {
         this.$router.push("/demand");
       } else {
-        this.$router.push("/oridinaryUsers");
+        this.$router.push("/ordinaryUsers");
       }
     },
   },
