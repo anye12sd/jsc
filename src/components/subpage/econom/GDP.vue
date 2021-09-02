@@ -125,7 +125,7 @@ export default {
           top: "30%",
           left: "3%",
           right: "3%",
-          bottom: "14%",
+          bottom: "16%",
           containLabel: true,
         },
         title: {

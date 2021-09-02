@@ -35,7 +35,7 @@
       <div id="qyhyfb" v-if="active == 1"></div>
     </div>
     <div class="search-box" @click="dialogVisible = true">
-      a35435354
+      搜索
     </div>
     <el-dialog
         title="提示"
@@ -545,7 +545,20 @@ export default {
 }
 .search-box{
   position: absolute;
-  top: -44px
+  top: -48px;
+  cursor: pointer;
+  border: 1px solid #315a92;
+  color: #ccc;
+  height: 25px;
+  line-height: 25px;
+  width: 50px;
+  padding:0 2px 0 15px;
+  font-size: 12px;
+  text-align: center;
+  border-radius: 15px;
+  background-image: url("../../../assets/subpage/search@1x.png");
+  background-repeat: no-repeat;
+  background-position: 10px;
 }
 .el-input-reset{
   width: 100%;

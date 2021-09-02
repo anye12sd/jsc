@@ -180,7 +180,7 @@
         <div class="last-content">
           <div class="last-content-title">
             <div class="flex">
-              <div class="flex-1 detail-content-title detail-status">合规风险力</div>
+              <div class="flex-1 detail-content-title detail-hegui">合规风险力</div>
               <div class="detail-content-title-num">
                 <template v-for="(item, index) in parseInt(qyzh_pfxq.hgfxpf).toString().split('')">
                   <span :key="index">{{item}}</span>
@@ -220,7 +220,7 @@
       </div>
     </div>
     <div class="search-box" @click="dialogVisible = true">
-      a35435354
+      搜索
     </div>
     <el-dialog
         :modal="false"
@@ -670,6 +670,36 @@ export default {
   font-size: 1.4rem;
   color: #ffffff;
 }
+.detail-status{
+  background: url("../../../assets/subpage/jingying@1x.png") no-repeat left;
+  padding-left: 28px;
+  background-size: 24px;
+  font-size: 16px;
+}
+.detail-dev{
+  background: url("../../../assets/subpage/chuangxin@1x.png") no-repeat left;
+  padding-left: 28px;
+  background-size: 24px;
+  font-size: 16px;
+}
+.detail-duty{
+  background: url("../../../assets/subpage/shehui@1x.png") no-repeat left;
+  padding-left: 28px;
+  background-size: 24px;
+  font-size: 16px;
+}
+.detail-ability{
+  background: url("../../../assets/subpage/gongxian@1x.png") no-repeat left;
+  padding-left: 28px;
+  background-size: 24px;
+  font-size: 16px;
+}
+.detail-hegui{
+  background: url("../../../assets/subpage/hegui@1x.png") no-repeat left;
+  padding-left: 28px;
+  background-size: 24px;
+  font-size: 16px;
+}
 .detail-content-title-num span{
   border: 1px solid #509DFF;
   padding: 2px;
@@ -693,7 +723,7 @@ export default {
 }
 .detail-content-box{
   border: 1px solid rgba(148, 193, 255, .4);
-  margin-top: 10px;
+  margin-top: 8px;
   background: #1b4786;
   padding: 9px;
   border-radius: 5px;
@@ -718,7 +748,20 @@ export default {
 }
 .search-box{
   position: absolute;
-  top: -28px
+  top: -32px;
+  cursor: pointer;
+  border: 1px solid #315a92;
+  color: #ccc;
+  height: 25px;
+  line-height: 25px;
+  width: 50px;
+  padding:0 2px 0 15px;
+  font-size: 12px;
+  text-align: center;
+  border-radius: 15px;
+  background-image: url("../../../assets/subpage/search@1x.png");
+  background-repeat: no-repeat;
+  background-position: 10px;
 }
 .el-input-reset{
   width: 100%;
