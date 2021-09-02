@@ -99,7 +99,7 @@ export default {
       showtip2: false,
       activeNum: -1,
       total: 1,
-      st: ["通过", "驳回", "无状态", "单位分配", "开发中"],
+      st: ["通过", "驳回", "无状态", "单位分配", "开发中",'驳回','开发中'],
       list: [],
       actionPeoples: [],
       waitchosePerson: 0,
@@ -201,7 +201,7 @@ export default {
     confirm() {
       // console.log(this.waitchosePerson);
       demandstatus(
-        `id=${this.list[this.activeNum].id}&status=4&execute=${
+        `id=${this.list[this.activeNum].id}&status=7&execute=${
           this.actionPeoples[this.waitchosePerson].user_id
         }`
       ).then((res) => {

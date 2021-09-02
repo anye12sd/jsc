@@ -36,10 +36,12 @@ export default {
       date2: "12:00",
       day: 0,
       userid: {
+        '-1':"请登录",
         1: "系统管理员",
         2: "单位管理员",
         3: "普通用户",
         4: "模型开发人员",
+        5: '数据专员'
       },
       week: {
         0: "星期日",
@@ -100,6 +102,7 @@ export default {
     goafter() {
       this.$store.commit("config/setShowTopBar", true);
       this.$router.push("/pcCockpit/distribution");
+      this.$store.commit("jurisdiction/settimes", 2);
     },
     getTime() {
       let date = new Date();

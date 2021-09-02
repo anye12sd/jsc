@@ -4,7 +4,7 @@ export default {
         currentRouterPath: "",
         isLogin: false,
         access_token: null,
-        identity:1,
+        identity:-1,
         userInfo:{
             userName:"王",
             role_id:3

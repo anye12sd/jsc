@@ -74,7 +74,7 @@
               placeholder="选择开始日期"
               v-model="form.date1"
               style="width: 100%"
-              :picker-options="pickerOptionsEnd"
+              :picker-options="pickerOptionsStart"
             ></el-date-picker>
           </el-col>
           <el-col class="line" :span="2">-</el-col>
@@ -123,7 +123,7 @@
             class="upload-demo"
             ref="upload"
             :limit="1"
-            action="http://10.21.197.237/app/data"
+            action="http://10.21.197.237/module/data"
             :on-change="onChange"
             :on-remove="handleRemove"
             :file-list="form.file"
@@ -186,6 +186,7 @@ export default {
       models: [],
       total: 1,
       appTime: 0,
+      nextMonthFirstDay: 0,
       dialogVisible: false,
       excel_url: "",
       loading: false,
@@ -202,9 +203,14 @@ export default {
         ],
         file: [],
       },
-      pickerOptionsEnd: {
+      pickerOptionsStart: {
         disabledDate: (time) => {
           return time.getTime() > this.appTime;
+        },
+      },
+      pickerOptionsEnd: {
+        disabledDate: (time) => {
+          return time.getTime() > this.nextMonthFirstDay;
         },
       },
       dialogbtn: true,
@@ -239,6 +245,13 @@ export default {
       this.$store.commit("jurisdiction/setModelInfo", item);
     },
     todownload(id, type, modular_type, k) {
+      if(this.identity != 5) {
+        this.$message({
+            message: "只有数据专员才能下载",
+            type: "warning",
+          });
+        return
+      }
       this.excel_url = k.excel_url;
       this.modular_type = modular_type;
       this.dialogVisible = true;
@@ -248,16 +261,33 @@ export default {
       getAppTime().then((res) => {
         if (res.status == 200) {
           this.appTime = res.data;
+          let month = new Date(this.appTime).getMonth() + 1
+          let year = new Date(this.appTime).getFullYear()
+          let nextMonthFirstDay
+          if(month == 12){
+            nextMonthFirstDay = new Date(year + 1,0,1).getTime();//根据年份与月份日期得到下个月第一天的对象
+          }else{
+            nextMonthFirstDay = new Date(year,month,1).getTime();//根据年份与月份日期得到下个月第一天的对象
+          }
+          this.nextMonthFirstDay = nextMonthFirstDay - 1000 //减去1000毫秒得到本月最后一天23.59.59分毫秒
+          console.log(nextMonthFirstDay)
           this.dialogbtn = false;
         }
       });
     },
     download(id, type, modular_type) {
+      if(this.identity != 5) {
+        this.$message({
+            message: "只有数据专员才能下载",
+            type: "warning",
+          });
+        return
+      }
       this.modular_type = modular_type;
       this.handleExport(id, type);
       // if(type == 3){
       //   window.open(
-      //       "http://10.21.197.237/app/sql?id=" +
+      //       "http://10.21.197.237/module/sql?id=" +
       //       id +
       //       "&access_token=" +
       //       location.search.split("=")[1] +
@@ -265,7 +295,7 @@ export default {
       //   );
       // } else if(type == 1){
       // window.open(
-      //     "http://10.21.197.237/app/sql?id=" +
+      //     "http://10.21.197.237/module/sql?id=" +
       //     id +
       //     "&access_token=" +
       //     location.search.split("=")[1] +
@@ -472,14 +502,14 @@ export default {
     handleExport(id, type) {
       let url;
       // if(type == 3) {
-      //   url = "http://10.21.197.237/app/sql?id=" +
+      //   url = "http://10.21.197.237/module/sql?id=" +
       //       id +
       //       "&access_token=" +
       //       location.search.split("=")[1] +
       //       "&sql_type=" + type
       // }
       // else if(type == 1) {
-      //   url = "http://10.21.197.237/app/sql?id=" +
+      //   url = "http://10.21.197.237/module/sql?id=" +
       //       id +
       //       "&access_token=" +
       //       location.search.split("=")[1] +
@@ -496,7 +526,7 @@ export default {
       // document.body.appendChild(elemIF)
       this.loading = true;
       let URL =
-        "http://10.21.197.237/app/sql?id=" +
+        "http://10.21.197.237/module/sql?id=" +
         id +
         "&access_token=" +
         location.search.split("=")[1] +

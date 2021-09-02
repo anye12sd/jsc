@@ -58,7 +58,7 @@ export default {
   },
   components: {},
   computed:{
-    ...mapState("config",["currentRouterPath","2"])
+    ...mapState("config",["currentRouterPath","2",'topbararr'])
   },
   mounted(){
     
@@ -96,7 +96,6 @@ export default {
         if(newValue.includes(item.routerpath)){
           this.current = item.id;
         }
-        // if(newValue.includes(item.routerpath))
       })
     },
     2(){

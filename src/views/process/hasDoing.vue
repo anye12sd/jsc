@@ -94,7 +94,7 @@ export default {
   data() {
     return {
       currentPage: 1,
-      st: ["通过", "驳回", "无状态", "单位分配", "开发中"],
+      st: ["通过", "已驳回", "无状态", "已通过", "已通过",'已驳回','正在开发','完成'],
       total: 1,
       list: [],
       querymesg: null,

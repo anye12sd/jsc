@@ -53,7 +53,7 @@ export default {
     this.change();
   },
   computed: {
-    ...mapState("config", ["currentRouterPath", "6"]),
+    ...mapState("config", ["currentRouterPath", "6",'topbararr']),
   },
   methods: {
     chose(item) {

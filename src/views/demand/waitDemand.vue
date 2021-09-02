@@ -62,9 +62,9 @@
     <div class="develop" v-show="showDevelop">
       <div class="mask"></div>
       <div class="main">
-        <div>
+        <!-- <div class="op">
           <span>模型类型</span>
-          <el-select v-model="type" placeholder="请选择类型">
+          <el-select class="sec" v-model="type" placeholder="请选择类型">
             <el-option
               v-for="(item, index) in options"
               :key="index"
@@ -74,17 +74,61 @@
             >
             </el-option>
           </el-select>
+        </div> -->
+        <div class="op">
+          <span>数据库</span>
+          <el-select class="sec" v-model="database" placeholder="请选择数据库">
+            <el-option
+              v-for="(item, index) in databases"
+              :key="index"
+              :label="item.label"
+              :value="item.value"
+              :disabled="item.disabled"
+            >
+            </el-option>
+          </el-select>
         </div>
-        <div class="tip">
-          请勿查询数据超过20000条，防止程序执行超时，无法得到结果
+        <div class="op">
+          <span>内置条件</span>
+          <el-select
+            class="sec"
+            v-model="condition"
+            placeholder="请选择内置条件"
+          >
+            <el-option
+              v-for="(item, index) in conditions"
+              :key="index"
+              :label="item.label"
+              :value="item.value"
+              :disabled="item.disabled"
+            >
+            </el-option>
+          </el-select>
         </div>
-        <div>
+        <div class="op">
+          <span>处理方式</span>
+          <div class="sec" style="line-height: 40px; padding-left: 20px">
+            <el-radio v-model="radio" label="1">导出数据</el-radio>
+            <el-radio v-model="radio" label="2">数据规整</el-radio>
+          </div>
+        </div>
+        <div class="tip" v-show="condition == 1">
+          内置条件选择时间，sql语句必须使用{start_time}
+          {end_time}表示开始结束时间
+        </div>
+        <div class="op">
           <span class="top">脚本内容</span>
-          <textarea cols="70" rows="14" v-model="content"></textarea>
+          <textarea
+            class="sec"
+            cols="70"
+            rows="14"
+            v-model="content"
+          ></textarea>
         </div>
         <div class="actions">
           <!-- <span class="confirm" @click="goPreview">数据预览</span> -->
-          <span class="confirm" @click="confirm">确定</span>
+          <span class="confirm" v-if="!hasyz" @click="yanzheng">验证</span>
+          <span class="confirm" @click="confirm" v-if="hasyz">确定</span>
           <span class="cancel" @click="cancel">取消</span>
         </div>
       </div>
@@ -95,25 +139,66 @@
 <script>
 // 需求待办
 import searchdemo from "@/components/searchdemo.vue";
-import { demandexecute, appAdd, appCategory } from "@/api/list.js";
+import { demandexecute, appAdd, appCategory,testing } from "@/api/list.js";
 import { Base64 } from "js-base64";
 export default {
   name: "waitDemand",
   data() {
     return {
+      hasyz: false,
       currentPage: 1,
       showDevelop: false,
       type: "SQL脚本",
       active: {},
       total: 1,
       content: "",
-      st: ["通过", "驳回", "无状态", "单位分配", "开发中"],
+      st: [
+        "开发中",
+        "开发中",
+        "开发中",
+        "开发中",
+        "开发中",
+        "开发中",
+        "开发中",
+        '完成'
+      ],
       options: [
         {
           value: "SQL脚本",
           label: "SQL脚本",
         },
       ],
+      database: 1,
+      databases: [
+        {
+          value: 1,
+          label: "mysql",
+        },
+        {
+          value: 2,
+          label: "oracle",
+        },
+        {
+          value: 3,
+          label: "hive",
+        },
+        {
+          value: 4,
+          label: "postgre",
+        },
+      ],
+      condition: 2,
+      conditions: [
+        {
+          value: 1,
+          label: "时间",
+        },
+        {
+          value: 2,
+          label: "无",
+        },
+      ],
+      radio: "1",
       list: [],
       querymesg: null,
       data: [],
@@ -125,7 +210,7 @@ export default {
     };
   },
   components: {
-    searchdemo
+    searchdemo,
   },
   mounted() {
     this.getdata(1);
@@ -133,7 +218,94 @@ export default {
     //   this.data = res.data.data;
     // });
   },
+  watch:{
+    content(){
+      this.hasyz = false
+    },
+    database(){
+      this.hasyz = false
+    },
+    condition(){
+      this.hasyz = false
+    },
+    radio(){
+      this.hasyz = false
+    }
+  },
   methods: {
+    cancel() {
+      this.showDevelop = false;
+      this.hasyz = false;
+      // 类型
+      this.type = "";
+      // 内容
+      this.content = "";
+      // 数据库
+      this.database = 1;
+      // 内置条件
+      this.condition = 2;
+      // 处理方式
+      this.radio = "1";
+    },
+    yanzheng() {
+      if (this.condition == 1) {
+        if (
+          !this.content.includes("{start_time}") &&
+          !this.content.includes("{ start_time }")
+        ) {
+          this.$message({
+            message: "请使用{start_time}变量",
+            type: "warning",
+          });
+          return;
+        }
+        if (
+          !this.content.includes("{end_time}") &&
+          !this.content.includes("{ end_time }")
+        ) {
+          this.$message({
+            message: "请使用{end_time}变量",
+            type: "warning",
+          });
+          return;
+        }
+      }
+      let str = 'database_type=' +this.database +'&sql_type='+this.condition + "&modular_type="+this.radio +"&sql="+ Base64.encode(this.content)
+      testing(str).then(res=>{
+        // console.log(res)
+        if(res.data.type) {
+          this.hasyz = true
+        } else {
+          this.$message({
+            message: "验证失败sql语句无效",
+            type: "warning",
+          });
+        }
+      })
+      
+    },
+    confirm() {
+      let sql = Base64.encode(this.content);
+      appAdd({
+        id: this.active.id,
+        sql,
+        status:8,
+        database_type:this.database,
+        sql_type:this.condition,
+        modular_type:this.radio
+      }).then((res) => {
+        // console.log(res)
+        if (res.data.status == 200) {
+          this.showDevelop = false;
+          this.active = {};
+          this.getdata(this.currentPage);
+          this.$message({
+            message: "提交成功",
+            type: "warning",
+          });
+        }
+      });
+    },
     handleNodeClick(data) {
       // console.log(data);
       this.queryId = data.id;
@@ -157,36 +329,24 @@ export default {
     clear() {
       this.querymesg = null;
     },
-    confirm() {
-      let sql = Base64.encode(this.content);
-      appAdd({
-        id: this.active.id,
-        sql,
-      }).then((res) => {
-        // console.log(res)
-        if (res.data.status == 200) {
-          this.showDevelop = false;
-          this.active = {};
-        }
-      });
-    },
+
     getdata(page) {
       let str = "";
       if (this.querymesg) {
         str =
           "page=" +
           page +
-          "&type=1&demand_name=" +
+          "&type=3&demand_name=" +
           this.querymesg.demand_name +
           "&start_time=" +
           this.querymesg.start_time +
           "&end_time=" +
           this.querymesg.end_time;
       } else {
-        str = "type=1&page=" + page;
+        str = "type=3&page=" + page;
       }
-      if(this.queryId) {
-        str = str + "&category_id=" + this.queryId
+      if (this.queryId) {
+        str = str + "&category_id=" + this.queryId;
       }
       demandexecute(str).then((res) => {
         // console.log(res)
@@ -200,11 +360,7 @@ export default {
       this.showDevelop = true;
       this.active = k;
     },
-    cancel() {
-      this.showDevelop = false;
-      this.type = "";
-      this.content = "";
-    },
+
     goPreview() {
       this.$router.push("/sqlPreview");
     },
@@ -222,7 +378,7 @@ export default {
 <style scoped lang="less">
 .waitDemand {
   height: 91%;
-  .pagination{
+  .pagination {
     padding-left: 47%;
   }
   .listfolder {
@@ -233,54 +389,52 @@ export default {
       margin-top: 10px;
     }
     .list {
-    
-    width: 100%;
-    .line {
-      // margin: 0.1% 0;
-      margin-top: 0.1%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 8%;
-      border: 1px solid #f5f6f9;
-      div {
-        font-family: MicrosoftYaHei;
-        font-size: 14px;
-        color: #666f8e;
-        text-align: center;
-        flex: 2;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      .num {
-        flex: 1;
-      }
-      .actions {
-        span {
-          display: inline-block;
-          vertical-align: middle;
-          width: 70px;
-          background: #f5f4f7;
-          border: 1px solid #e5e6eb;
-          border-radius: 4px;
-          padding: 2px;
+      width: 100%;
+      .line {
+        // margin: 0.1% 0;
+        margin-top: 0.1%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 8%;
+        border: 1px solid #f5f6f9;
+        div {
           font-family: MicrosoftYaHei;
           font-size: 14px;
-          cursor: pointer;
+          color: #666f8e;
+          text-align: center;
+          flex: 2;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .num {
+          flex: 1;
+        }
+        .actions {
+          span {
+            display: inline-block;
+            vertical-align: middle;
+            width: 70px;
+            background: #f5f4f7;
+            border: 1px solid #e5e6eb;
+            border-radius: 4px;
+            padding: 2px;
+            font-family: MicrosoftYaHei;
+            font-size: 14px;
+            cursor: pointer;
+          }
+        }
+      }
+      .topline {
+        background: #f5f6f9;
+        margin: 0;
+        div {
+          padding: 0.5% 0;
         }
       }
     }
-    .topline {
-      background: #f5f6f9;
-      margin: 0;
-      div {
-        padding: 0.5% 0;
-      }
-    }
   }
-  }
-  
 }
 .develop {
   position: fixed;
@@ -313,6 +467,19 @@ export default {
     color: #000000;
     box-sizing: border-box;
     padding-top: 50px;
+    overflow-y: scroll;
+    .op {
+      display: flex;
+      justify-content: center;
+      > span {
+        width: 70px;
+        text-align: right;
+        line-height: 40px;
+      }
+      .sec {
+        width: 50%;
+      }
+    }
     textarea {
       resize: none;
       border-radius: 4px;
@@ -320,7 +487,7 @@ export default {
       box-sizing: border-box;
       color: #606266;
       display: inline-block;
-      padding: 0 15px;
+      padding: 15px;
       outline: 0;
       width: 500px;
     }
@@ -334,7 +501,6 @@ export default {
   }
 
   .main > div {
-    padding-left: 150px;
     margin-top: 20px;
     span {
       margin-right: 10px;
@@ -357,6 +523,7 @@ export default {
     font-size: 18px;
     color: #ffffff;
     text-align: center;
+    margin-bottom: 40px;
     .cancel {
       width: 148px;
       height: 36px;

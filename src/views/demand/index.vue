@@ -116,7 +116,7 @@ export default {
     },
   },
   computed: {
-    ...mapState("config", ["currentRouterPath", "4", "identity"]),
+    ...mapState("config", ["currentRouterPath", "4", "identity",'topbararr']),
   },
   watch: {
     currentRouterPath(newValue, oldValue) {

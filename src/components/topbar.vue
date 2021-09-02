@@ -12,13 +12,13 @@
     </div>
     <div class="user">
       <div class="left">
-        <span @click="gobefore">返回前台</span>
+        <span @click="gobefore" v-if="identity != 4">返回前台</span>
         <span @click="signout">退出登录</span>
       </div>
       <div class="right">
         <div>
           <span class="userName">{{ userInfo.userName }}</span>
-          <span class="identity">{{ identity[userInfo.role_id] }}</span>
+          <span class="identitys">{{ identitys[userInfo.role_id] }}</span>
         </div>
         <div class="time">{{ date1 }}&nbsp;&nbsp;{{ date2 }}</div>
       </div>
@@ -37,11 +37,12 @@ export default {
       date2: "12:00",
       current: 0,
       usingOption: [],
-      identity: {
+      identitys: {
         1: "系统管理员",
         2: "单位管理员",
         3: "普通用户",
         4: "模型开发人员",
+        5:'数据专员'
       },
       option: [
         {
@@ -87,7 +88,7 @@ export default {
     // HelloWorld
   },
   computed:{
-    ...mapState('config',['isLogin',"topbararr","userInfo"])
+    ...mapState('config',['isLogin',"topbararr","userInfo",'identity'])
   },
   mounted() {
     this.getTime();
@@ -261,7 +262,7 @@ export default {
       display: inline-block;
       vertical-align: middle;
     }
-    .identity {
+    .identitys {
       font-family: MicrosoftYaHei;
       font-size: 12px;
       color: #eff2f6;

@@ -72,7 +72,7 @@ export default {
     return {
       currentPage: 1,
       total: 1,
-      st: ["通过", "驳回", "无状态", "单位分配", "开发中"],
+      st:["完成", "完成", "完成", "完成", "完成",'完成','完成'],
       list: [],
       querymesg: null,
       data: [],

@@ -38,11 +38,6 @@ const routes = [
         path: "",
         redirect: "distribution"
       },
-      // {
-      //   path: "subScribe",
-      //   name: "SubScribe",
-      //   component: () => import("@/views/pcCockpit/subscribe")
-      // },
       {
         path:"distribution",
         name:"Distribution",
@@ -80,11 +75,6 @@ const routes = [
       // }
     ]
   },
-  // {
-  //   path: "/modelIntroduce",
-  //   name: "ModelIntroduce",
-  //   component: () => import('../views/modelIntroduce')
-  // },
   {
     path: "/process",
     // name:"Process",

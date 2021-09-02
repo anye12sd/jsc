@@ -24,15 +24,12 @@ export default {
   },
   mounted() {
     this.init();
-    console.log(this.identity);
   },
   methods: {
     init() {
       let access_token = location.search.split("=")[1];
-      console.log(access_token);
       if (access_token) {
         this.hasToken = true;
-        this.jj()
         return;
       }
       let str;
@@ -54,92 +51,6 @@ export default {
         // ddOrigin: 'https://login.dg-work.cn',
       });
     },
-    jj() {
-      let access_token = location.search.split("=")[1];
-      let hash = window.location.hash;
-      if (!access_token) return;
-      if (window.globalconfig == 0) {
-        if (access_token == "aaaa") {
-          this.$store.commit("config/setidentity", 1);
-          this.$store.commit("config/setUsetInfo", {
-            userName: "系统",
-            role_id: 1,
-          });
-          this.$store.commit("config/setLogin", true);
-          if (hash == "#/login") {
-            this.$router.push("/oridinaryUsers");
-          }
-          return;
-        } else if (access_token == "bbbb") {
-          this.$store.commit("config/setidentity", 2);
-          this.$store.commit("config/setUsetInfo", {
-            userName: "单位",
-            role_id: 2,
-          });
-          this.$store.commit("config/setLogin", true);
-          if (hash == "#/login") {
-            this.$router.push("/oridinaryUsers");
-          }
-          return;
-        } else if (access_token == "cccc") {
-          //普通用户
-          this.$store.commit("config/setLogin", true);
-          this.$store.commit("config/setidentity", 3);
-          this.$store.commit("config/setUsetInfo", {
-            userName: "普通",
-            role_id: 3,
-          });
-          if (hash == "#/login") {
-            this.$router.push("/oridinaryUsers");
-          }
-          return;
-        } else if (access_token == "dddd") {
-          //模型开发人员
-          this.$store.commit("config/setLogin", true);
-          if (hash == "#/login") {
-            this.$router.push("/demand");
-          }
-          this.$store.commit("config/setidentity", 4);
-          this.$store.commit("config/setShowTopBar", true);
-          return;
-        } else if (access_token == "eeee") {
-          this.$store.commit("config/setidentity", 2);
-          this.$store.commit("config/setLogin", true);
-          if (hash == "#/login") {
-            this.$router.push("/oridinaryUsers");
-          }
-          return;
-        }
-      }
-
-      if (access_token && !sessionStorage.getItem("hasLogin")) {
-        console.log("user");
-        tologin().then((res) => {
-          console.log(res);
-          if (res.data.status == 200) {
-            this.$store.commit("config/setLogin", true);
-            this.$store.commit("config/setUsetInfo", res.data.data);
-            this.$store.commit("config/setidentity", res.data.data.role_id);
-            sessionStorage.setItem("hasLogin", "1");
-            setTimeout(() => {
-              if (this.identity == 4) {
-                this.$router.push("/demand");
-                this.$store.commit("config/setShowTopBar", true);
-              } else {
-                this.$router.push("/oridinaryUsers");
-              }
-            }, 500);
-          } else {
-            this.$message({
-              message: "获取信息失败请重新登录",
-              type: "warning",
-            });
-            this.$store.commit("config/setLogin", false);
-          }
-          // this.$store.commit("config/setLogin",true)
-        });
-      }
-    },
   },
   computed: {
     ...mapMutations("config", ["setUsetInfo"]),
@@ -147,11 +58,10 @@ export default {
   },
   watch: {
     identity(newValue) {
-      console.log("111", newValue);
       if (newValue == 4) {
         this.$router.push("/demand");
       } else {
-        this.$router.push("/oridinaryUsers");
+        this.$router.push("/ordinaryUsers");
       }
     },
   },

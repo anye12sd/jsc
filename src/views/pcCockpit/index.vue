@@ -62,7 +62,7 @@ export default {
     // approval,subscribe
   },
   computed: {
-    ...mapState("config", ["currentRouterPath", "1"]),
+    ...mapState("config", ["currentRouterPath", "1",'topbararr']),
   },
   mounted() {
     this.change();

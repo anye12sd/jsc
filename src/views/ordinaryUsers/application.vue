@@ -2,10 +2,10 @@
   <div class="application">
     <div class="tit"><img src="@/assets/img/appli.png" alt="图" /></div>
     <div class="main">
-      <div v-for="p in option" :key="p.name">
-        <div><span @click="getdetail(p)">应用介绍</span></div>
+      <div v-for="p in option" :key="p.name" @click="jump(p.app_url)" style="cursor:pointer;">
+        <div><span @click.stop="getdetail(p)">应用介绍</span></div>
         <div><img :src="'http://10.21.197.237'+p.app_ico" alt="图" /></div>
-        <div @click="jump(p.app_url)" style="cursor:pointer;">{{ p.appName }}</div>
+        <div>{{ p.appName }}</div>
       </div>
     </div>
     <div class="pagination">
@@ -133,8 +133,8 @@ export default {
       }
       > div:nth-child(2) {
         text-align: center;
-        margin-top: 2rem;
-        margin-bottom: 2rem;
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
       }
       > div:nth-child(3) {
         font-family: MicrosoftYaHei;

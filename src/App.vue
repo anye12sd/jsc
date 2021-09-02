@@ -43,7 +43,9 @@ export default {
       let access_token = location.search.split("=")[1];
       let hash =window.location.hash;
       if (!access_token) return;
+      this.$store.commit("jurisdiction/settimes", 1);
       if (window.globalconfig == 0) {
+        
         if (access_token == "aaaa") {
           this.$store.commit("config/setidentity", 1);
           this.$store.commit("config/setUsetInfo", {
@@ -81,11 +83,15 @@ export default {
         } else if (access_token == "dddd") {
           //模型开发人员
           this.$store.commit("config/setLogin", true);
-          if(hash == '#/login') {
-            this.$router.push("/demand")
-          }
           this.$store.commit("config/setidentity", 4);
           this.$store.commit("config/setShowTopBar", true);
+          this.$store.commit("config/setUsetInfo", {
+            userName: "开发",
+            role_id: 4,
+          });
+          if(hash == '#/login') {
+            this.$router.push("/demand/waitDemand")
+          }
           return;
         } else if (access_token == "eeee") {
           this.$store.commit("config/setidentity", 2);
@@ -94,13 +100,24 @@ export default {
             this.$router.push("/oridinaryUsers");
           }
           return;
+        } else if (access_token == "ffff") {
+          this.$store.commit("config/setLogin", true);
+          this.$store.commit("config/setidentity", 5);
+          this.$store.commit("config/setUsetInfo", {
+            userName: "数据",
+            role_id: 5,
+          });
+          if(hash == '#/login') {
+            this.$router.push("/oridinaryUsers");
+          }
+          return
         }
       }
 
       if (access_token && !sessionStorage.getItem("hasLogin")) {
         console.log("user");
         tologin().then((res) => {
-          console.log(res)
+          // console.log(res)
           if (res.data.status == 200) {
             this.$store.commit("config/setLogin", true);
             this.$store.commit("config/setUsetInfo", res.data.data);
@@ -151,8 +168,16 @@ export default {
   },
   computed: {
     ...mapState("config", ["isLogin", "identity", "showtopbar"]),
+    ...mapState("jurisdiction", ["times"]),
   },
   watch: {
+    times(newValue){
+      console.log(newValue)
+      if(newValue == 1 || newValue == 2) {
+        return
+      }
+      this.init()
+    },
     isLogin(newValue) {
       if (newValue == false) {
         // this.$router.push("/login");
@@ -168,13 +193,16 @@ export default {
     $route(to, from) {
       let path = document.location.hash;
       this.$store.commit("config/setPath", path);
-      // console.log(this.identity)
+      // console.log(this.identity,to.fullPath)
       if (to.fullPath == "/login") {
         this.$store.commit("config/setShowTopBar", false);
-      } else if (to.fullPath.includes("oridinaryUsers")) {
+      } 
+       if (to.fullPath.includes("oridinaryUsers")) {
         this.$store.commit("config/setShowTopBar", false);
-      } else {
-        if (this.identity == 3) {
+        return
+       }
+        
+        if (this.identity == 3 || this.identity == 5) {
           this.$message({
             message: "您无权查看该页面",
             type: "warning",
@@ -213,7 +241,7 @@ export default {
           ];
         }
         if (!arr.includes(to.fullPath)) {
-          if(to.fullPath != '/demand/waitDemand') {
+          if(to.fullPath == '/demand/addNewDemand') {
             this.$message({
             message: "您无权查看该页面",
             type: "warning",
@@ -223,7 +251,7 @@ export default {
           return;
         }
         this.$store.commit("config/setShowTopBar", true);
-      }
+      
     },
     showtopbar(newValue) {
       if (newValue) {

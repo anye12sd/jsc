@@ -46,10 +46,10 @@
           <div class="time" :title="k.create_time">{{ k.create_time }}</div>
           <div class="status" :title="k.tit">{{ st[k.status - 1] }}</div>
           <div class="actions">
-            <span @click.stop="dedit(k)" v-if="k.status == 5">编辑</span>
-            <span @click.stop="delet(k)" v-if="k.status == 5">删除</span>
-            <span @click.stop="editsub(k)" v-if="k.status == 5">提交</span>
-            <span v-if="k.status != 5">没有操作</span>
+            <span @click.stop="dedit(k)" v-if="k.status == 3">编辑</span>
+            <span @click.stop="delet(k)" v-if="k.status == 3 || k.status == 1">删除</span>
+            <span @click.stop="editsub(k)" v-if="k.status == 3">提交</span>
+            <span v-if="k.status != 3">没有操作</span>
           </div>
         </div>
       </div>
@@ -65,6 +65,7 @@
       class="pagination"
     >
     </el-pagination>
+    <!-- 提交编辑框 -->
     <div class="write" v-show="showedit">
       <div class="mask" @click="hideedit"></div>
       <div class="main">
@@ -142,7 +143,7 @@
         </div>
         <div>
           <label>需求单位</label>
-          <el-select v-model="form.company" placeholder="选择需求单位">
+          <el-select v-model="form.company" filterable :clearable="true"  placeholder="搜索需求单位">
             <el-option
               v-for="item in options"
               :key="item.id"
@@ -174,12 +175,13 @@
 // 新增需求
 import searchdemo from "@/components/searchdemo.vue";
 import { demanduser } from "@/api/managa.js";
+import {mapState} from 'vuex'
 import {
   demandhandlelist,
   modulebranch,
   demandadd,
   getdemand,
-  appCategory,
+  demandstatus,
 } from "@/api/list.js";
 import { demandedit, demanddel } from "@/api/managa.js";
 export default {
@@ -193,7 +195,7 @@ export default {
       currentPage: 1,
       total: 1,
       // st: ["通过", "驳回", "无状态", "开发中", "草稿"],
-      st:['提交','驳回','草稿','管理员确认','开发','完成'],
+      st:['等待审核','驳回','草稿','管理员确认','开发','完成'],
       form: {
         demandName: null,
         company: null,
@@ -222,6 +224,16 @@ export default {
     // appCategory().then((res) => {
     //   this.data = res.data.data;
     // });
+  },
+  computed:{
+    ...mapState('config',['userInfo'])
+  },
+  watch:{
+    userInfo(newval){
+      if(newval.branch_id){
+        this.form.company = newval.branch_id
+      }
+    }
   },
   components: {
     searchdemo,
@@ -252,7 +264,7 @@ export default {
     confirmsub() {
       demandedit({
         id: this.editform.id,
-        status: 3,
+        status: 1,
       }).then((res) => {
         if (res.data.status == 200) {
           this.handleCurrentChange(this.currentPage);
@@ -272,7 +284,7 @@ export default {
     confirmedit() {
       demandedit({
         ...this.editform,
-        status: 3,
+        status: 1,
       }).then((res) => {
         // console.log(res);
         if (res.data.status == 200) {
@@ -379,8 +391,8 @@ export default {
         }
       });
     },
-    getdata(page, str) {
-      demandhandlelist("page=" + page + "&type=1" + str).then((res) => {
+    getdata(page) {
+      demandhandlelist("page=" + page + "&type=1").then((res) => {
         // console.log("我发起的", res);
         if (res.data.status == 200) {
           this.total = res.data.data.count;

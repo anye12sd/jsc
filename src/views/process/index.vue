@@ -50,9 +50,7 @@ export default {
     };
   },
   mounted() {
-    // this.change()
     this.init()
-    // console.log(this.current)
   },
   methods: {
     init(){
@@ -62,9 +60,9 @@ export default {
         this.usingOption = [this.options[0],this.options[1]]
       }
       // 普通用户
-      if(this.identity == 3) {
-        this.usingOption = [this.options[1],this.options[2]]
-      }
+      // if(this.identity == 3) {
+      //   this.usingOption = [this.options[1],this.options[2]]
+      // }
       // console.log(this.identity)
       // 单位管理员
       if(this.identity == 2) {
@@ -78,21 +76,6 @@ export default {
       this.current = item.id;
       this.$router.push(item.routerpath);
     },
-    // change(){
-    //   if(this[5].items){
-    //     this.options.forEach(item=>{
-    //     this[5].items.forEach(p=>{
-    //       if(item.id == p.id) {
-    //         item.name = p.name
-    //         this.usingOption.push(item)
-    //       }
-    //     })
-    //   })
-    //   this.usingOption[0].classname1 = "status02";
-    //   this.usingOption[0].classname2 = "status01";
-    //   this.current = this.usingOption[0].id
-    //   }
-    // }
   },
   computed:{
     ...mapState("config",["currentRouterPath","identity"])
@@ -115,9 +98,6 @@ export default {
       // if(location.hash == "#"+this.usingOption[0].routerpath) return
       this.$router.push(this.usingOption[0].routerpath)
     }
-    // 5(){
-    //   this.change()
-    // }
   }
 };
 </script>

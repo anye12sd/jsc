@@ -138,7 +138,7 @@ export default {
       selectedNumber: 0,
       drawer: false,
       // st: ["通过", "驳回", "无状态", "单位分配", "开发中"],
-      st:['提交','驳回','草稿','管理员确认','开发','完成'],
+      st:['等待审核','驳回','草稿','管理员确认','开发','完成'],
       list: [],
       detail: [],
       detail2: null,
@@ -220,9 +220,9 @@ export default {
       this.drawer = false;
     },
     goon(id, index) {
-      let status = 4;
+      let status = 5;
       if (this.identity == 1) {
-        status = 5;
+        status = 4;
       }
       demandstatus("status=" + status + "&id=" + id).then((res) => {
         // console.log(res);
@@ -232,7 +232,8 @@ export default {
       });
     },
     refuse(id, index) {
-      demandstatus("status=2&id=" + id).then((res) => {
+      let status = this.identity == 1 ? 2 : 6
+      demandstatus("status="+status+"&id=" + id).then((res) => {
         // console.log(res);
         if (res.data.status == 200) {
           this.list.splice(index, 1);
@@ -241,7 +242,7 @@ export default {
     },
     manygoon() {
       let ids = "";
-      let status = 4;
+      let status = 5;
       this.list.forEach((item, index) => {
         if (item.isSelect) {
           ids += item.id + ",";
@@ -250,7 +251,7 @@ export default {
       ids = ids.slice(0, ids.length - 1);
       // console.log(ids);
       if (this.identity == 1) {
-        status = 5;
+        status = 4;
       }
       demandstatusall("status=" + status + "&ids=" + ids).then((res) => {
         // console.log(res);
@@ -275,6 +276,7 @@ export default {
       });
     },
     manyrefuse() {
+      let status = this.identity == 1 ? 2 : 6
       let ids = "";
       this.list.forEach((item, index) => {
         if (item.isSelect) {
@@ -282,7 +284,7 @@ export default {
         }
       });
       ids = ids.slice(0, ids.length - 1);
-      demandstatusall("status=2&ids=" + ids).then((res) => {
+      demandstatusall("status="+status+"&ids=" + ids).then((res) => {
         // console.log(res);
         if (res.data.data == true) {
           this.$message({
@@ -306,7 +308,6 @@ export default {
     },
     getdata() {
       demandlist("page=1&type=3").then((res) => {
-        console.log("待处理", res);
         if (res.data.status == 200) {
           this.total = res.data.data.count;
           this.list = res.data.data.list;

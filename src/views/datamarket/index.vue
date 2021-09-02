@@ -36,7 +36,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("config", ["currentRouterPath", "20"]),
+    ...mapState("config", ["currentRouterPath", "20",'topbararr']),
   },
   mounted() {
     this.change();
@@ -62,9 +62,12 @@ export default {
     },
   },
   watch: {
-      20(){
+    20(){
       this.change()
     },
+    //   20(){
+    //   this.change()
+    // },
     currentRouterPath(newValue, oldValue) {
       this.options.forEach((item) => {
         if (newValue.includes(item.routerpath)) {
