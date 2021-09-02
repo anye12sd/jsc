@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="invest-content">
-        <div id="zsyz" v-if="show"></div>
+        <div id="zsyz"></div>
         <div class="invest-content-box">
           <div class="menu">
             <div :class="active == 0 ? 'active' : ''" @click="swit(0)">
@@ -44,16 +44,16 @@ export default {
   data() {
     return {
       baseUrl: 'http://10.21.197.236:9000',
-      show: true,
       cyhl_zsyz: {},
       cyhl_zsyz1: {},
       cyhl_gdzc: {},
       cyhl_gdzc1: {},
       cyhl_gdzc2: {},
       chart: '',
-      chart1: '',
-      chart2: '',
-      active: 1
+      active: 0,
+      tzbzqk: '',
+      zsyz: '',
+      gytr: ''
     };
   },
   mounted() {
@@ -117,14 +117,14 @@ export default {
           });
     },
     drawing() {
-      if (this.chart) {
-        this.chart.dispose();
+      if (this.zsyz) {
+        this.zsyz.dispose();
       }
-      if (this.chart1) {
-        this.chart1.dispose();
+      if (this.tzbzqk) {
+        this.tzbzqk.dispose();
       }
-      if (this.chart2) {
-        this.chart2.dispose();
+      if (this.gytr) {
+        this.gytr.dispose();
       }
       this.itMyChart2()
       this.itMyChart3()
@@ -132,7 +132,7 @@ export default {
     },
     itMyChart2() {
       let zsyz = echarts.init(document.getElementById("zsyz"));
-      this.chart = zsyz
+      this.zsyz = zsyz
       var x = [];
       var y = [];
       var y1 = [];
@@ -152,7 +152,7 @@ export default {
 
           textStyle: {
             color: "#fff",
-            fontSize: "14",
+            fontSize: "12",
           },
         //   subtextStyle: {
         //     color: "#90979c",
@@ -395,7 +395,7 @@ export default {
     itMyChart3() {
       let that = this
       let tzbzqk = echarts.init(document.getElementById("tzbzqk"));
-      this.chart1 = tzbzqk
+      this.tzbzqk = tzbzqk
       var x = [];
       var y = [];
       //  console.log(  this.cyhl_gdzc,222)
@@ -411,7 +411,7 @@ export default {
           y: "0%",
           textStyle: {
             color: "#fff",
-            fontSize: "14",
+            fontSize: "12",
           },
         },
         tooltip: {
@@ -582,6 +582,7 @@ export default {
     },
     itMyChart4(xxdata) {
       let gytr = echarts.init(document.getElementById("gytr"));
+      this.gytr = gytr
       this.chart2 = gytr
       var seriesData = [];
       xxdata.map((item) => {
@@ -605,16 +606,16 @@ export default {
       var option = {
         // backgroundColor: "#0f375f",
         grid: {
-          top: "15%",
-          left: "20%",
-          right: "20%",
-          bottom: "10%",
+          top: "25%",
+          left: "10%",
+          right: "11%",
+          bottom: "12%",
           containLabel: true,
         },
         xAxis: {
           type: "value",
           //  min:'100',
-          name: "增长率%",
+          // name: "增长率%",
           min: 0,
           max: "60",
           splitNumber: 4,
@@ -643,9 +644,9 @@ export default {
             },
           },
           axisLabel: {
-            margin: 20,
+            margin: 10,
             textStyle: {
-              color: "#666",
+              color: "#fff",
             },
           },
         },
@@ -673,7 +674,7 @@ export default {
             //  改变y轴字体颜色和大小
             //formatter: '{value} m³ ', //  给y轴添加单位
             textStyle: {
-              color: "rgba(250,250,250,0.6)",
+              color: "#fff",
               fontSize: 14,
             },
           },
@@ -718,7 +719,19 @@ export default {
       gytr.setOption(option);
     },
     swit(val) {
+      if(val == this.active) return
       this.active = val;
+      if(val == 0){
+        this.gytr.dispose()
+        this.$nextTick(function () {
+          this.itMyChart3()
+        })
+      }else{
+        this.tzbzqk.dispose()
+        this.$nextTick(function () {
+          this.itMyChart4(this.cyhl_gdzc2)
+        })
+      }
     },
   },
 };
@@ -740,10 +753,13 @@ export default {
 .flex-1{
   flex: 1;
 }
+.invest{
+  height: 100%;
+}
 .invest-header{
   color: #fff;
-  font-size: 16px;
-  margin-top: 18px;
+  font-size: 14px;
+  margin-top: 12px;
 }
 .invest-header-left{
   text-align: right;
@@ -755,19 +771,22 @@ export default {
 .invest-header-content{
   color: #32C5FF;
   margin-top: 5px;
-  font-size: 16px;
+  font-size: 14px;
 }
 .invest-header-content span{
   font-weight:bold;
   margin-right: 4px;
 }
+.invest-content{
+  height: 80%;
+}
 #zsyz{
   width: 100%;
-  height: 200px;
+  height: 50%;
 }
 .invest-content-box{
-  margin-top: 15px;
   position: relative;
+  height: 100%;
 }
 .menu {
   position: absolute;
@@ -801,13 +820,13 @@ export default {
 }
 #tzbzqk{
   width: 100%;
-  height: 200px;
+  height: 50%;
   z-index: 99;
   position: relative;
 }
 #gytr{
   width: 100%;
-  height: 200px;
+  height: 55%;
   z-index: 99;
   position: relative;
 }

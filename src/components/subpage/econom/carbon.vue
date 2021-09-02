@@ -5,7 +5,7 @@
       <div>碳排放总量排行</div>
     </div>
     <div class="carbon-box flex">
-      <div class="carbon-rank-box flex-1">
+      <div class="carbon-rank-box">
         <div class="menu">
           <div :class="active == 0 ? 'active' : ''" @click="swit(0)">
             湖州市
@@ -157,18 +157,18 @@ export default {
           icon:'circle',
           orient: "horizontal",
           left: "center",
-          bottom: 0,
+          bottom: 35,
           textStyle: {
             color: "#fff",
-            fontSize:14
+            fontSize:12
           },
         },
 
         series: [
           {
             type: "pie",
-            radius: ["40%", "65%"],
-            center: ["50%", "35%"],
+            radius: ["30%", "50%"],
+            center: ["50%", "30%"],
             label: {
               show: false,
               fontSize: 20,
@@ -248,15 +248,21 @@ export default {
   font-size: 1.4rem;
   color: #ffffff;
 }
+.carbon-box{
+  height: 100%;
+}
+.carbon-rank-box{
+  width: 50%;
+}
 .carbon-rank{
-  max-height: 186px;
+  max-height: 64%;
   overflow: auto;
 }
 .carbon-rank-content{
-  margin-top: 8px;
-  height: 22px;
-  line-height: 22px;
-  font-size: 14px;
+  margin-top: 6px;
+  height: 18px;
+  line-height: 18px;
+  font-size: 12px;
 }
 .carbon-rank-content-index{
   text-align: right;
@@ -265,9 +271,9 @@ export default {
 }
 .carbon-rank-content-index span{
   display: inline-block;
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
   color: #fff;
   border: 1px solid #fff;
   text-align: center;
@@ -292,6 +298,6 @@ export default {
 }
 #hzbt{
   width: 100%;
-  height: 214px;
+  height: 100%;
 }
 </style>
