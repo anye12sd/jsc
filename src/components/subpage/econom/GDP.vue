@@ -5,7 +5,7 @@
       <div>GDP预测</div>
     </div>
     <div class="GDP-box flex">
-      <div class="GDP-preview-box flex-2">
+      <div class="GDP-preview-box">
         <div class="userInput">
           <div class="elect">工业用电量：</div>
           <input type="text" v-model="electricity" class="eleinput" />
@@ -33,7 +33,7 @@
           </div>
         </div>
       </div>
-      <div class="GDP-chart flex-3">
+      <div class="GDP-chart">
         <div id="nesynew"></div>
       </div>
     </div>
@@ -121,34 +121,33 @@ export default {
       max2 += 100;
       // console.log(max1);
       let option = {
+        grid: {
+          top: "30%",
+          left: "3%",
+          right: "3%",
+          bottom: "16%",
+          containLabel: true,
+        },
         title: {
           text: "工业产值历年变化情况",
           // "subtext": "BY MICVS",
           x: "0%",
           y: "0%",
-
           textStyle: {
             color: "#fff",
             fontSize: "14",
           },
         },
         legend: {
-          right: "20px",
+          right: "15px",
           top: "0px",
-          width: "200px",
+          width: "170px",
           height: "100px",
           type: "plain",
           textStyle: {
             color: "#ddd",
             fontFamily: "SourceHanSansCN-Norma",
-            fontSize: 14,
-          },
-          grid: {
-            left: 20,
-            right: 20,
-            top:16,
-            bottom:0,
-            containLabel: true,
+            fontSize: 12,
           },
           data: [
             {
@@ -164,7 +163,7 @@ export default {
         tooltip: {
           trigger: "axis",
           textStyle:{
-            fontSize:16,
+            fontSize:14,
           },
           formatter: (param) => {
             var str = "";
@@ -328,7 +327,7 @@ export default {
           {
             name: "增长率",
             type: "line",
-            symbolSize: 7,
+            symbolSize: 5,
             yAxisIndex: 1,
             // lineStyle: {
             //   normal: {
@@ -358,7 +357,7 @@ export default {
   computed: {
     guessRes() {
       return (
-          this.pianliang * 1 + this.electricity * 1 + 0.14110188 + 1.35494991
+          (this.pianliang * 1 + this.electricity * 1 + 0.14110188 + 1.35494991).toFixed(8)
       );
     },
   },
@@ -375,14 +374,15 @@ export default {
 .flex{
   display: flex;
 }
-.flex-2{
-  flex: 2
-}
-.flex-3{
-  flex: 3;
+.GDP-box{
+  height: 100%;
 }
 .GDP-preview-box{
+  width: 40%;
   margin-right: 8px;
+}
+.GDP-chart{
+  width: 100%;
 }
 .pianliang {
   height: 30px;
@@ -393,19 +393,19 @@ export default {
   align-items: center;
 }
 .elect {
-  font-size: 14px;
+  font-size: 12px;
   color: #ffffff;
   letter-spacing: 0;
   text-align: right;
-  width: 85px
+  width: 75px
 }
 
 .company {
-  font-size: 14px;
+  font-size: 12px;
   color: #ffffff;
   letter-spacing: 0;
   position: absolute;
-  right: 20px;
+  right: 12px;
   width: 35px;
 }
 .icondiy {
@@ -433,10 +433,11 @@ export default {
   letter-spacing: 0;
   text-align: center;
   outline: none;
+  width: 130px;
 }
 .guessRes .tit{
   margin-top: 12px;
-  font-size: 16px;
+  font-size: 12px;
 }
 .guessRes .result{
   margin-top: 12px;
@@ -460,7 +461,7 @@ export default {
 }
 #nesynew{
   width: 100%;
-  height: 240px;
+  height: 100%;
 }
 </style>
 <style>
@@ -480,6 +481,7 @@ export default {
   height: 30px;
   padding-right: 0;
   outline: none;
+  width: 130px;
 }
 .userInput .el-select__caret {
   display: none;

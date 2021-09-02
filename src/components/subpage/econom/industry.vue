@@ -187,7 +187,7 @@ export default {
             type: "pie",
             z: 3,
             center: ["50%", "50%"],
-            radius: ["45%", "75%"],
+            radius: ["45%", "70%"],
             color: [
               "#FFBE00",
               "#4AFFB7",
@@ -239,24 +239,24 @@ export default {
 .product{
   padding-bottom: 12px;
   font-size: 12px;
+  height: 89%;
 }
 #cyzb{
-  width: 100%;
-  height: 230px;
+  height: 100%;
 }
 .product-detail{
   font-size: 12px;
   color: #32C5FF;
 }
 .product-detail-box{
-  margin-top: 20px;
-  font-size: 14px;
+  margin-top: 15px;
+  font-size: 12px;
 }
 .product-detail-box > div:nth-child(2){
   margin-top: 6px;
 }
 .product-detail-box:nth-child(1){
-  margin-top: 22px;
+  margin-top: 15px;
 }
 .industry-name{
   color: #fff;

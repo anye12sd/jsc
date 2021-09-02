@@ -16,8 +16,11 @@
             <div>{{ k.name }}</div>
           </div>
         </div>
-        <div class="each" style="width: 30%">
-          <component :is="allmodel[1]"></component>
+        <div class="each" style="width: 30%" v-if="!enterpriseDetail">
+          <component :is="allmodel[1]" @showEnterprise="showEnterprise"></component>
+        </div>
+        <div class="each detail-component" style="width: 30%; height: 308%; position: relative; z-index: 1001" v-else>
+          <component :is="allmodel[8]" :enterpriseNameProp="enterpriseName" @hideEnterprise="hideEnterprise"></component>
         </div>
       </div>
       <div class="line">
@@ -27,8 +30,8 @@
         <div class="each" style="width: 38%">
           <component :is="allmodel[3]"></component>
         </div>
-        <div class="each" style="width: 30%">
-          <component :is="allmodel[4]"></component>
+        <div class="each" style="width: 30%" :class="!enterpriseDetail ? 'componentShow' : 'componentHide'">
+          <component :is="allmodel[4]" @showEnterprise="showEnterprise"></component>
         </div>
       </div>
       <div class="line">
@@ -38,8 +41,8 @@
         <div class="each" style="width: 38%">
           <component :is="allmodel[6]"></component>
         </div>
-        <div class="each" style="width: 30%">
-          <component :is="allmodel[7]"></component>
+        <div class="each" style="width: 30%" :class="!enterpriseDetail ? 'componentShow' : 'componentHide'">
+          <component :is="allmodel[7]" ></component>
         </div>
       </div>
     </div>
@@ -113,13 +116,17 @@ export default {
       models: [],
       allmodel: [
           "industry",
-          "kindGarden",
+          "enterpriseInfo",
           "invest",
           "carbon",
-          "job",
+          "enterpriseScore",
           "comEducation",
           "GDP",
+          "enterpriseRisk",
+          "enterpriseDetail"
       ],
+      enterpriseDetail: false,
+      enterpriseName: ''
     };
   },
   mounted() {
@@ -150,6 +157,13 @@ export default {
         this.heiper = Math.floor((hei / 350) * 100) / 100;
       }
     },
+    showEnterprise(name){
+      this.enterpriseName = name
+      this.enterpriseDetail = true
+    },
+    hideEnterprise(){
+      this.enterpriseDetail = false
+    }
   },
   components: {
     ...allpage,
@@ -222,5 +236,14 @@ export default {
       }
     }
   }
+}
+.componentShow{
+  opacity: 100%;
+}
+.componentHide{
+  opacity: 0;
+}
+.detail-component{
+  padding: 16px 20px 0px 20px !important;
 }
 </style>

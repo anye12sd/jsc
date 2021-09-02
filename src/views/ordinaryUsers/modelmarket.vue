@@ -65,7 +65,7 @@
       :visible.sync="dialogVisible"
       width="60%"
     >
-      <el-form ref="form" :model="form" label-width="80px">
+      <el-form ref="form" class="form-box" :model="form" label-width="80px">
         <el-form-item label="查询时间" v-if="sql_type == 1">
           <el-col :span="11">
             <el-date-picker
@@ -668,5 +668,11 @@ export default {
       }
     }
   }
+}
+.line{
+  text-align: center;
+}
+.form-box .el-input__inner{
+  width: 100%;
 }
 </style>
