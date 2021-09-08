@@ -12,8 +12,14 @@
     </div>
     <div class="user">
       <div class="left">
-        <span @click="gobefore" v-if="identity != 4">返回前台</span>
-        <span @click="signout">退出登录</span>
+        <span :class="'icon'+(show?' fan':' zhen')" @click="show = !show"></span>
+        <div :class="show?'msg ':''">
+          <div @click="gobefore" v-if="identity != 4">返回前台</div>
+          <div @click="signout">退出登录</div>
+          <div @click="showtab = !showtab">修改个人信息</div>
+        </div>
+        <!-- <span @click="gobefore" v-if="identity != 4">返回前台</span>
+        <span @click="signout">退出登录</span> -->
       </div>
       <div class="right">
         <div>
@@ -23,20 +29,63 @@
         <div class="time">{{ date1 }}&nbsp;&nbsp;{{ date2 }}</div>
       </div>
     </div>
+    <el-drawer title="修改个人信息" :visible.sync="showtab" direction="rtl" size="40%">
+      <div class="userinfo">
+        <div class="labe">
+          <span>姓名：</span>
+          <input type="text" v-model="info.userName" />
+        </div>
+
+        <div class="labe">
+          <span>密码：</span>
+          <input type="text" v-model="password" />
+        </div>
+        <div class="labe">
+          <span>手机号：</span>
+          <input type="text" v-model="info.mobile" />
+        </div>
+        <div class="labe">
+          <span>邮箱：</span>
+          <input type="text" v-model="info.email" />
+        </div>
+        <div class="labe">
+          <span>性别：</span>
+          <el-select v-model="info.sex" placeholder="请选择">
+            <el-option
+              v-for="item in sexoption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </div>
+        <div class="labe">
+          <span>地址：</span>
+          <input type="text" v-model="info.address" />
+        </div>
+        <div class="action">
+          <span @click="confirm">确定</span>
+          <span @click="cancel">取消</span>
+        </div>
+      </div>
+    </el-drawer>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import { getMenu } from "@/api/user.js";
+import { mapState } from "vuex";
+import { userEdit } from "@/api/list.js";
 export default {
   name: "topbar",
   data() {
     return {
+      show:false,
       date1: "2021-3-24",
       date2: "12:00",
       current: 0,
       usingOption: [],
+      password:'',
       identitys: {
         1: "系统管理员",
         2: "单位管理员",
@@ -44,6 +93,8 @@ export default {
         4: "模型开发人员",
         5:'数据专员'
       },
+      ns:['','系统','单位','普通','数据','开发'],
+      showtab:false,
       option: [
         {
           id: 1,
@@ -82,6 +133,23 @@ export default {
           path: "/process",
         },
       ],
+      sexoption: [
+        {
+          value: 1,
+          label: "男",
+        },
+        {
+          value: 2,
+          label: "女",
+        },
+      ],
+      info: {
+        userName: "",
+        mobile: '',
+        email: '',
+        sex: 1,
+        address: '',
+      },
     };
   },
   components: {
@@ -95,6 +163,9 @@ export default {
     setInterval(() => {
       this.getTime();
     }, 5000);
+    if(sessionStorage.getItem("mobile")) {
+      this.info.mobile = sessionStorage.getItem("mobile")
+    }
     this.init();
   },
   methods: {
@@ -153,6 +224,50 @@ export default {
       this.date1 = date.toLocaleDateString().split("/").join("-");
       this.date2 = date.getHours() + ":" + date.getMinutes();
     },
+    confirm() {
+      userEdit({
+        userName: this.info.userName,
+        id: this.userInfo.id,
+        mobile: this.info.mobile,
+        email: this.info.email,
+        empGender: this.info.sex,
+        workPlace: this.info.address,
+        status: 1 ,
+        password:this.password
+      }).then((res) => {
+        // console.log(res);
+        this.password = ''
+        if (res.data.status == 200) {
+          this.$message({
+            message:"修改成功",
+            type: "success",
+          });
+          this.$store.commit("config/setUsetInfo", {
+            userName: this.info.userName,
+            role_id: this.userInfo.role_id,
+            id:this.userInfo.id
+          });
+          let username = ''
+            username = res.data.data.userName || res.data.data.employeeName || this.ns[res.data.data.role_id]
+            sessionStorage.setItem("username", username);
+          sessionStorage.setItem("username", username);
+          sessionStorage.setItem("id", res.data.data.id);
+          sessionStorage.setItem("mobile", res.data.data.mobile);
+          this.showtab = false;
+          this.show = false
+          this.list[this.active] = res.data.data
+          this.active = -1
+        }
+      }).catch(()=>{
+        this.password = ''
+      });
+    },
+cancel() {
+      this.showtab = false;
+      this.active = -1
+    },
+
+
   },
   watch: {
     topbararr(){
@@ -190,6 +305,29 @@ export default {
   },
 };
 </script>
+
+<style lang="less">
+.topbar {
+  .userinfo {
+    .labe {
+      .el-select {
+        padding: 0 !important;
+        border: none !important;
+      }
+      .el-input--suffix .el-input__inner {
+        // border: none;
+        border: 1px solid #c1c1c1;
+        height: 30px;
+        line-height: 30px;
+        padding: 3px 5px;
+      }
+      .el-input__icon {
+        line-height: 30px;
+      }
+    }
+  }
+}
+</style>
 
 <style scoped lang="less">
 .topbar {
@@ -238,20 +376,60 @@ export default {
     .left{
       font-family: PingFangSC-Medium;
       color: #ffffff;
-      margin-right: 5px;
+      margin-right: 10px;
       cursor: pointer;
       text-align: center;
-      span{
-        font-size: 13px;
-        display: block;
-        background-color: #fff;
-        color: #016cf0;
-        // margin-top: 3px;
-        border-radius: 4px;
-        padding: 1px 5px;
+      position: relative;
+      // >span{
+      //   font-size: 13px;
+      //   display: block;
+      //   background-color: #fff;
+      //   color: #016cf0;
+      //   border-radius: 4px;
+      //   padding: 1px 5px;
+      // }
+      // >span:nth-of-type(2){
+      //   margin-top: 2px;
+      // }
+      >.icon{
+        background-color: transparent;
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-bottom: 2px solid #fff;
+        border-left: 2px solid #fff;
+        
+        transition: all 0.5s linear;
+        transform-origin: center center;
       }
-      span:nth-of-type(2){
-        margin-top: 2px;
+      >.zhen{
+        transform: rotate(-45deg);
+      }
+      >.fan{
+        transform: rotate(135deg);
+      }
+      >div{
+        max-height: 0;
+        transition: all 0.5s linear;
+        overflow: hidden;
+        position: absolute;
+        top: 25px;
+        left: -50px;
+        font-size: 13px;
+        width: 100px;
+        background-color: #fff;
+        box-shadow: 0px 0px 6px #000;
+        border-radius: 3px;
+        color: #000;
+        >div{
+          margin: 4px;
+        }
+        >div:hover{
+          background-color: #dcdfe4; 
+        }
+      }
+      >.msg{
+        max-height: 100px;
       }
     }
     .userName {
@@ -276,6 +454,70 @@ export default {
       font-size: 12px;
       color: #eaefff;
       letter-spacing: 1px;
+      text-align: center;
+    }
+  }
+
+    .userinfo {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 10px;
+    .labe {
+      width: 50%;
+      display: flex;
+      margin-top: 10px;
+      align-items: center;
+      span {
+        flex: 2;
+        text-align: right;
+        height: 30px;
+        line-height: 30px;
+        display: inline-block;
+        // text-align-last: justify;
+      }
+      div,
+      input {
+        flex: 4;
+        border: 1px solid #c1c1c1;
+        padding: 3px 5px;
+        border-radius: 4px;
+        height: 30px;
+        line-height: 24px;
+        box-sizing: border-box;
+      }
+      input:focus {
+        border: 1px solid #409eff;
+        outline: 0;
+      }
+    }
+    .action {
+      width: 100%;
+      margin-top: 20px;
+      text-align: center;
+    }
+    .action > span:nth-of-type(1) {
+      padding: 3px;
+      width: 100px;
+      box-sizing: border-box;
+      background: #017cf8;
+      color: #ffffff;
+      border-radius: 4px;
+      display: inline-block;
+      cursor: pointer;
+    }
+    .action > span:nth-of-type(2) {
+      padding: 3px;
+      width: 100px;
+      background: #ffffff;
+      box-sizing: border-box;
+      border: 1px solid #cccfd7;
+      box-shadow: 0 0 6px 0 rgba(38, 91, 218, 0.04);
+      border-radius: 4px;
+      color: #384155;
+      text-align: center;
+      display: inline-block;
+      cursor: pointer;
+      margin-left: 10px;
     }
   }
 }

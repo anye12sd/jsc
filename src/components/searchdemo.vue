@@ -159,6 +159,7 @@ export default {
   font-family: MicrosoftYaHei;
   font-size: 16px;
   color: #292929;
+  position: relative;
   label {
     margin-right: 1%;
   }
@@ -210,13 +211,15 @@ export default {
     margin-right: 3%;
   }
   .searchlogo {
+    position: relative;
     cursor: pointer;
-    height: 38%;
-    padding: 0.6% 1.8%;
+    height: 60%;
+    text-align: center;
     display: flex;
     align-items: center;
+    justify-content: center;
     border: 1px solid #017cf8;
-    width: auto;
+    width: 65px;
     background: #017cf8;
     border-radius: 2px;
   }

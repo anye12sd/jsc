@@ -259,11 +259,19 @@ export default {
       baseUrl: 'http://10.21.197.236:9000',
       searchContent: '',
       option: [],
-      dialogVisible: false
+      dialogVisible: false,
+      chart1:null,
+      chart2:null
     }
   },
   mounted() {
     this.getData(this.enterpriseName);
+    window.addEventListener("resize", this.itMyChart11);
+    window.addEventListener("resize", this.itMyChart12);
+  },
+  beforeDestroy(){
+    window.removeEventListener('resize',this.itMyChart11)
+    window.removeEventListener('resize',this.itMyChart12)
   },
   methods: {
     getData(xdata) {
@@ -313,7 +321,11 @@ export default {
       });
     },
     itMyChart11() {
+      if (this.chart1) {
+        this.chart1.dispose();
+      }
       let topxq2 = this.$echarts.init(document.getElementById("topxq3"));
+      this.chart1 = topxq2
       var dataname = [
         "经济状态",
         "创新发展",
@@ -422,7 +434,11 @@ export default {
       topxq2.setOption(option);
     },
     itMyChart12() {
+      if (this.chart2) {
+        this.chart2.dispose();
+      }
       let topdqyqk2 = this.$echarts.init(document.getElementById("topdqyqk3"));
+      this.chart2 = topdqyqk2
       var x = [];
       var y = [];
       let ymin = 0;

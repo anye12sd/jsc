@@ -426,6 +426,10 @@ export default {
         img {
           background-color: #fff;
           cursor: pointer;
+          vertical-align: middle;
+        }
+        span{
+          vertical-align: middle;
         }
       }
       .num {

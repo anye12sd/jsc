@@ -216,7 +216,7 @@ export default {
       this.explain.forEach((item) => {
         data.append(item.field, item.content);
       });
-      data.append("access_token", location.search.split("=")[1]);
+      data.append("access_token", location.search.split("=")[1] || sessionStorage.getItem("access_token")) ;
       data.append("id", this.changeAble.id);
       this.$axios({
         method: "post",
@@ -258,7 +258,7 @@ export default {
       this.explain.forEach((item) => {
         data.append(item.field, item.content);
       });
-      data.append("access_token", location.search.split("=")[1]);
+      data.append("access_token", location.search.split("=")[1] || sessionStorage.getItem("access_token"));
 
       this.$axios({
         method: "post",

@@ -37,14 +37,16 @@
         <div v-for="(k, index) in list" :key="index" class="line">
           <div class="num">{{ index }}</div>
           <div class="name" :title="k.demand_name">{{ k.demand_name }}</div>
-          <div class="company" :title="k.branch_id">
+          <div class="company" :title="k.get_branch_name">
             {{ k.get_branch_name }}
           </div>
           <div class="status" :title="st[k.status - 1]">
             {{ st[k.status - 1] }}
           </div>
           <div class="actions">
-            <span @click="selectPerson(index)">{{
+            <span v-if="userInfo.branch_id && userInfo.branch_id == k.branch_id && k.status == 4" @click="goon">通过</span>
+            <span v-if="userInfo.branch_id && userInfo.branch_id == k.branch_id && k.status == 4" @click="refuse">驳回</span>
+            <span @click="selectPerson(index)" v-else>{{
               k.execute_id != 0 ? "已选择" : "选择开发人员"
             }}</span>
           </div>
@@ -90,6 +92,7 @@
 import searchdemo from "@/components/searchdemo.vue";
 import { demandhandlelist, demandstatus, appCategory } from "@/api/list.js";
 import { demanduser } from "@/api/managa.js";
+import { mapState } from "vuex";
 export default {
   name: "demandHandle",
   data() {
@@ -121,7 +124,31 @@ export default {
   components: {
     searchdemo,
   },
+  computed:{
+    ...mapState('config',['userInfo','identity'])
+  },
   methods: {
+    goon(id, index) {
+      let status = 5;
+      if (this.identity == 1) {
+        status = 4;
+      }
+      demandstatus("status=" + status + "&id=" + id).then((res) => {
+        // console.log(res);
+        if (res.data.status == 200) {
+          this.handleCurrentChange(this.currentPage)
+        }
+      });
+    },
+    refuse(id, index) {
+      let status = this.identity == 1 ? 2 : 6
+      demandstatus("status="+status+"&id=" + id).then((res) => {
+        // console.log(res);
+        if (res.data.status == 200) {
+          this.handleCurrentChange(this.currentPage)
+        }
+      });
+    },
     handleNodeClick(data) {
       // console.log(data);
       this.queryId = data.id;

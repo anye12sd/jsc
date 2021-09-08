@@ -11,7 +11,7 @@
     <div class="list">
       <div class="line topline">
         <div class="num">姓名</div>
-        <div class="account">账号</div>
+        <div class="account">用户id</div>
         <div class="company">手机号</div>
         <div class="actions">操作</div>
       </div>
@@ -49,10 +49,14 @@
           <div v-if="!isedit">{{ userInfo.userName }}</div>
           <input v-else type="text" v-model="userInfo.userName" />
         </div>
-        <div class="labe">
+        <!-- <div class="labe">
           <span>账号：</span>
           <div v-if="!isedit">{{ userInfo.account }}</div>
           <input v-else type="text" v-model="userInfo.account" />
+        </div> -->
+        <div class="labe" v-if="isedit">
+          <span>密码：</span>
+          <input type="text" v-model="password" />
         </div>
         <div class="labe">
           <span>手机号：</span>
@@ -115,6 +119,7 @@ export default {
   data() {
     return {
       currentPage: 1,
+      password:'',
       total: 1,
       list: [],
       show: false,
@@ -175,8 +180,10 @@ export default {
         empGender: this.userInfo.sex,
         workPlace: this.userInfo.address,
         status: this.userInfo.status ,
+        password:this.password
       }).then((res) => {
         // console.log(res);
+        this.password = ''
         if (res.data.status == 200) {
           this.$message({
             message:"修改成功",
@@ -187,6 +194,8 @@ export default {
           this.list[this.active] = res.data.data
           this.active = -1
         }
+      }).catch(()=>{
+        this.password = ''
       });
     },
     cancel() {

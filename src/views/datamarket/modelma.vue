@@ -1,6 +1,13 @@
 <template>
   <div class="modelma">
     <!-- <searchdemo :four="true" one="模型编号" two="请输入模型编号"></searchdemo> -->
+    <searchdemo
+      one="模型名称"
+      two="请输入模型名称"
+      three="选择所属单位"
+      @feedback="justgoto"
+    ></searchdemo>
+
     <div class="addnew">
       <span @click="addnew">新增模型</span>
     </div>
@@ -36,6 +43,9 @@
             </p>
             <p @click="godown(k.id, index)" v-if="k.load == 1">
               <img :src="puton" alt="图片资源缺失" /> <span>下架</span>
+            </p>
+            <p @click="dele(k.id, index)">
+               <span>删除</span>
             </p>
           </div>
         </div>
@@ -80,7 +90,8 @@ import off from "@/assets/listlogo/off.png";
 import puton from "@/assets/listlogo/puton.png";
 import modelPuton from "./modelpo";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import { getmodellist, modelload, } from "@/api/list.js";
+import { getmodellist, modelload,moduledel } from "@/api/list.js";
+import searchdemo from "@/components/searchdemo.vue";
 export default {
   name: "modelma",
   data() {
@@ -95,6 +106,7 @@ export default {
       module_id: 0,
       waitEdit: false,
       showedit: false,
+      searchName:''
     };
   },
   computed: {
@@ -110,9 +122,20 @@ export default {
     });
   },
   components: {
-    modelPuton,
+    modelPuton,searchdemo
   },
   methods: {
+    justgoto(val){
+      this.searchName = val
+      this.handleCurrentChange(this.currentPage)
+    },
+    dele(id,idx){
+      moduledel('id='+id).then(res=>{
+        if(res.data.status == 200) {
+          this.handleCurrentChange(this.currentPage)
+        }
+      })
+    },
     hideedit() {
       this.showedit = false;
     },
@@ -153,6 +176,9 @@ export default {
       // console.log(`当前页: ${val}`);
       let queryStr = "";
       queryStr = "page=" + val;
+      if(this.searchName) {
+        queryStr += '&modulename='+this.searchName
+      }
       getmodellist(queryStr).then((res) => {
         this.list = res.data.data.list;
         this.total = res.data.data.count;
@@ -190,9 +216,14 @@ export default {
 <style scoped lang="less">
 .modelma {
   height: 91%;
+  position: relative;
   .addnew {
     height: 35px;
     line-height: 35px;
+    text-align: right;
+    position: absolute;
+    top: 1%;
+    right: 10px;
     text-align: right;
     span {
       background: #017cf8;

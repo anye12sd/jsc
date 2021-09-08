@@ -5,7 +5,7 @@
         <div>{{ date1 }}&nbsp;&nbsp;{{ date2 }}&nbsp;&nbsp;{{ week[day] }}</div>
         <tabs @jump="swit"></tabs>
       </div>
-      <div class="tit" v-show="current == 0">数字驾驶舱PC端</div>
+      <div class="tit" v-show="current == 0">长兴数字驾驶舱</div>
       <div class="user">
         <span
           class="goafter"

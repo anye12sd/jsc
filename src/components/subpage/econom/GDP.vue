@@ -71,11 +71,16 @@ export default {
           label: 2.5,
         },
       ],
-      baseUrl: 'http://10.21.197.236:9000'
+      baseUrl: 'http://10.21.197.236:9000',
+      chart:null
     };
   },
   mounted() {
     this.getData()
+    window.addEventListener("resize", this.itMyChartGDP);
+  },
+  beforeDestroy(){
+    window.removeEventListener('resize',this.itMyChartGDP)
   },
   methods: {
     getData(){
@@ -99,7 +104,11 @@ export default {
           });
     },
     itMyChartGDP() {
+      if (this.chart) {
+        this.chart.dispose();
+      }
       let nesynew = echarts.init(document.getElementById("nesynew"));
+      this.chart = nesynew
       let x = [];
       let y1 = [];
       let y2 = [];
@@ -135,7 +144,7 @@ export default {
           y: "0%",
           textStyle: {
             color: "#fff",
-            fontSize: "14",
+            fontSize: (16 / 1080) * document.body.scrollHeight,
           },
         },
         legend: {
@@ -147,7 +156,7 @@ export default {
           textStyle: {
             color: "#ddd",
             fontFamily: "SourceHanSansCN-Norma",
-            fontSize: 12,
+            fontSize: (14 / 1080) * document.body.scrollHeight,
           },
           data: [
             {
@@ -163,7 +172,7 @@ export default {
         tooltip: {
           trigger: "axis",
           textStyle:{
-            fontSize:14,
+            fontSize:(14 / 1080) * document.body.scrollHeight,
           },
           formatter: (param) => {
             var str = "";
@@ -199,6 +208,7 @@ export default {
           axisLabel: {
             //坐标轴刻度标签的相关设置
             show: true,
+            fontSize: (14 / 1080) * document.body.scrollHeight,
             textStyle: {
               color: "#d1e6eb",
               margin: 15,
@@ -212,7 +222,7 @@ export default {
             name: "亿元",
             nameTextStyle: {
               color: "#fff",
-              fontSize: "14",
+              fontSize: (14 / 1080) * document.body.scrollHeight,
               padding: [10, 0, 0, 0],
             },
             min: 0,
@@ -241,6 +251,7 @@ export default {
             axisLabel: {
               margin: 5,
               textStyle: {
+                fontSize: (14 / 1080) * document.body.scrollHeight,
                 color: "#d1e6eb",
               },
             },
@@ -254,7 +265,7 @@ export default {
             name: "增长率%",
             nameTextStyle: {
               color: "#fff",
-              fontSize: "14",
+              fontSize: (14 / 1080) * document.body.scrollHeight,
               // padding: [10, 0, 0, 0],
             },
             // min: 0,
@@ -310,7 +321,7 @@ export default {
             barWidth:14,
             itemStyle: {
               // color:"#008EF9",
-              fontSize:14,
+              fontSize:(14 / 1080) * document.body.scrollHeight,
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                 {
                   offset: 0,
@@ -464,7 +475,8 @@ export default {
   height: 100%;
 }
 </style>
-<style>
+<style lang='less'>
+#GDP{
 .userInput{
   position: relative;
   margin-top: 12px;
@@ -509,4 +521,6 @@ export default {
   padding: 0;
   width: auto;
 }
+}
+
 </style>

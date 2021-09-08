@@ -170,7 +170,7 @@ const routes = [
   // 普通用户页面
   {
     path:"/oridinaryUsers",
-    component:()=>import("../views/ordinaryUsers"),
+    component:()=>import("../views/oridinaryUsers"),
     children:[
       {
         path:'',
@@ -179,32 +179,32 @@ const routes = [
       {
         path:"pcdrive",
         name:"Pcdirve",
-        component:()=>import("../views/ordinaryUsers/pcdrive")
+        component:()=>import("../views/oridinaryUsers/pcdrive")
       },
       {
         path:"pcdrive2",
         name:"Pcdirve2",
-        component:()=>import("../views/ordinaryUsers/pcdrive2")
+        component:()=>import("../views/oridinaryUsers/pcdrive2")
       },
       {
         path:'modelmarket',
         name:"Modelmarket",
-        component:()=>import("../views/ordinaryUsers/modelmarket")
+        component:()=>import("../views/oridinaryUsers/modelmarket")
       },
       {
         path:"application",
         name:"Application",
-        component:()=>import('../views/ordinaryUsers/application')
+        component:()=>import('../views/oridinaryUsers/application')
       },
       {
         path:'datamarket',
         name:"Datamarket",
-        component:()=>import("../views/ordinaryUsers/datamarket")
+        component:()=>import("../views/oridinaryUsers/datamarket")
       },
       {
         path:"detail/:id",
         name:"Detail",
-        component:()=>import("../views/ordinaryUsers/detail")
+        component:()=>import("../views/oridinaryUsers/detail")
       }
     ]
   },

@@ -26,22 +26,30 @@
         <div v-for="(k, index) in list" :key="index" class="line">
           <div :title="k.appName">{{ k.appName }}</div>
           <div>
-            <img class="icon" v-if="k.app_ico" :src="'http://10.21.197.237'+k.app_ico" alt="">
+            <img
+              class="icon"
+              v-if="k.app_ico"
+              :src="'http://10.21.197.237' + k.app_ico"
+              alt=""
+            />
             <span v-else>无图标</span>
           </div>
           <div :title="k.update_time">{{ k.update_time }}</div>
           <div class="actions">
-            <p @click="goup(k.id, index)" v-if="k.load == 2 ">
+            <p @click="goup(k.id, index)" v-if="k.load == 2">
               <img :src="change" alt="图片资源缺失" /> <span>上架</span>
             </p>
             <p @click="edit(k, index)">
               <img :src="off" alt="图片资源缺失" /> <span>修改</span>
             </p>
-            <p @click="godown(k.id, index)" v-if="k.load == 1 ">
+            <p @click="godown(k.id, index)" v-if="k.load == 1">
               <img :src="puton" alt="图片资源缺失" /> <span>下架</span>
             </p>
             <p @click="intro(k.id, index)">
               <span>应用介绍</span>
+            </p>
+            <p @click="dele(k.id, index)">
+              <span>删除</span>
             </p>
           </div>
         </div>
@@ -60,11 +68,11 @@
     <div class="tip" v-if="showedit">
       <div class="mask" @click="hideedit"></div>
       <modelPuton
-         v-if="showedit"
+        v-if="showedit"
         class="maincen"
         @success="success"
         @cancel="hideputon"
-        :edit='waitEdit'
+        :edit="waitEdit"
       ></modelPuton>
     </div>
     <div class="tip" v-if="showputon">
@@ -74,7 +82,7 @@
         class="maincen"
         @success="success"
         @cancel="hideputon"
-        :edit='false'
+        :edit="false"
       ></modelPuton>
     </div>
     <modify
@@ -95,11 +103,7 @@ import puton from "@/assets/listlogo/puton.png";
 import modify from "./modify";
 import modelPuton from "./modelPuton";
 import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-import {
-  getlist,
-  appload,
-  introduce,
-} from "@/api/list.js";
+import { getlist, appload, introduce, appdel } from "@/api/list.js";
 export default {
   name: "modelManaga",
   data() {
@@ -141,8 +145,15 @@ export default {
     },
     edit(k, index) {
       this.showedit = true;
-      this.waitEdit = {...k}
+      this.waitEdit = { ...k };
       this.waitEdit.index = index;
+    },
+    dele(id) {
+      appdel("id=" + id).then((res) => {
+        if (res.data.status == 200) {
+          this.handleCurrentChange(this.currentPage);
+        }
+      });
     },
     intro(id) {
       introduce(id).then((res) => {
@@ -165,12 +176,12 @@ export default {
     },
     hideputon() {
       this.showputon = false;
-      this.showedit = false
+      this.showedit = false;
     },
-    success(){
-      this.handleCurrentChange(this.currentPage)
+    success() {
+      this.handleCurrentChange(this.currentPage);
       this.showputon = false;
-      this.showedit = false
+      this.showedit = false;
     },
     subok() {
       this.showModify = false;
@@ -287,7 +298,7 @@ export default {
       align-items: center;
       height: 8%;
       border: 1px solid #f5f6f9;
-      .icon{
+      .icon {
         height: 100%;
         max-width: 100%;
       }
@@ -334,6 +345,10 @@ export default {
         color: #017cf8;
       }
       .actions > p:nth-of-type(3) {
+        margin-left: 5px;
+        color: #017cf8;
+      }
+      .actions > p:nth-of-type(4) {
         margin-left: 5px;
         color: #fd6969;
       }

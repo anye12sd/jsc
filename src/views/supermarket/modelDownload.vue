@@ -89,12 +89,12 @@ export default {
   },
   methods: {
     expo(id) {
-      console.log("222");
+      let access_token = location.search.split("=")[1] || sessionStorage.getItem("access_token");
       window.open(
         "http://10.21.197.237/app/sql?id=" +
           id +
           "&access_token=" +
-          location.search.split("=")[1]
+          access_token
       );
       // appsql(id).then(res=>{
       //   console.log(res)

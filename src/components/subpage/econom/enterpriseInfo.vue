@@ -14,42 +14,67 @@
         </div>
       </div>
       <div class="enterprise-header flex">
-        <div class="enterprise-header-left flex-1 ">
+        <div class="enterprise-header-left flex-1">
           <div class="in">
             <div>总企业数</div>
             <div>
-              <span style="font-weight:bold;font-size: 16px;color: #32C5FF;margin-right: 7px">{{ qyzh_qyxx.zs }}</span>
+              <span
+                style="
+                  font-weight: bold;
+                  font-size: 16px;
+                  color: #32c5ff;
+                  margin-right: 7px;
+                "
+                >{{ qyzh_qyxx.zs }}</span
+              >
             </div>
           </div>
           <div class="in" style="margin-left: 18px">
             <div>较去年</div>
-            <div :class="qyzh_qyxx.xz&&qyzh_qyxx.xz * 1 >= 0? 'increase' : 'decrease'">{{ qyzh_qyxx.xz }}</div>
+            <div
+              :class="
+                qyzh_qyxx.xz && qyzh_qyxx.xz * 1 >= 0 ? 'increase' : 'decrease'
+              "
+            >
+              {{ qyzh_qyxx.xz }}
+            </div>
           </div>
         </div>
         <div class="enterprise-header-right flex-1">
           <div>规上企业数</div>
-          <div><span style="font-weight:bold;font-size: 16px;color: #32C5FF;margin-right: 4px">{{ qyzh_qyxx.gsqy }}</span></div>
+          <div>
+            <span
+              style="
+                font-weight: bold;
+                font-size: 16px;
+                color: #32c5ff;
+                margin-right: 4px;
+              "
+              >{{ qyzh_qyxx.gsqy }}</span
+            >
+          </div>
         </div>
       </div>
-      <div id="qyqrqk" v-if="active == 0"></div>
-      <div id="qyhyfb" v-if="active == 1"></div>
+      <div class="mi">
+        <div id="qyqrqk" :class="active == 0 ? '' : 'hide'"></div>
+        <div id="qyhyfb" :class="active == 1 ? '' : 'hide'"></div>
+      </div>
     </div>
-    <div class="search-box" @click="dialogVisible = true">
-      搜索
-    </div>
+    <div class="search-box" @click="dialogVisible = true">搜索</div>
     <el-dialog
-        title="提示"
-        :visible.sync="dialogVisible"
-        width="60%"
-        :before-close="handleClose">
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="60%"
+      :before-close="handleClose"
+    >
       <el-autocomplete
-          :trigger-on-focus="false"
-          v-model="searchContent"
-          class="el-input-reset"
-          value-key="firm_name"
-          :fetch-suggestions="querySearchAsync"
-          placeholder="请输入内容"
-          @select="handleSelect"
+        :trigger-on-focus="false"
+        v-model="searchContent"
+        class="el-input-reset"
+        value-key="firm_name"
+        :fetch-suggestions="querySearchAsync"
+        placeholder="请输入内容"
+        @select="handleSelect"
       ></el-autocomplete>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -60,75 +85,83 @@
 </template>
 
 <script>
-import echarts from 'echarts'
+import echarts from "echarts";
 export default {
   name: "enterpriseInfo",
-  data(){
+  data() {
     return {
-      searchContent: '',
-      qyhyfb: '',
-      qyqrqk: '',
+      searchContent: "",
+      qyhyfb: "",
+      qyqrqk: "",
       active: 0,
       qyzh_qyxx: [],
       qyzh_qyxx1: [],
       qyzh_qyxx2: [],
-      baseUrl: 'http://10.21.197.236:9000',
+      baseUrl: "http://10.21.197.236:9000",
       dialogVisible: false,
-      option: []
-    }
+      option: [],
+    };
   },
   mounted() {
-    this.getData()
+    this.getData();
+    window.addEventListener("resize", this.itMyChart9);
+    window.addEventListener("resize", this.itMyChart10);
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.itMyChart9);
+    window.removeEventListener("resize", this.itMyChart10);
   },
   methods: {
     getData() {
       //   let data = this.$qs.stringify({
       //     nx: 2020,
       //   });
-      let data = ({
-        xzq: '长兴县',
-      });
+      let data = {
+        xzq: "长兴县",
+      };
       this.$axios({
         method: "post",
         url: this.baseUrl + "/index/economic/qyzh_qyxx",
         data: data,
       })
-          .then((res) => {
-            let optionsdata = res.data;
-            if (optionsdata.code == 200) {
-              this.qyzh_qyxx = optionsdata.data[0][0];
-              this.qyzh_qyxx1 = optionsdata.data[1];
-              this.qyzh_qyxx2 = optionsdata.data[2];
-              this.itMyChart9();
-              this.itMyChart10();
-            }
-            else{
-              this.$message.error("获取企业信息失败")
-            }
-            // console.log(optionsdata.data, 88);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        .then((res) => {
+          let optionsdata = res.data;
+          if (optionsdata.code == 200) {
+            this.qyzh_qyxx = optionsdata.data[0][0];
+            this.qyzh_qyxx1 = optionsdata.data[1];
+            this.qyzh_qyxx2 = optionsdata.data[2];
+            this.itMyChart9();
+            this.itMyChart10();
+          } else {
+            this.$message.error("获取企业信息失败");
+          }
+          // console.log(optionsdata.data, 88);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     swit(val) {
-      if(val == this.active) return
+      if (val == this.active) return;
       this.active = val;
-      if(val == 0){
-        this.qyhyfb.dispose()
+      if (val == 0) {
+        this.qyhyfb.dispose();
         this.$nextTick(function () {
-          this.itMyChart9()
-        })
-      }else{
-        this.qyqrqk.dispose()
+          this.itMyChart9();
+        });
+      } else {
+        this.qyqrqk.dispose();
         this.$nextTick(function () {
-          this.itMyChart10()
-        })
+          this.itMyChart10();
+        });
       }
     },
     itMyChart9() {
+      if (this.qyqrqk) {
+        this.qyqrqk.dispose();
+      }
       let qyqrqk = this.$echarts.init(document.getElementById("qyqrqk"));
-      this.qyqrqk = qyqrqk
+      this.qyqrqk = qyqrqk;
       var x = [];
       var y = [];
       this.qyzh_qyxx2.map((item) => {
@@ -148,24 +181,24 @@ export default {
         //     color: "#666",
         //     fontSize: "14",
         //   },
-          // subtextStyle: {
-          //   color: "#90979c",
-          //   fontSize: "16",
-          // },
+        // subtextStyle: {
+        //   color: "#90979c",
+        //   fontSize: "16",
+        // },
         // },
         tooltip: {
           trigger: "axis",
           backgroundColor: "rgba(0,0,0,0.7)",
           textStyle: {
             color: "#fff",
-            fontSize:14
+            fontSize: (14 / 1080) * document.body.scrollHeight,
           },
           formatter: "{a}<br/>{c}",
         },
         grid: {
           top: "20%",
-          left: "13%",
-          right: "17%",
+          left: "5%",
+          right: "5%",
           bottom: "6%",
           containLabel: true,
         },
@@ -192,7 +225,7 @@ export default {
               textStyle: {
                 color: "#fff",
                 margin: 0,
-                fontSize: 12
+                fontSize: (12 / 1080) * document.body.scrollHeight,
               },
             },
             axisTick: {
@@ -227,10 +260,10 @@ export default {
               },
             },
             axisLabel: {
-              margin: 12,
+              margin: (12 / 1080) * document.body.scrollHeight,
               textStyle: {
                 color: "#fff",
-                fontSize: 12
+                fontSize: (12 / 1080) * document.body.scrollHeight,
               },
             },
             axisTick: {
@@ -258,7 +291,7 @@ export default {
               position: "top",
               textStyle: {
                 color: "#fff",
-                fontSize: 16
+                fontSize: (16 / 1080) * document.body.scrollHeight,
               },
             },
             itemStyle: {
@@ -274,21 +307,21 @@ export default {
               normal: {
                 //线性渐变，前4个参数分别是x0,y0,x2,y2(范围0~1);相当于图形包围盒中的百分比。如果最后一个参数是‘true’，则该四个值是绝对像素位置。
                 color: new echarts.graphic.LinearGradient(
-                    0,
-                    0,
-                    0,
-                    1,
-                    [
-                      {
-                        offset: 0,
-                        color: "#f7b500",
-                      },
-                      {
-                        offset: 1,
-                        color: "rgba(255,255,255, 0)",
-                      },
-                    ],
-                    false
+                  0,
+                  0,
+                  0,
+                  1,
+                  [
+                    {
+                      offset: 0,
+                      color: "#f7b500",
+                    },
+                    {
+                      offset: 1,
+                      color: "rgba(255,255,255, 0)",
+                    },
+                  ],
+                  false
                 ),
                 shadowColor: "#f7b500", //阴影颜色
                 shadowBlur: 0, //shadowBlur设图形阴影的模糊大小。配合shadowColor,shadowOffsetX/Y, 设置图形的阴影效果。
@@ -302,7 +335,7 @@ export default {
     },
     itMyChart10() {
       let qyhyfb = this.$echarts.init(document.getElementById("qyhyfb"));
-      this.qyhyfb = qyhyfb
+      this.qyhyfb = qyhyfb;
       var xdata = [];
       // var y = [];
       this.qyzh_qyxx1.map((item) => {
@@ -323,34 +356,41 @@ export default {
         //     color: "#666",
         //     fontSize: "14",
         //   },
-          // subtextStyle: {
-          //   color: "#90979c",
-          //   fontSize: "16",
-          // },
+        // subtextStyle: {
+        //   color: "#90979c",
+        //   fontSize: "16",
+        // },
         // },
         animation: true,
         tooltip: {
           trigger: "item",
           // formatter: "{b}  {d}% ",
-          textStyle:{
-            fontSize: 14,
-          }
+          textStyle: {
+            fontSize: (14 / 1080) * document.body.scrollHeight,
+          },
         },
         legend: {
+          type: "scroll",
+          pageIconSize: (32 / 4860) * document.body.scrollWidth,
+          pageIconColor: "#fff000",
+          pageTextStyle: {
+            fontSize: (32 / 4860) * document.body.scrollWidth,
+            color: "#fff",
+          },
           width: "100%",
           textStyle: {
             color: "#fff",
-            fontSize: 12,
+            fontSize: (16 / 1080) * document.body.scrollHeight,
           },
           icon: "circle",
           bottom: 10,
-          right: '22%',
+          right: "22%",
           itemGap: 5,
           padding: [0, 0],
           orient: "vertical",
-          formatter:(name)=>{
-            return name
-          }
+          formatter: (name) => {
+            return name;
+          },
         },
         series: [
           {
@@ -403,16 +443,16 @@ export default {
                   },
                   b: {
                     color: "#b3e5ff",
-                    fontSize: 16,
+                    fontSize: (16 / 1080) * document.body.scrollHeight,
                     lineHeight: 33,
                   },
                   c: {
-                    fontSize: 14,
+                    fontSize: (14 / 1080) * document.body.scrollHeight,
                     color: "#eee",
                   },
                   per: {
                     color: "#FDF44E",
-                    fontSize: 14,
+                    fontSize: (14 / 1080) * document.body.scrollHeight,
                     padding: [5, 8],
                     borderRadius: 2,
                   },
@@ -430,15 +470,15 @@ export default {
       qyhyfb.setOption(option);
     },
     handleClose(done) {
-      done()
+      done();
     },
-    handleClick(){
-      this.$emit('showEnterprise', this.searchContent)
-      this.dialogVisible = false
+    handleClick() {
+      this.$emit("showEnterprise", this.searchContent);
+      this.dialogVisible = false;
     },
     handleSelect(item) {
-      this.$emit('showEnterprise', item.firm_name)
-      this.dialogVisible = false
+      this.$emit("showEnterprise", item.firm_name);
+      this.dialogVisible = false;
     },
     querySearchAsync(queryString, cb) {
       this.$axios({
@@ -448,17 +488,17 @@ export default {
         if (res.data.code == 200) {
           this.option = res.data.data[0];
           cb(this.option);
-        } else if(res.data.code == 300){
+        } else if (res.data.code == 300) {
           this.option = [];
           cb(this.option);
         }
       });
     },
-  }
-}
+  },
+};
 </script>
 
-<style scoped>
+<style scoped lang='less'>
 #enterpriseInfo {
   width: 100%;
   height: 100%;
@@ -466,15 +506,18 @@ export default {
   box-sizing: border-box;
   position: relative;
 }
-.flex{
+.flex {
   display: flex;
 }
-.flex-1{
+.hide {
+  visibility: hidden;
+}
+.flex-1 {
   flex: 1;
 }
-.info-box{
+.info-box {
   position: relative;
-  height: 100%;
+  height: 89%;
 }
 .menu {
   position: absolute;
@@ -485,7 +528,7 @@ export default {
   align-items: center;
   z-index: 100;
 }
-.menu div{
+.menu div {
   cursor: pointer;
   background: #0f3264;
   border: 1px solid #2061bc;
@@ -495,55 +538,63 @@ export default {
   color: #bcf6ff;
   padding: 2px 5px;
 }
-.menu .active{
-  background-image: linear-gradient(179deg,
-  #3688ff 19%,
-  #1a57ab 63%,
-  #1c3e68 100%);
+.menu .active {
+  background-image: linear-gradient(
+    179deg,
+    #3688ff 19%,
+    #1a57ab 63%,
+    #1c3e68 100%
+  );
   border: 1px solid #94c1ff;
   border-radius: 2px 0 0 2px;
   font-family: MicrosoftYaHei;
   font-size: 1.4rem;
   color: #ffffff;
 }
-.enterprise-header{
+.enterprise-header {
   color: #fff;
-  font-size: 14px;
-  margin-top: 8px;
+  font-size: 1.4rem;
+  height: 30%;
+  align-items: center;
 }
-.enterprise-header-left{
+.enterprise-header-left {
   text-align: right;
   padding-right: 25px;
 }
-.enterprise-header-right{
+.enterprise-header-right {
   padding-left: 25px;
 }
-.increase{
+.increase {
   color: #1fe86e;
-  background: url("../../../assets/subpage/increase.png")no-repeat left;
+  background: url("../../../assets/subpage/increase.png") no-repeat left;
   background-size: 12px;
   padding-left: 15px;
   font-weight: 500;
 }
-.decrease{
+.decrease {
   color: #fa6400;
-  background: url("../../../assets/subpage/reduce.png")no-repeat left;
+  background: url("../../../assets/subpage/reduce.png") no-repeat left;
   background-size: 12px;
   padding-left: 15px;
   font-weight: 500;
 }
-.in{
+.in {
   display: inline-block;
 }
-#qyqrqk{
+.mi {
   width: 100%;
-  height: 60%;
+  height: 70%;
+  position: relative;
+  #qyqrqk,
+  #qyhyfb {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 }
-#qyhyfb{
-  width: 100%;
-  height: 60%;
-}
-.search-box{
+.search-box {
   position: absolute;
   top: -48px;
   cursor: pointer;
@@ -552,7 +603,7 @@ export default {
   height: 25px;
   line-height: 25px;
   width: 50px;
-  padding:0 2px 0 15px;
+  padding: 0 2px 0 15px;
   font-size: 12px;
   text-align: center;
   border-radius: 15px;
@@ -560,11 +611,11 @@ export default {
   background-repeat: no-repeat;
   background-position: 10px;
 }
-.el-input-reset{
+.el-input-reset {
   width: 100%;
 }
-.el-input-reset /deep/ .el-input__inner{
+.el-input-reset /deep/ .el-input__inner {
   width: 100%;
-  padding: 0 15px
+  padding: 0 15px;
 }
 </style>

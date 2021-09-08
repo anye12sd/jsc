@@ -76,10 +76,15 @@ export default {
       huzhoushi: [],
       xiang: [],
       industry: [],
+      chart:null
     }
   },
   mounted() {
     this.getData()
+    window.addEventListener("resize", this.drawhzbt);
+  },
+  beforeDestroy(){
+    window.removeEventListener('resize',this.drawhzbt)
   },
   methods: {
     swit(val) {
@@ -125,7 +130,11 @@ export default {
           });
     },
     drawhzbt() {
+      if (this.chart) {
+        this.chart.dispose();
+      }
       let hzbt = this.$echarts.init(document.getElementById("hzbt"));
+      this.chart = hzbt
       let data = [];
       this.huzhoushi.forEach((item) => {
         data.push({

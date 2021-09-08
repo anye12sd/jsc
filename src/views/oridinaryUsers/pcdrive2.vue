@@ -238,7 +238,7 @@ export default {
   }
 }
 .componentShow{
-  opacity: 100%;
+  opacity: 1;
 }
 .componentHide{
   opacity: 0;

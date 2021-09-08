@@ -26,8 +26,8 @@
               各类型投资
             </div>
           </div>
-          <div id="tzbzqk" v-if="active == 0"></div>
-          <div id="gytr" v-else-if="active == 1"></div>
+          <div id="tzbzqk" :class="active == 0 ? '':'hide'"></div>
+          <div id="gytr" :class="active == 1 ? '':'hide'"></div>
         </div>
       </div>
     </div>
@@ -66,23 +66,24 @@ export default {
   },
   methods: {
     getdata2() {
-      let data = qs.stringify({
-        nx: 2020,
-      });
+      // let data = qs.stringify({
+      //   nx: 2020,
+      // });
       this.$axios({
         method: "post",
         url: this.baseUrl + "/index/economic/cyhl_zsyz",
-        data: data,
+        // data: data,
       })
           .then((res) => {
             let optionsdata = res.data;
             if (optionsdata.code == 200) {
               this.cyhl_zsyz = optionsdata.data[0][0];
               this.cyhl_zsyz1 = optionsdata.data[1];
+              this.itMyChart2();
             }else{
               this.$message.error('无法获取产业比重数据，请联系管理员')
             }
-            this.itMyChart2();
+            
             // console.log(optionsdata.data, 88);
           })
           .catch((err) => {
@@ -90,13 +91,13 @@ export default {
           });
     },
     get_options2() {
-      let data = qs.stringify({
-        nx: 2020,
-      });
+      // let data = qs.stringify({
+      //   nx: 2020,
+      // });
       this.$axios({
         method: "post",
         url: this.baseUrl + "/index/economic/cyhl_gdzc",
-        data: data,
+        // data: data,
       })
           .then((res) => {
             let optionsdata = res.data;
@@ -109,8 +110,6 @@ export default {
             }else{
               this.$message.error('无法获取产业比重数据，请联系管理员')
             }
-            this.itMyChart2();
-            // console.log(optionsdata.data, 88);
           })
           .catch((err) => {
             console.log(err);
@@ -152,7 +151,7 @@ export default {
 
           textStyle: {
             color: "#fff",
-            fontSize: "12",
+            fontSize: (12 / 1080) * document.body.scrollHeight,
           },
         //   subtextStyle: {
         //     color: "#90979c",
@@ -175,7 +174,7 @@ export default {
           show: true,
           trigger: "axis",
           textStyle:{
-            fontSize:12
+            fontSize:(12 / 1080) * document.body.scrollHeight
           },
           formatter: (param) => {
             var str = "";
@@ -208,7 +207,7 @@ export default {
               symbolOffset: [0, 8],
               lineStyle: {
                 color: "#979797",
-                fontSize: "12",
+                fontSize: (12 / 1080) * document.body.scrollHeight,
               },
             },
             //箭头一端没效果,一端箭头
@@ -218,7 +217,7 @@ export default {
               //坐标轴刻度标签的相关设置
               textStyle: {
                 color: "#fff",
-                margin: 15,
+                margin: (15 / 1080) * document.body.scrollHeight,
               },
             },
             axisTick: {
@@ -239,7 +238,7 @@ export default {
             max: 12,
             nameTextStyle: {
               color: "#fff",
-              fontSize: "12",
+              fontSize: (12 / 1080) * document.body.scrollHeight,
               padding: [10, 0, 0, 0],
             },
             splitNumber: 6,
@@ -258,14 +257,14 @@ export default {
               symbol: ["none", "arrow"], //箭头一端没效果,一端箭头
               symbolSize: [7, 10],
               symbolOffset: [0, 8],
-              fontSize: "12",
+              fontSize: (12 / 1080) * document.body.scrollHeight,
               lineStyle: {
                 color: "#979797",
-                fontSize: "12",
+                fontSize: (12 / 1080) * document.body.scrollHeight,
               },
             },
             axisLabel: {
-              margin: 20,
+              margin: (20 / 1080) * document.body.scrollHeight,
               textStyle: {
                 color: "#fff",
               },
@@ -411,7 +410,7 @@ export default {
           y: "0%",
           textStyle: {
             color: "#fff",
-            fontSize: "12",
+            fontSize: (12 / 1080) * document.body.scrollHeight,
           },
         },
         tooltip: {
@@ -447,7 +446,7 @@ export default {
             boundaryGap: true,
             nameTextStyle: {
               color: "#fff",
-              fontSize: "14",
+              fontSize: (14 / 1080) * document.body.scrollHeight,
               // padding:[10,0,0 ,0]
             },
             axisLine: {
@@ -484,7 +483,7 @@ export default {
             // max: 140,
             nameTextStyle: {
               color: "#fff",
-              fontSize: "14",
+              fontSize: (14 / 1080) * document.body.scrollHeight,
               padding: [10, 0, 0, 0],
             },
             splitNumber: 6,
@@ -621,13 +620,13 @@ export default {
           splitNumber: 4,
           nameTextStyle: {
             color: "#666",
-            fontSize: "14",
+            fontSize: (14 / 1080) * document.body.scrollHeight,
             padding: [0,0,0,-6]
           },
           splitLine: {
             show: false,
             lineStyle: {
-              color: "#rgba(0,145,255,1)",
+              color: "rgba(0,145,255,1)",
             },
           },
           axisTick: {
@@ -675,7 +674,7 @@ export default {
             //formatter: '{value} m³ ', //  给y轴添加单位
             textStyle: {
               color: "#fff",
-              fontSize: 14,
+              fontSize: (14 / 1080) * document.body.scrollHeight,
             },
           },
         },
@@ -683,7 +682,7 @@ export default {
           {
             type: "bar",
             name: "产出",
-            barWidth:37,
+            barWidth:(37 / 1080) * document.body.scrollHeight ,
             itemStyle: {
               normal: {
                 label: {
@@ -694,7 +693,7 @@ export default {
                     color: function (params) {
                       return colorList[params.dataIndex];
                     },
-                    fontSize: 14,
+                    fontSize: (14 / 1080) * document.body.scrollHeight,
                     // fontWeight: 600
                   },
                   formatter: function (data) {
@@ -744,6 +743,9 @@ export default {
   color: #fff;
   box-sizing: border-box;
 }
+.hide{
+  visibility: hidden;
+}
 .bigtit{
   height: 5%;
 }
@@ -754,12 +756,14 @@ export default {
   flex: 1;
 }
 .invest{
-  height: 100%;
+  height: 95%;
+  overflow: hidden;
 }
 .invest-header{
   color: #fff;
-  font-size: 14px;
-  margin-top: 12px;
+  font-size: 1.4rem;
+  height: 15%;
+  align-items: center;
 }
 .invest-header-left{
   text-align: right;
@@ -771,14 +775,14 @@ export default {
 .invest-header-content{
   color: #32C5FF;
   margin-top: 5px;
-  font-size: 14px;
+  font-size: 1.4rem;
 }
 .invest-header-content span{
   font-weight:bold;
   margin-right: 4px;
 }
 .invest-content{
-  height: 80%;
+  height: 85%;
 }
 #zsyz{
   width: 100%;
@@ -786,7 +790,7 @@ export default {
 }
 .invest-content-box{
   position: relative;
-  height: 100%;
+  height: 50%;
 }
 .menu {
   position: absolute;
@@ -820,14 +824,18 @@ export default {
 }
 #tzbzqk{
   width: 100%;
-  height: 50%;
+  height: 100%;
   z-index: 99;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 #gytr{
   width: 100%;
-  height: 55%;
+  height: 100%;
   z-index: 99;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 </style>

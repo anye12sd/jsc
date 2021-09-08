@@ -208,7 +208,7 @@ export function demandexecute (str) {
 export function appAdd(data) {
     return request({
         method:"post",
-        url:"/app/add",
+        url:"/module/add",
         data
     })
 }
@@ -340,5 +340,19 @@ export function testing(str){
     return request ({
         method:"get",
         url:"testing?"+str,
+    })
+}
+
+export function moduledel(str){
+    return request ({
+        method:"get",
+        url:"module/del?"+str,
+    })
+}
+
+export function appdel(str){
+    return request ({
+        method:"get",
+        url:"app/del?"+str,
     })
 }

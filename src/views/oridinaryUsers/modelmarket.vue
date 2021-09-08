@@ -396,7 +396,7 @@ export default {
       formData.append("date1", this.form.date1);
       formData.append("date2", this.form.date2);
       formData.append("content", this.form.contents);
-      formData.append("access_token", location.search.split("=")[1]);
+      formData.append("access_token", location.search.split("=")[1] || sessionStorage.getItem("access_token"));
       formData.append("id", this.id);
       formData.append("sql_type", this.sql_type);
       console.log(formData);
@@ -452,7 +452,7 @@ export default {
       formData.append("date1", this.form.date1);
       formData.append("date2", this.form.date2);
       formData.append("content", this.form.contents);
-      formData.append("access_token", location.search.split("=")[1]);
+      formData.append("access_token", location.search.split("=")[1] || sessionStorage.getItem("access_token"));
       formData.append("id", this.id);
       formData.append("sql_type", this.sql_type);
       console.log(formData);
@@ -525,11 +525,12 @@ export default {
       // }
       // document.body.appendChild(elemIF)
       this.loading = true;
+      let access_token = location.search.split("=")[1] || sessionStorage.getItem("access_token");
       let URL =
         "http://10.21.197.237/module/sql?id=" +
         id +
         "&access_token=" +
-        location.search.split("=")[1] +
+        access_token +
         "&sql_type=" +
         type +
         "&start_time=" +
