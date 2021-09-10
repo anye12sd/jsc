@@ -2,6 +2,56 @@
   <div class="pcdrive">
     <div class="cen">
       <div class="line">
+        <div class="themeline">
+          <span class="theme">产业情况</span>
+        </div>
+        <div class="each" style="height: 31%">
+          <component :is="allmodel[0]"></component>
+        </div>
+        <div class="each" style="height: 62%">
+          <component :is="allmodel[2]"></component>
+        </div>
+<!--        <div class="each" style="height: 31%">-->
+<!--          <component :is="allmodel[3]"></component>-->
+<!--        </div>-->
+      </div>
+      <div class="midline">
+        <div class="menu" ref="each">
+          <div
+              v-for="(k, index) in opt"
+              :key="k.name"
+              :class="0 == index ? 'op' : 'op light'"
+              @click="changtype(index)"
+          >
+            <img :src="k.img" alt=" " />
+            <div>{{ k.name }}</div>
+          </div>
+        </div>
+        <div class="down">
+          <div class="themeline">
+            <span class="theme">GDP预测</span>
+          </div>
+          <div class="each">
+            <component :is="allmodel[6]" style="height:49%;"></component>
+          </div>
+        </div>
+        <div class="down">
+          <div class="themeline">
+            <span class="theme">碳排放总量排行</span>
+          </div>
+          <div class="each">
+            <component :is="allmodel[4]" style="height:49%;"></component>
+            <component :is="allmodel[7]" style="height:49%;"></component>
+          </div>
+        </div>
+      </div>
+      <div class="line">
+        <div class="themeline">
+          <span class="theme">企业综合</span>
+        </div>
+      </div>
+      <!--
+      <div class="line">
         <div class="each" style="width: 30%">
           <component :is="allmodel[0]"></component>
         </div>
@@ -45,6 +95,7 @@
           <component :is="allmodel[7]" ></component>
         </div>
       </div>
+      -->
     </div>
   </div>
 </template>
@@ -180,23 +231,38 @@ export default {
     height: 100%;
     display: flex;
     margin: 0 auto;
-    align-content: space-around;
-    flex-wrap: wrap;
+    justify-content: space-between;
     > .line {
-      width: 100%;
-      height: 32%;
+      width: 24%;
       display: flex;
-      justify-content: space-between;
+      flex-wrap: wrap;
+      align-content: space-around;
       > .each {
-        height: 100%;
-        padding: 16px 10px 0 20px;
+        width: 100%;
+        padding: 13px 10px 0 15px;
         box-sizing: border-box;
         background-color: rgba(6, 26, 62, 0.4);
         box-shadow: inset 0 1px 3px 0 rgba(0, 255, 234, 0.5),
-          inset 0 0 11px 0 #00b7ff;
+        inset 0 0 11px 0 #00b7ff;
         border-radius: 20px;
       }
+      > .themeline {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 4%;
+      }
+    }
+    > .midline {
+      width: 49.3333%;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
       > .menu {
+        width: 80%;
+        height: 32%;
+        margin: 0 auto;
         background-image: url("../../assets/img/mainbg.png");
         background-repeat: no-repeat;
         background-size: 85% 83%;
@@ -234,16 +300,109 @@ export default {
           }
         }
       }
+      > .down {
+        width: 49%;
+        height: 68%;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: space-around;
+        > .themeline {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 6%;
+        }
+        > .each {
+          height: 92%;
+          width: 100%;
+          padding: 13px 10px 0 20px;
+          box-sizing: border-box;
+          background-color: rgba(6, 26, 62, 0.4);
+          box-shadow: inset 0 1px 3px 0 rgba(0, 255, 234, 0.5),
+          inset 0 0 11px 0 #00b7ff;
+          border-radius: 20px;
+          display: flex;
+          flex-wrap: wrap;
+          align-content: space-between;
+        }
+      }
     }
   }
 }
-.componentShow{
-  opacity: 1;
-}
-.componentHide{
-  opacity: 0;
-}
-.detail-component{
-  padding: 16px 20px 0px 20px !important;
-}
+// 旧式css
+//.pcdrive {
+//  height: 93%;
+//  width: 100%;
+//  .cen {
+//    width: 97%;
+//    height: 100%;
+//    display: flex;
+//    margin: 0 auto;
+//    align-content: space-around;
+//    flex-wrap: wrap;
+//    > .line {
+//      width: 100%;
+//      height: 32%;
+//      display: flex;
+//      justify-content: space-between;
+//      > .each {
+//        height: 100%;
+//        padding: 16px 10px 0 20px;
+//        box-sizing: border-box;
+//        background-color: rgba(6, 26, 62, 0.4);
+//        box-shadow: inset 0 1px 3px 0 rgba(0, 255, 234, 0.5),
+//          inset 0 0 11px 0 #00b7ff;
+//        border-radius: 20px;
+//      }
+//      > .menu {
+//        background-image: url("../../assets/img/mainbg.png");
+//        background-repeat: no-repeat;
+//        background-size: 85% 83%;
+//        background-position: center center;
+//        display: flex;
+//        justify-content: space-around;
+//        align-items: flex-end;
+//        flex-wrap: wrap;
+//        box-shadow: none;
+//        background-color: transparent;
+//        > div:nth-child(1),
+//        > div:nth-child(4) {
+//          margin-bottom: 20px;
+//        }
+//        > div:nth-child(2),
+//        > div:nth-child(3) {
+//          margin-bottom: 0px;
+//        }
+//        > .light {
+//          opacity: 0.6;
+//        }
+//        > .op {
+//          width: 16%;
+//          font-family: SourceHanSerifSC-Heavy;
+//          font-size: 18px;
+//          color: #ffffff;
+//          letter-spacing: 0;
+//          text-align: center;
+//          img {
+//            width: 100%;
+//            cursor: pointer;
+//          }
+//          > div {
+//            cursor: pointer;
+//          }
+//        }
+//      }
+//    }
+//  }
+//}
+//.componentShow{
+//  opacity: 1;
+//}
+//.componentHide{
+//  opacity: 0;
+//}
+//.detail-component{
+//  padding: 16px 20px 0px 20px !important;
+//}
 </style>
