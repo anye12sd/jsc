@@ -130,10 +130,10 @@ export default {
     };
   },
   mounted() {
-    this.changesize();
-    window.onresize = () => {
-      this.changesize();
-    };
+    // this.changesize();
+    // window.onresize = () => {
+    //   this.changesize();
+    // };
   },
   methods: {
     changtype(index) {
@@ -173,7 +173,7 @@ export default {
 
 <style scoped lang="less">
 .pcdrive {
-  height: 92%;
+  height: 93%;
   width: 100%;
   .cen {
     width: 97%;

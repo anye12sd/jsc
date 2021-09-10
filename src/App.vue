@@ -128,7 +128,7 @@ export default {
         }
       }
       // console.log(access_token)
-      if (access_token ) {
+      if (access_token && !sessionStorage.getItem("access_token")) {
         // console.log("user");
         tologin().then((res) => {
           // console.log(res)
@@ -223,7 +223,7 @@ export default {
         // console.log('44444')
         return;
       }
-    console.log('123')
+    // console.log('123')
       if (this.identity == 3 || this.identity == 5) {
         this.$message({
           message: "您无权查看该页面",

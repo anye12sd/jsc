@@ -11,9 +11,9 @@
       <div>预警状态</div>
     </div>
     <div v-for="(k, index) in yezt_yeyycyj" :key="index" :class="'col line'+(index == 0? ' first' :'')">
-      <div>{{ k.yjryrs }}</div>
-      <div>{{ k.lyrs }}</div>
-      <div>{{ k.yj }}</div>
+      <div :title="k.yjryrs">{{ k.yjryrs }}</div>
+      <div :title="k.lyrs">{{ k.lyrs }}</div>
+      <div :title="k.yj">{{ k.yj }}</div>
       <div :style="'color:'+(parseInt(k.yj) >= parseInt(k.lyrs) ? '#00E24E;':'#FF4747;')">{{ parseInt(k.yj) >= parseInt(k.lyrs) ? "正常" : "异常" }}</div>
     </div>
   </div>
@@ -64,33 +64,37 @@ export default {
     align-items: center;
     justify-content: space-between;
     > div:nth-child(1) {
-      flex: 4;
+      width: 58%;
       font-family: SourceHanSansCN-Medium;
       font-size: 1.4rem;
       letter-spacing: 0;
       padding-left: 1%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     > div:nth-child(2) {
       font-family: DINPro-Medium;
       font-size: 1.6rem;
       letter-spacing: 0;
+      width: 38%;
     }
     > div:nth-child(3) {
       font-family: DINPro-Medium;
       font-size: 1.6rem;
       letter-spacing: 0;
+      width: 19%;
     }
     > div:nth-child(4) {
       font-family: SourceHanSansCN-Medium;
       font-size: 1.4rem;
       letter-spacing: 0;
+      width: 28%;
     }
-    > div {
-      flex: 2;
-    }
+
   }
   >.topline{
-    margin-top: 1rem;
+    margin-top: 0.8rem;
     >div{
       color: #7291CD;
     }
@@ -98,7 +102,7 @@ export default {
   >.line{
     background-image: linear-gradient(270deg, rgba(142,176,255,0.00) 0%, rgba(2,192,253,0.42) 99%);
     padding: 0.5rem 0;
-    margin-top: 0.8rem;
+    margin-top: 0.6rem;
     >div:nth-child(2){
       color: #ffe047;
     }

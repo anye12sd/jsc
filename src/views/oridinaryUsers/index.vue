@@ -140,9 +140,9 @@ export default {
     display: flex;
     justify-content: space-between;
     padding: 0 30px;
-    height: 8%;
+    height: 7%;
     box-sizing: border-box;
-    padding-top: 1.1%;
+    padding-top: 0.8%;
     > div {
       flex: 1;
     }

@@ -6,9 +6,6 @@
       <div class="tabs">
         <div :class="active == 0 ? 'active' : ''" @click="change(0)">就业</div>
         <div :class="active == 1 ? 'active' : ''" @click="change(1)">婚嫁</div>
-        <div :class="active == 2 ? 'active' : ''" @click="change(2)">
-          民生诉求
-        </div>
       </div>
     </div>
     <div :class="'jb se'+(active == 0?'':' hide')">
@@ -69,14 +66,12 @@
       </div>
     </div>
     <marr :class="'se'+(active == 1?'': ' hide')"></marr>
-    <peopleLiving :class="'se'+(active == 2?' ':' hide')"></peopleLiving>
   </div>
 </template>
 
 <script>
 // 就业
 import marr from './marriage.vue'
-import peopleLiving from './peopleLiving.vue'
 
 export default {
   name: "job",
@@ -92,7 +87,7 @@ export default {
     this.getdata();
   },
   components:{
-    marr,peopleLiving
+    marr
   },
   methods: {
     getdata() {

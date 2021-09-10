@@ -1,5 +1,9 @@
 <template>
   <div class="peopleLiving">
+    <div class="bigtit">
+      <div class="tag"></div>
+      <div>民生诉求</div>
+    </div>
     <div class="shsqtop">
       <div>
         <div>热线受理</div>
@@ -95,7 +99,7 @@ export default {
             name: "",
             type: "wordCloud",
             gridSize: 20,
-            sizeRange: [12, 30],
+            sizeRange: [(17 / 1080) * document.body.scrollHeight, (30 / 1080) * document.body.scrollHeight],
             rotationRange: [0, 0],
             shape: "circle",
             textStyle: {
@@ -131,11 +135,11 @@ export default {
     font-family: MicrosoftYaHei-Bold;
     font-size: 1.4rem;
     color: #ffffff;
-    margin: 2rem auto 0 auto;
+    margin: 1rem auto 0 auto;
   }
   .shsqtop {
     display: flex;
-    height: 25%;
+    height: 20%;
     width: 80%;
     margin: 0 auto;
     justify-content: space-around;
@@ -171,7 +175,7 @@ export default {
     }
   }
   #sqrcfx {
-    height: 60%;
+    height: 57%;
   }
 }
 </style>

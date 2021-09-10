@@ -5,96 +5,97 @@
       <div>义务教育</div>
     </div>
     <div class="main">
-      <div class="left">
-        <div class="menu">
-          <div :class="active == 0 ? 'active' : ''" @click="swit(0)">
-            义务教育（上年）
-          </div>
-          <div :class="active == 1 ? 'active' : ''" @click="swit(1)">
-            各年级人数
-          </div>
+      <div class="menu">
+        <div :class="active == 0 ? 'active' : ''" @click="swit(0)">
+          义务教育（上年）
         </div>
+        <div :class="active == 1 ? 'active' : ''" @click="swit(1)">
+          各年级人数
+        </div>
+        <div :class="active == 2 ? 'active' : ''" @click="swit(2)">
+          历年师资配比
+        </div>
+      </div>
+      <div class="cont">
         <div class="edu" v-show="active == 0">
+        <div>
           <div>
-            <div>
-              <div class="cycolor">小学数量</div>
-              <div class="cynumber">{{ qnzt_ywzj1.XXSL }}</div>
-            </div>
-            <div>
-              <div class="cycolor">中学数量</div>
-              <div class="cynumber">{{ qnzt_ywzj1.ZXSL }}</div>
-            </div>
-            <div>
-              <div class="cycolor">小学人数</div>
-              <div class="cynumber">{{ qnzt_ywzj1.XXRS }}</div>
-            </div>
-            <div>
-              <div class="cycolor">中学人数</div>
-              <div class="cynumber">{{ qnzt_ywzj1.ZXRS }}</div>
-            </div>
+            <div class="cycolor">小学数量</div>
+            <div class="cynumber">{{ qnzt_ywzj1.XXSL }}</div>
           </div>
-          <img src="@/assets/subpage/edu.png" alt="图呢？" />
           <div>
-            <div>
-              <div class="cycolor">老师总数</div>
-              <div class="cynumber">{{ qnzt_ywzj2.jszs }}</div>
-            </div>
-            <div>
-              <div class="cycolor">一级教师</div>
-              <div class="cynumber">{{ qnzt_ywzj2.yjjs }}</div>
-            </div>
-            <div>
-              <div class="cycolor">二级教师</div>
-              <div class="cynumber">{{ qnzt_ywzj2.ejjs }}</div>
-            </div>
-            <div>
-              <div class="cycolor">三级教师</div>
-              <div class="cynumber">{{ qnzt_ywzj2.sjjs }}</div>
-            </div>
+            <div class="cycolor">中学数量</div>
+            <div class="cynumber">{{ qnzt_ywzj1.ZXSL }}</div>
+          </div>
+          <div>
+            <div class="cycolor">小学人数</div>
+            <div class="cynumber">{{ qnzt_ywzj1.XXRS }}</div>
+          </div>
+          <div>
+            <div class="cycolor">中学人数</div>
+            <div class="cynumber">{{ qnzt_ywzj1.ZXRS }}</div>
           </div>
         </div>
-        <div class="grade" v-show="active == 1">
+        <img src="@/assets/subpage/edu.png" alt="图呢？" />
+        <div>
           <div>
-            <div>各年级人数</div>
-            <img src="@/assets/subpage/grade.png" alt="图呢？？？" />
+            <div class="cycolor">老师总数</div>
+            <div class="cynumber">{{ qnzt_ywzj2.jszs }}</div>
+          </div>
+          <div>
+            <div class="cycolor">一级教师</div>
+            <div class="cynumber">{{ qnzt_ywzj2.yjjs }}</div>
+          </div>
+          <div>
+            <div class="cycolor">二级教师</div>
+            <div class="cynumber">{{ qnzt_ywzj2.ejjs }}</div>
+          </div>
+          <div>
+            <div class="cycolor">三级教师</div>
+            <div class="cynumber">{{ qnzt_ywzj2.sjjs }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="grade" v-show="active == 1">
+        <div>
+          <div>各年级人数</div>
+          <img src="@/assets/subpage/grade.png" alt="图呢？？？" />
+        </div>
+        <div>
+          <div>
+            <div>
+              <span>一年级</span> <span> {{ qnzt_ywzj3.NJ1 }}</span>
+            </div>
+            <div>
+              <span>二年级</span> <span> {{ qnzt_ywzj3.NJ2 }}</span>
+            </div>
+            <div>
+              <span>三年级</span> <span> {{ qnzt_ywzj3.NJ3 }}</span>
+            </div>
+            <div>
+              <span>四年级</span> <span> {{ qnzt_ywzj3.NJ4 }}</span>
+            </div>
+            <div>
+              <span>五年级</span> <span> {{ qnzt_ywzj3.NJ5 }}</span>
+            </div>
           </div>
           <div>
             <div>
-              <div>
-                <span>一年级</span> <span> {{ qnzt_ywzj3.NJ1 }}</span>
-              </div>
-              <div>
-                <span>二年级</span> <span> {{ qnzt_ywzj3.NJ2 }}</span>
-              </div>
-              <div>
-                <span>三年级</span> <span> {{ qnzt_ywzj3.NJ3 }}</span>
-              </div>
-              <div>
-                <span>四年级</span> <span> {{ qnzt_ywzj3.NJ4 }}</span>
-              </div>
-              <div>
-                <span>五年级</span> <span> {{ qnzt_ywzj3.NJ5 }}</span>
-              </div>
+              <span>六年级</span> <span> {{ qnzt_ywzj3.NJ6 }}</span>
             </div>
             <div>
-              <div>
-                <span>六年级</span> <span> {{ qnzt_ywzj3.NJ6 }}</span>
-              </div>
-              <div>
-                <span>初一</span> <span> {{ qnzt_ywzj3.NJ7 }}</span>
-              </div>
-              <div>
-                <span>初二</span> <span> {{ qnzt_ywzj3.NJ8 }}</span>
-              </div>
-              <div>
-                <span>初三</span> <span> {{ qnzt_ywzj3.NJ9 }}</span>
-              </div>
+              <span>初一</span> <span> {{ qnzt_ywzj3.NJ7 }}</span>
+            </div>
+            <div>
+              <span>初二</span> <span> {{ qnzt_ywzj3.NJ8 }}</span>
+            </div>
+            <div>
+              <span>初三</span> <span> {{ qnzt_ywzj3.NJ9 }}</span>
             </div>
           </div>
         </div>
       </div>
-      <div class="right">
-        <div id="lnszbhqk"></div>
+      <div id="lnszbhqk" :class="active == 2 ? '':'hide'"></div>
       </div>
     </div>
   </div>
@@ -111,16 +112,16 @@ export default {
       qnzt_ywzj2: [],
       qnzt_ywzj3: [],
       active: 0,
-      qnzt_szpb:[],
-      chart:null
+      qnzt_szpb: [],
+      chart: null,
     };
   },
   mounted() {
     this.getdata();
-    window.addEventListener("resize",this.itMyChart3y);
+    window.addEventListener("resize", this.itMyChart3);
   },
-  beforeDestroy(){
-    window.removeEventListener('resize',this.itMyChart3)
+  beforeDestroy() {
+    window.removeEventListener("resize", this.itMyChart3);
   },
   methods: {
     getdata() {
@@ -177,16 +178,14 @@ export default {
         title: {
           text: "历年师资配比变化情况",
           // "subtext": "BY MICVS",
-          x: "0%",
-          y: "0%",
-
+          top:'2%',
           textStyle: {
             color: "#fff",
-            fontSize:(14 / 1080) * document.body.scrollHeight ,
+            fontSize: (14 / 1080) * document.body.scrollHeight,
           },
           subtextStyle: {
             color: "#90979c",
-            fontSize:(14 / 1080) * document.body.scrollHeight ,
+            fontSize: (14 / 1080) * document.body.scrollHeight,
           },
         },
         tooltip: {
@@ -194,7 +193,7 @@ export default {
           formatter: "{b} {c}",
         },
         grid: {
-          top: "20%",
+          top: "19%",
           left: "1%",
           right: "5%",
           bottom: "5%",
@@ -212,7 +211,7 @@ export default {
               symbolOffset: [0, 8],
               lineStyle: {
                 color: "#979797",
-                fontSize:(14 / 1080) * document.body.scrollHeight ,
+                fontSize: (14 / 1080) * document.body.scrollHeight,
               },
             },
             //箭头一端没效果,一端箭头
@@ -223,7 +222,7 @@ export default {
               textStyle: {
                 color: "#d1e6eb",
                 margin: 15,
-                fontSize:(14 / 1080) * document.body.scrollHeight ,
+                fontSize: (14 / 1080) * document.body.scrollHeight,
               },
             },
             axisTick: {
@@ -242,7 +241,7 @@ export default {
               show: true,
               lineStyle: {
                 color: "#0a3256",
-                fontSize:(14 / 1080) * document.body.scrollHeight ,
+                fontSize: (14 / 1080) * document.body.scrollHeight,
               },
             },
             symbol: ["none", "arrow"], //箭头一端没效果,一端箭头
@@ -256,14 +255,14 @@ export default {
               symbolOffset: [0, 8],
               lineStyle: {
                 color: "#979797",
-                fontSize:(14 / 1080) * document.body.scrollHeight ,
+                fontSize: (14 / 1080) * document.body.scrollHeight,
               },
             },
             axisLabel: {
               margin: 20,
               textStyle: {
                 color: "#d1e6eb",
-                fontSize:(14 / 1080) * document.body.scrollHeight ,
+                fontSize: (14 / 1080) * document.body.scrollHeight,
               },
             },
             axisTick: {
@@ -291,13 +290,13 @@ export default {
               position: "top",
               textStyle: {
                 color: "#fff",
-                fontSize:(14 / 1080) * document.body.scrollHeight ,
+                fontSize: (14 / 1080) * document.body.scrollHeight,
               },
             },
             itemStyle: {
               normal: {
                 color: "#b5b94d",
-                fontSize:(14 / 1080) * document.body.scrollHeight ,
+                fontSize: (14 / 1080) * document.body.scrollHeight,
               },
             },
             tooltip: {
@@ -334,7 +333,6 @@ export default {
       };
 
       lnszbhqk.setOption(option);
-      
     },
   },
 };
@@ -349,125 +347,129 @@ export default {
   font-family: SourceHanSansCN-Regular;
   .main {
     height: 89%;
-    display: flex;
-    justify-content: space-around;
-    > div {
-      width: 48%;
-    }
-    .right{
-      #lnszbhqk{
-        width: 100%;
-        height: 100%;
+    
+    .menu {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 10%;
+      .active {
+        background-image: linear-gradient(
+          179deg,
+          #3688ff 19%,
+          #1a57ab 63%,
+          #1c3e68 100%
+        );
+        border: 1px solid #94c1ff;
+        border-radius: 2px 0 0 2px;
+        font-family: MicrosoftYaHei;
+        font-size: 1.4rem;
+        color: #ffffff;
+      }
+      div {
+        cursor: pointer;
+        background: #0f3264;
+        border: 1px solid #2061bc;
+        border-radius: 0 2px 2px 0;
+        font-family: MicrosoftYaHei;
+        font-size: 1.3rem;
+        color: #bcf6ff;
+        padding: 0.2rem 5px;
       }
     }
-    .left {
-      .menu {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        .active {
-          background-image: linear-gradient(
-            179deg,
-            #3688ff 19%,
-            #1a57ab 63%,
-            #1c3e68 100%
-          );
-          border: 1px solid #94c1ff;
-          border-radius: 2px 0 0 2px;
-          font-family: MicrosoftYaHei;
-          font-size: 1.4rem;
-          color: #ffffff;
-        }
-        div {
-          cursor: pointer;
-          background: #0f3264;
-          border: 1px solid #2061bc;
-          border-radius: 0 2px 2px 0;
-          font-family: MicrosoftYaHei;
-          font-size: 1.3rem;
-          color: #bcf6ff;
-          padding: 2px 5px;
-        }
-      }
+    .cont{
+      width: 100%;
+      height: 90%;
+      position: relative;
       .edu {
-        height: 81%;
-        margin-top: 1rem;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        > img {
-          height: 90%;
-        }
+      height: 100%;
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      > img {
+        height: 90%;
+      }
+      > div {
+        height: 100%;
         > div {
-          height: 100%;
+          height: 25%;
+          box-sizing: border-box;
+          > div:nth-child(1) {
+            font-family: MicrosoftYaHei;
+            font-size: 1.4rem;
+            color: #ffffff;
+          }
+          > div:nth-child(2) {
+            font-family: DINPro-Medium;
+            font-size: 2rem;
+            color: #32c5ff;
+          }
+        }
+      }
+    }
+    .grade {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      > div:nth-child(1) {
+        height: 100%;
+        display: flex;
+        align-content: center;
+        flex-wrap: wrap;
+        justify-content: center;
+        div {
+          width: 100%;
+          text-align: center;
+        }
+        > img {
+          height: 55%;
+        }
+      }
+
+      > div:nth-child(2) {
+        width: 70%;
+        height: 80%;
+        border: 1px solid #01f4f2;
+        background-color: #0c469b;
+        display: flex;
+        > div {
+          width: 50%;
+          display: flex;
+          flex-wrap: wrap;
+          align-content: space-around;
+          justify-content: center;
           > div {
-            height: 25%;
-            box-sizing: border-box;
-            > div:nth-child(1) {
+            width: 100%;
+            text-align: center;
+            > span:nth-child(1) {
               font-family: MicrosoftYaHei;
               font-size: 1.4rem;
               color: #ffffff;
+              letter-spacing: 0;
+              text-align: right;
             }
-            > div:nth-child(2) {
+            > span:nth-child(2) {
               font-family: DINPro-Medium;
-              font-size: 2rem;
+              font-size: 1.82rem;
               color: #32c5ff;
+              letter-spacing: 0;
+              text-align: center;
             }
           }
         }
       }
-      .grade {
-        height: 81%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        > div:nth-child(1) {
-          height: 100%;
-          display: flex;
-          align-content: center;
-          flex-wrap: wrap;
-          justify-content: center;
-          div {
-            width: 100%;
-            text-align: center;
-          }
-          > img {
-            height: 55%;
-          }
-        }
-
-        > div:nth-child(2) {
-          width: 70%;
-          height: 80%;
-          border: 1px solid #01f4f2;
-          background-color: #0c469b;
-          display: flex;
-          > div {
-            width: 50%;
-            display: flex;
-            flex-wrap: wrap;
-            align-content: space-around;
-            justify-content: center;
-            > div {
-              width: 100%;
-              text-align: center;
-              > span:nth-child(1) {
-                font-family: MicrosoftYaHei;
-                font-size: 1.4rem;
-                color: #ffffff;
-                letter-spacing: 0;
-                text-align: right;
-              }
-              > span:nth-child(2) {
-                font-family: DINPro-Medium;
-                font-size: 1.82rem;
-                color: #32c5ff;
-                letter-spacing: 0;
-                text-align: center;
-              }
-            }
-          }
-        }
+    }
+    .hide{
+      visibility: hidden;
+    }
+    #lnszbhqk{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
       }
     }
   }

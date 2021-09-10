@@ -2,6 +2,56 @@
   <div class="pcdrive">
     <div class="cen">
       <div class="line">
+        <div class="themeline">
+          <span class="theme">幼儿主题</span>
+        </div>
+        <div class="each" style="height: 31%">
+          <component :is="allmodel[0]"></component>
+        </div>
+        <div class="each" style="height: 31%">
+          <component :is="allmodel[2]"></component>
+        </div>
+        <div class="each" style="height: 31%">
+          <component :is="allmodel[3]"></component>
+        </div>
+      </div>
+      <div class="midline">
+        <div class="menu" ref="each">
+          <div
+            v-for="(k, index) in opt"
+            :key="k.name"
+            :class="0 == index ? 'op' : 'op light'"
+            @click="changtype(index)"
+          >
+            <img :src="k.img" alt=" " />
+            <div>{{ k.name }}</div>
+          </div>
+        </div>
+        <div class="down">
+          <div class="themeline">
+            <span class="theme">青少年主题</span>
+          </div>
+          <div class="each">
+            <component :is="allmodel[5]" style="height:49%;"></component>
+            <component :is="allmodel[1]" style="height:49%;"></component>
+          </div>
+        </div>
+        <div class="down">
+          <div class="themeline">
+            <span class="theme">成年主题</span>
+          </div>
+          <div class="each">
+            <component :is="allmodel[4]" style="height:49%;"></component>
+            <component :is="allmodel[7]" style="height:49%;"></component>
+          </div>
+        </div>
+      </div>
+      <div class="line">
+        <div class="themeline">
+          <span class="theme">老年主题</span>
+        </div>
+      </div>
+      <!-- <div class="line">
         <div class="each" style="width: 30%">
           <component :is="allmodel[0]"></component>
         </div>
@@ -38,7 +88,7 @@
         <div class="each" style="width: 49.5%">
           <component :is="allmodel[6]"></component>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -66,25 +116,6 @@ export default {
   name: "pcdrive",
   data() {
     return {
-      widper: 1,
-      heiper: 1,
-      total: 1,
-      current: 0,
-      page: 1,
-      num: [
-        {
-          id: 1,
-          ke: "a",
-        },
-        {
-          id: 2,
-          ke: "b",
-        },
-        {
-          id: 3,
-          ke: "c",
-        },
-      ],
       opt: [
         {
           name: "幸福民生",
@@ -105,25 +136,19 @@ export default {
           img: f3,
         },
       ],
-      currentPage: 1,
-      models: [],
       allmodel: [
-          "birth",
-          "learn",
-          "further",
-          "kindGarden",
-          "job",
-          "comEducation",
-          "disease",
+        "birth",
+        "learn",
+        "further",
+        "kindGarden",
+        "job",
+        "comEducation",
+        "disease",
+        "peopleLiving"
       ],
     };
   },
-  mounted() {
-    this.changesize();
-    window.onresize = () => {
-      this.changesize();
-    };
-  },
+  mounted() {},
   methods: {
     changtype(index) {
       if (index == 2 || index == 3) {
@@ -133,18 +158,8 @@ export default {
         });
         return;
       }
-    if(index == 1) {
-        this.$router.push('/oridinaryUsers/pcdrive2')
-    }
-    //   this.current = index;
-    //   this.currentPage = 1;
-    },
-    changesize() {
-      if (this.$refs.each) {
-        let wid = this.$refs.each.clientWidth - 20;
-        let hei = this.$refs.each.clientHeight - 8;
-        this.widper = Math.floor((wid / 650) * 100) / 100;
-        this.heiper = Math.floor((hei / 350) * 100) / 100;
+      if (index == 1) {
+        this.$router.push("/oridinaryUsers/pcdrive2");
       }
     },
   },
@@ -156,30 +171,45 @@ export default {
 
 <style scoped lang="less">
 .pcdrive {
-  height: 92%;
+  height: 93%;
   width: 100%;
   .cen {
     width: 97%;
     height: 100%;
     display: flex;
     margin: 0 auto;
-    align-content: space-around;
-    flex-wrap: wrap;
+    justify-content: space-between;
     > .line {
-      width: 100%;
-      height: 32%;
+      width: 24%;
       display: flex;
-      justify-content: space-between;
+      flex-wrap: wrap;
+      align-content: space-around;
       > .each {
-        height: 100%;
-        padding: 16px 10px 0 20px;
+        width: 100%;
+        padding: 13px 10px 0 15px;
         box-sizing: border-box;
         background-color: rgba(6, 26, 62, 0.4);
         box-shadow: inset 0 1px 3px 0 rgba(0, 255, 234, 0.5),
           inset 0 0 11px 0 #00b7ff;
         border-radius: 20px;
       }
+      > .themeline {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 4%;
+      }
+    }
+    > .midline {
+      width: 49.3333%;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
       > .menu {
+        width: 80%;
+        height: 32%;
+        margin: 0 auto;
         background-image: url("../../assets/img/mainbg.png");
         background-repeat: no-repeat;
         background-size: 85% 83%;
@@ -215,6 +245,33 @@ export default {
           > div {
             cursor: pointer;
           }
+        }
+      }
+      > .down {
+        width: 49%;
+        height: 68%;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: space-around;
+        > .themeline {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 6%;
+        }
+        > .each {
+          height: 92%;
+          width: 100%;
+          padding: 13px 10px 0 20px;
+          box-sizing: border-box;
+          background-color: rgba(6, 26, 62, 0.4);
+          box-shadow: inset 0 1px 3px 0 rgba(0, 255, 234, 0.5),
+            inset 0 0 11px 0 #00b7ff;
+          border-radius: 20px;
+          display: flex;
+        flex-wrap: wrap;
+        align-content: space-between;
         }
       }
     }

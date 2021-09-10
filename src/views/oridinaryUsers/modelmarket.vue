@@ -594,7 +594,7 @@ export default {
 </style>
 <style scoped lang="less">
 .modelmarket {
-  height: 92%;
+  height: 93%;
   width: 100%;
   .tit {
     text-align: center;

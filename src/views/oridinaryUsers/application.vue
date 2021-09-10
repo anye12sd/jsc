@@ -93,7 +93,7 @@ export default {
 
 <style lang="less" scoped>
 .application {
-  height: 92%;
+  height: 93%;
   .tit {
     text-align: center;
     img {

@@ -119,7 +119,7 @@ export default {
 
 <style scoped lang="less">
 .detail {
-  height: 78%;
+  height: 85%;
   width: 95%;
   margin: 1% auto 0 auto;
   box-sizing: border-box;

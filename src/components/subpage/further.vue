@@ -86,7 +86,7 @@ export default {
 
           textStyle: {
             color: "#fff",
-            fontSize:(14 / 1080) * window.innerHeight ,
+            fontSize:(14 / 1080) * document.body.scrollHeight ,
           },
         },
         tooltip: {
@@ -95,7 +95,7 @@ export default {
           formatter: "{b} {c}",
         },
         grid: {
-          top: "25%",
+          top: "28%",
           left: "1%",
           right: "6%",
           bottom: "2%",
@@ -124,7 +124,7 @@ export default {
               textStyle: {
                 color: "#d1e6eb",
                 margin: 15,
-                fontSize:(14 / 1080) * window.innerHeight ,
+                fontSize:(14 / 1080) * document.body.scrollHeight,
               },
             },
             axisTick: {
@@ -143,6 +143,7 @@ export default {
               show: true,
               lineStyle: {
                 color: "#0a3256",
+                
               },
             },
             symbol: ["none", "arrow"], //箭头一端没效果,一端箭头
@@ -156,13 +157,14 @@ export default {
               symbolOffset: [0, 8],
               lineStyle: {
                 color: "#979797",
-                fontSize:(14 / 1080) * window.innerHeight ,
+                
               },
             },
             axisLabel: {
               margin: 20,
               textStyle: {
                 color: "#d1e6eb",
+                fontSize:(14 / 1080) * document.body.scrollHeight ,
               },
             },
             axisTick: {
@@ -190,6 +192,7 @@ export default {
               position: "top",
               textStyle: {
                 color: "#fff",
+                fontSize:(14 / 1080) * document.body.scrollHeight,
               },
             },
             itemStyle: {
