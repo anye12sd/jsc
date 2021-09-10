@@ -4,7 +4,7 @@
       <div class="tag"></div>
       <div>GDP预测</div>
     </div>
-    <div class="GDP-box flex">
+    <div class="GDP-box">
       <div class="GDP-preview-box">
         <div class="userInput">
           <div class="elect">工业用电量：</div>
@@ -389,11 +389,12 @@ export default {
   height: 100%;
 }
 .GDP-preview-box{
-  width: 40%;
+  width: 100%;
   margin-right: 8px;
 }
 .GDP-chart{
   width: 100%;
+  height: 100%;
 }
 .pianliang {
   height: 30px;
@@ -480,6 +481,7 @@ export default {
 .userInput{
   position: relative;
   margin-top: 12px;
+  padding: 0 3.6rem
 }
 .userInput .el-input__inner{
   font-size: 14px;

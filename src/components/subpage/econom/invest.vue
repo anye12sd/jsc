@@ -148,10 +148,9 @@ export default {
           // "subtext": "BY MICVS",
           x: "0%",
           y: "0%",
-
           textStyle: {
             color: "#fff",
-            fontSize: (12 / 1080) * document.body.scrollHeight,
+            fontSize: (16 / 1080) * document.body.scrollHeight,
           },
         //   subtextStyle: {
         //     color: "#90979c",
@@ -410,7 +409,7 @@ export default {
           y: "0%",
           textStyle: {
             color: "#fff",
-            fontSize: (12 / 1080) * document.body.scrollHeight,
+            fontSize: (16 / 1080) * document.body.scrollHeight,
           },
         },
         tooltip: {
@@ -774,8 +773,8 @@ export default {
 }
 .invest-header-content{
   color: #32C5FF;
-  margin-top: 5px;
-  font-size: 1.4rem;
+  margin-top: 3px;
+  font-size: 1.6rem;
 }
 .invest-header-content span{
   font-weight:bold;
@@ -786,11 +785,11 @@ export default {
 }
 #zsyz{
   width: 100%;
-  height: 50%;
+  height: 48%;
 }
 .invest-content-box{
   position: relative;
-  height: 50%;
+  height: 48%;
 }
 .menu {
   position: absolute;
