@@ -1,5 +1,18 @@
 <template>
   <div class="social">
+    <div class="bot">
+      <div>
+        <img
+          src="@/assets/subpage/number.png"
+          alt="图片缺失"
+          style="height: 100%; margin-right: 5%"
+        />
+      </div>
+      <div class="old">
+        <div class="qyxxtitle">养老机构</div>
+        <div class="qyxxnumber">{{ lnzt_shbz.yljgs }}</div>
+      </div>
+    </div>
     <div class="ea">
       <div class="qyxxtitle">城镇低保</div>
       <div class="qyxxnumber">{{ lnzt_shbz.czdbs }}</div>
@@ -11,17 +24,6 @@
     <div class="ea">
       <div class="qyxxtitle">临时救助</div>
       <div class="qyxxnumber">{{ lnzt_shbz.lsjzs }}</div>
-    </div>
-    <div>
-      <img
-        src="@/assets/subpage/number.png"
-        alt="图片缺失"
-        style="height: 100%; margin-right: 5%"
-      />
-    </div>
-    <div class="old">
-      <div class="qyxxtitle">养老机构</div>
-      <div class="qyxxnumber">{{ lnzt_shbz.yljgs }}</div>
     </div>
   </div>
 </template>
@@ -68,24 +70,37 @@ export default {
   box-sizing: border-box;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-content: center;
+  flex-wrap: wrap;
+  position: absolute;
+
   img {
     height: 3rem;
     margin: 0 10px;
   }
-  > .old {
-    margin-left: 20px;
-    > div:nth-child(1) {
-      font-family: MicrosoftYaHei;
-      font-size: 1.6rem;
-      color: #ffffff;
+  > .bot {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 2rem;
+    >div{
+      display: inline-block;
     }
-    > div:nth-child(2) {
-      font-family: DINPro-Medium;
-      font-size: 2.6rem;
-      color: #00eaff;
+    > .old {
+      margin-left: 20px;
+      > div:nth-child(1) {
+        font-family: MicrosoftYaHei;
+        font-size: 1.6rem;
+        color: #ffffff;
+        
+      }
+      > div:nth-child(2) {
+        font-family: DINPro-Medium;
+        font-size: 2.6rem;
+        color: #00eaff;
+      }
     }
   }
+
   > .ea {
     padding: 3rem 20px;
     background: rgba(32, 97, 188, 0.31);

@@ -50,45 +50,11 @@
         <div class="themeline">
           <span class="theme">老年主题</span>
         </div>
-      </div>
-      <!-- <div class="line">
-        <div class="each" style="width: 30%">
-          <component :is="allmodel[0]"></component>
-        </div>
-        <div class="each menu" ref="each" style="width: 38%">
-          <div
-            v-for="(k, index) in opt"
-            :key="k.name"
-            :class="current == index ? 'op' : 'op light'"
-            @click="changtype(index)"
-          >
-            <img :src="k.img" alt=" " />
-            <div>{{ k.name }}</div>
-          </div>
-        </div>
-        <div class="each" style="width: 30%">
-          <component :is="allmodel[1]"></component>
+        <div class="each" style="height:94.5%;display: flex;flex-wrap: wrap;align-content: space-between;">
+          <component :is="allmodel[6]" style="height:59%"></component>
+          <component :is="allmodel[8]" style="height:40%"></component>
         </div>
       </div>
-      <div class="line">
-        <div class="each" style="width: 30%">
-          <component :is="allmodel[2]"></component>
-        </div>
-        <div class="each" style="width: 38%">
-          <component :is="allmodel[3]"></component>
-        </div>
-        <div class="each" style="width: 30%">
-          <component :is="allmodel[4]"></component>
-        </div>
-      </div>
-      <div class="line">
-        <div class="each" style="width: 49.5%">
-          <component :is="allmodel[5]"></component>
-        </div>
-        <div class="each" style="width: 49.5%">
-          <component :is="allmodel[6]"></component>
-        </div>
-      </div> -->
     </div>
   </div>
 </template>
@@ -144,7 +110,8 @@ export default {
         "job",
         "comEducation",
         "disease",
-        "peopleLiving"
+        "peopleLiving",
+        'life'
       ],
     };
   },
@@ -180,7 +147,7 @@ export default {
     margin: 0 auto;
     justify-content: space-between;
     > .line {
-      width: 24%;
+      width: 24.9%;
       display: flex;
       flex-wrap: wrap;
       align-content: space-around;
@@ -248,7 +215,7 @@ export default {
         }
       }
       > .down {
-        width: 49%;
+        width: 49.6%;
         height: 68%;
         display: flex;
         flex-wrap: wrap;

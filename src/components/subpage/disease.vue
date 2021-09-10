@@ -1,17 +1,10 @@
 <template>
   <div class="disease">
-    <div class="bigtit">
+    <div class="bigtit" style="height: 6%">
       <div class="tag"></div>
-      <div>老年主题</div>
-      <div class="tabs">
-        <div :class="active == 0 ? 'active' : ''" @click="change(0)">疾病</div>
-        <div :class="active == 1 ? 'active' : ''" @click="change(1)">寿命</div>
-        <div :class="active == 2 ? 'active' : ''" @click="change(2)">
-          社会保障
-        </div>
-      </div>
+      <div>疾病</div>
     </div>
-    <div :class="'jb'+(active == 0 ? '':' hide')">
+    <div class="jb">
       <div class="left">
         <div class="lefttit">老年疾病排行TOP10</div>
         <div class="list" ref="jblist">
@@ -42,15 +35,11 @@
         <div id="sgrslnbhqk"></div>
       </div>
     </div>
-    <life :class="active == 1 ? '' :'hide'"></life>
-    <social :class="active == 2 ? '' :'hide'"></social>
   </div>
 </template>
 
 <script>
 // 疾病
-import life from './life.vue'
-import social from './social.vue'
 export default {
   name: "disease",
   data() {
@@ -59,24 +48,18 @@ export default {
       lnzt_st: [],
       lnzt_st2: {},
       lnzt_st3: [],
-      active: 0,
-      chart:null,
+
+      chart: null,
     };
   },
-  components:{
-    life,social
-  },
-  beforeDestroy(){
-    window.removeEventListener('resize',this.itMyChart5)
+  beforeDestroy() {
+    window.removeEventListener("resize", this.itMyChart5);
   },
   mounted() {
     this.getdata();
-    window.addEventListener("resize",this.itMyChart5);
+    window.addEventListener("resize", this.itMyChart5);
   },
   methods: {
-    change(val) {
-      this.active = val;
-    },
     getdata() {
       this.$axios({
         method: "post",
@@ -103,7 +86,7 @@ export default {
       let sgrslnbhqk = this.$echarts.init(
         document.getElementById("sgrslnbhqk")
       );
-      this.chart = sgrslnbhqk
+      this.chart = sgrslnbhqk;
       var x = [];
       var y = [];
       var y2 = [];
@@ -142,11 +125,10 @@ export default {
           },
           icon: "circle",
           // right: "0",
-          top: "0%",
-          margin: [15, 0],
+          top: "4%",
         },
         grid: {
-          top: "20%",
+          top: "25%",
           left: "1%",
           right: "1%",
           bottom: "20%",
@@ -330,62 +312,22 @@ export default {
 <style scoped lang="less">
 .disease {
   width: 100%;
-  height: 100%;
   color: #fff;
   box-sizing: border-box;
   position: relative;
-  .hide{
+  .hide {
     visibility: hidden;
   }
-  .bigtit {
-    position: relative;
-    .tabs {
-      position: absolute;
-      width: 35%;
-      right: 1%;
-      top: 0;
-      text-align: right;
-      > div {
-        display: inline;
-        background: #0f3264;
-        border: 1px solid #2061bc;
-        padding: 0.3rem 4%;
-        font-family: MicrosoftYaHei;
-        font-size: 1.4rem;
-        color: #bcf6ff;
-        text-align: center;
-        cursor: pointer;
-      }
-      > div:nth-child(1) {
-        border-radius: 2px 0 0 2px;
-        border-right: none;
-      }
-      > div:nth-child(2) {
-        border-radius: 2px;
-      }
-      > div:nth-child(3) {
-        border-radius: 0 2px 2px 0;
-        border-left: none;
-      }
-      > .active {
-        background-image: linear-gradient(
-          179deg,
-          #3688ff 19%,
-          #1a57ab 63%,
-          #1c3e68 100%
-        );
-      }
-    }
-  }
+
   .jb {
-    display: flex;
-    height: 89%;
+    height: 94%;
     width: 100%;
-    position: absolute;
-    > div {
-      width: 50%;
-    }
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
     .left {
+      height: 48%;
+      width: 100%;
       > div {
         width: 80%;
         margin: 0 auto;
@@ -441,6 +383,8 @@ export default {
       }
     }
     .right {
+      height: 50%;
+      width: 100%;
       .sg {
         display: flex;
         justify-content: space-around;

@@ -210,7 +210,7 @@ export default {
         border: 1px solid rgba(148, 193, 255, 0.31);
         border-radius: 2px;
         margin-bottom: 1rem;
-        padding: 1rem 2% 0.4rem 2% ;
+        padding: 0.5rem 2% 0.4rem 2% ;
         box-sizing: border-box;
         > div:nth-child(1) {
           font-family: MicrosoftYaHei;

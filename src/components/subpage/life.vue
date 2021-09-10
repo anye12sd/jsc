@@ -1,6 +1,17 @@
 <template>
   <div class="life">
-    <div class="left">
+    <div class="bigtit" style="height:8%;">
+      <div class="tag"></div>
+      <div>社会保障/寿命</div>
+      <div class="tabs">
+        <div :class="active == 1 ? 'active' : ''" @click="change(1)">寿命</div>
+        <div :class="active == 2 ? 'active' : ''" @click="change(2)">
+          社会保障
+        </div>
+      </div>
+    </div>
+    <div :class="active == 1 ?'mc':'mc hide'">
+      <div class="left">
       <div>
         <div class="qyxxtitle4">上年全国平均寿命</div>
         <div class="qyxxnumber">{{ lnzt_sw.qgrjsm }}</div>
@@ -21,11 +32,16 @@
     <div class="right">
       <div id="pjnlbh"></div>
     </div>
+    </div>
+
+    <social :class="active == 2 ?'':' hide'"></social>
   </div>
 </template>
 
 <script>
 // 寿命
+
+import social from './social.vue'
 export default {
   naem: "life",
   data() {
@@ -34,7 +50,11 @@ export default {
       lnzt_sw: {},
       lnzt_sw1: [],
       chart:null,
+      active: 1,
     };
+  },
+  components:{
+    social
   },
   mounted() {
     this.getdata();
@@ -44,6 +64,9 @@ export default {
     window.removeEventListener('resize',this.drawing)
   },
   methods: {
+    change(val) {
+      this.active = val;
+    },
     getdata() {
       this.$axios({
         method: "post",
@@ -102,33 +125,22 @@ export default {
         },
         grid: {
           top: "20%",
-          left: "15%",
-          right: "1%",
+          left: "10%",
+          right: "5%",
           bottom: "12%",
           // containLabel: true,
         },
         legend: {
           width: "100%",
-          left: "center",
           textStyle: {
             color: "#fff",
             fontSize:(14 / 1080) * document.body.scrollHeight ,
           },
           icon: "circle",
-          // right: "0",
+          itemWidth:(14 / 1080) * document.body.scrollHeight ,
+          right: "0%",
           top: "10%",
           padding: [0, 0],
-          // itemGap: 40,
-          // data: [
-          //   "测量工",
-          //   "电焊工",
-          //   "钢筋工",
-          //   "沥青工",
-          //   "安装工",
-          //   "起重工",
-          //   "养护工",
-          //   "其它",
-          // ],
         },
         xAxis: [
           {
@@ -152,6 +164,7 @@ export default {
               textStyle: {
                 color: "#d1e6eb",
                 margin: 15,
+                fontSize:(14 / 1080) * document.body.scrollHeight ,
               },
             },
             axisTick: {
@@ -187,9 +200,9 @@ export default {
               },
             },
             axisLabel: {
-              margin: 20,
               textStyle: {
                 color: "#d1e6eb",
+                fontSize:(14 / 1080) * document.body.scrollHeight ,
               },
             },
             axisTick: {
@@ -299,19 +312,65 @@ export default {
 <style scoped lang="less">
 .life {
   width: 100%;
-  height: 89%;
   color: #fff;
   box-sizing: border-box;
-  display: flex;
-  position: absolute;
+  position: relative;
+  .bigtit {
+    position: relative;
+    .tabs {
+      position: absolute;
+      width: 35%;
+      right: 1%;
+      top: 0;
+      text-align: right;
+      > div {
+        display: inline;
+        background: #0f3264;
+        border: 1px solid #2061bc;
+        padding: 0.3rem 4%;
+        font-family: MicrosoftYaHei;
+        font-size: 1.4rem;
+        color: #bcf6ff;
+        text-align: center;
+        cursor: pointer;
+      }
+      > div:nth-child(1) {
+        border-radius: 2px 0 0 2px;
+        border-right: none;
+      }
+      > div:nth-child(2) {
+        border-radius: 2px;
+      }
+      > div:nth-child(3) {
+        border-radius: 0 2px 2px 0;
+        border-left: none;
+      }
+      > .active {
+        background-image: linear-gradient(
+          179deg,
+          #3688ff 19%,
+          #1a57ab 63%,
+          #1c3e68 100%
+        );
+      }
+    }
+  }
+  .hide{
+    visibility: hidden;
+  }
+  .mc{
+    height: 92%;
+    position: absolute;
+  }
   .left {
-    width: 45%;
+    width: 70%;
+    margin: 0 auto;
+    height: 34%;
     display: flex;
     flex-wrap: wrap;
     align-content: center;
     > div {
       width: 50%;
-      margin-bottom: 2rem;
       > div {
         padding-left: 10%;
       }
@@ -327,13 +386,12 @@ export default {
       }
     }
   }
-  .right {
-    width: 55%;
+  .right{
+    height: 66%;
   }
   #pjnlbh {
     width: 100%;
     height: 94%;
-    margin: 5px auto 0 auto;
   }
 }
 </style>
