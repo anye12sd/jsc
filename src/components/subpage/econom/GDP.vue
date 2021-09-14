@@ -1,6 +1,6 @@
 <template>
   <div id="GDP">
-    <div class="bigtit">
+    <div class="bigtit" style="height:5%;">
       <div class="tag"></div>
       <div>GDP预测</div>
     </div>
@@ -134,14 +134,13 @@ export default {
           top: "30%",
           left: "3%",
           right: "3%",
-          bottom: "16%",
+          bottom: "5%",
           containLabel: true,
         },
         title: {
           text: "工业产值历年变化情况",
           // "subtext": "BY MICVS",
-          x: "0%",
-          y: "0%",
+          top:'5%',
           textStyle: {
             color: "#fff",
             fontSize: (16 / 1080) * document.body.scrollHeight,
@@ -149,7 +148,7 @@ export default {
         },
         legend: {
           right: "15px",
-          top: "0px",
+          top: "5%",
           width: "170px",
           height: "100px",
           type: "plain",
@@ -386,18 +385,20 @@ export default {
   display: flex;
 }
 .GDP-box{
-  height: 100%;
+  height: 95%;
 }
 .GDP-preview-box{
   width: 100%;
-  margin-right: 8px;
+  height: 40%;
+  overflow: hidden;
 }
 .GDP-chart{
   width: 100%;
-  height: 100%;
+  height: 60%;
 }
 .pianliang {
   height: 30px;
+  width: 60%;
   box-sizing: border-box;
 }
 .userInput {
@@ -416,9 +417,8 @@ export default {
   font-size: 12px;
   color: #ffffff;
   letter-spacing: 0;
-  position: absolute;
-  right: 12px;
-  width: 35px;
+  position: relative;
+  left: -30px;
 }
 .icondiy {
   position: relative;
@@ -435,7 +435,7 @@ export default {
 }
 .eleinput {
   box-sizing: border-box;
-  background: #2061BC;
+  background: rgba(148,193, 255, 0.3);
   border: 1px solid #94C1FF;
   border-radius: 8px;
   height: 30px;
@@ -445,7 +445,8 @@ export default {
   letter-spacing: 0;
   text-align: center;
   outline: none;
-  width: 130px;
+  width: 60%;
+  padding: 0 35px 0 10px;
 }
 .guessRes .tit{
   margin-top: 12px;
@@ -476,12 +477,12 @@ export default {
   height: 100%;
 }
 </style>
-<style lang='less'>
+<style lang='less' >
 #GDP{
 .userInput{
   position: relative;
-  margin-top: 12px;
-  padding: 0 3.6rem
+  margin-top: 1.2rem;
+  padding: 0
 }
 .userInput .el-input__inner{
   font-size: 14px;
@@ -489,13 +490,13 @@ export default {
   letter-spacing: 0;
   text-align: center;
   outline: none;
-  background: #090819;
-  border: 1px solid #a4a6aa;
+  background: rgba(148,193, 255, 0.3);
+  border: 1px solid #94C1FF;
   border-radius: 8px;
   height: 30px;
-  padding-right: 0;
+  padding: 0 35px 0 10px;
   outline: none;
-  width: 130px;
+  width: 100%;
 }
 .userInput .el-select__caret {
   display: none;

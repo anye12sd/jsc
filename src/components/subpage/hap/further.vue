@@ -261,7 +261,7 @@ export default {
       color: #ffffff;
       letter-spacing: 0;
       padding: 0 4px;
-      background-image: url("../../assets/subpage/group.png");
+      background-image: url("../../../assets/subpage/group.png");
       background-size: 100% 100%;
     }
     > div {

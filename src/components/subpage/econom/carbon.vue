@@ -1,10 +1,10 @@
 <template>
   <div id="carbon">
-    <div class="bigtit">
+    <div class="bigtit" style="height:5%;">
       <div class="tag"></div>
       <div>碳排放总量排行</div>
     </div>
-    <div class="carbon-box flex">
+    <div class="carbon-box">
       <div class="carbon-rank-box">
         <div class="menu">
           <div :class="active == 0 ? 'active' : ''" @click="swit(0)">
@@ -59,7 +59,7 @@
           </template>
         </div>
       </div>
-      <div class="carbon-rank-chart flex-1">
+      <div class="carbon-rank-chart">
         <div id="hzbt"></div>
       </div>
     </div>
@@ -156,7 +156,7 @@ export default {
         tooltip: {
           trigger: "item",
           textStyle: {
-            fontSize: 14,
+            fontSize: (14 / 1080) * document.body.scrollHeight,
           },
         },
         grid: {
@@ -169,7 +169,7 @@ export default {
           bottom: 35,
           textStyle: {
             color: "#fff",
-            fontSize:12
+            fontSize:(14 / 1080) * document.body.scrollHeight,
           },
         },
 
@@ -180,7 +180,7 @@ export default {
             center: ["50%", "30%"],
             label: {
               show: false,
-              fontSize: 20,
+              fontSize: (20 / 1080) * document.body.scrollHeight,
             },
             color: [
               "#26C1FF",
@@ -258,13 +258,10 @@ export default {
   color: #ffffff;
 }
 .carbon-box{
-  height: 100%;
-}
-.carbon-rank-box{
-  width: 50%;
+  height: 95%;
 }
 .carbon-rank{
-  max-height: 64%;
+  max-height: 78%;
   overflow: auto;
 }
 .carbon-rank-content{
@@ -304,6 +301,12 @@ export default {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+.carbon-rank-box{
+  height: 40%;
+}
+.carbon-rank-chart{
+  height: 60%;
 }
 #hzbt{
   width: 100%;

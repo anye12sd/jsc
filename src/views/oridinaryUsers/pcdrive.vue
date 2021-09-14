@@ -16,17 +16,18 @@
         </div>
       </div>
       <div class="midline">
-        <div class="menu" ref="each">
+        <menudemo></menudemo>
+        <!-- <div class="menu" ref="each">
           <div
             v-for="(k, index) in opt"
             :key="k.name"
-            :class="0 == index ? 'op' : 'op light'"
+            :class="0 == index ? 'op now' : 'op'"
             @click="changtype(index)"
           >
             <img :src="k.img" alt=" " />
             <div>{{ k.name }}</div>
           </div>
-        </div>
+        </div> -->
         <div class="down">
           <div class="themeline">
             <span class="theme">青少年主题</span>
@@ -60,14 +61,11 @@
 </template>
 
 <script>
-import f1 from "@/assets/img/f1.png";
-import f2 from "@/assets/img/f2.png";
-import f3 from "@/assets/img/f3.png";
-import f4 from "@/assets/img/f4.png";
-import { portaluser } from "@/api/list.js";
+
+import menudemo from './menudemo.vue'
 
 const modulesFiles = require.context(
-  "../../components/subpage",
+  "../../components/subpage/hap",
   true,
   /\.vue$/
 );
@@ -82,26 +80,7 @@ export default {
   name: "pcdrive",
   data() {
     return {
-      opt: [
-        {
-          name: "幸福民生",
-          img: f1,
-          category_id: 1,
-        },
-        {
-          name: "经济发展",
-          img: f4,
-          category_id: 6,
-        },
-        {
-          name: "社会治理",
-          img: f2,
-        },
-        {
-          name: "生态文明",
-          img: f3,
-        },
-      ],
+      
       allmodel: [
         "birth",
         "learn",
@@ -117,21 +96,10 @@ export default {
   },
   mounted() {},
   methods: {
-    changtype(index) {
-      if (index == 2 || index == 3) {
-        this.$message({
-          message: "此分类暂无",
-          type: "warning",
-        });
-        return;
-      }
-      if (index == 1) {
-        this.$router.push("/oridinaryUsers/pcdrive2");
-      }
-    },
+    
   },
   components: {
-    ...allpage,
+    ...allpage,menudemo
   },
 };
 </script>
@@ -173,47 +141,6 @@ export default {
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
-      > .menu {
-        width: 80%;
-        height: 32%;
-        margin: 0 auto;
-        background-image: url("../../assets/img/mainbg.png");
-        background-repeat: no-repeat;
-        background-size: 85% 83%;
-        background-position: center center;
-        display: flex;
-        justify-content: space-around;
-        align-items: flex-end;
-        flex-wrap: wrap;
-        box-shadow: none;
-        background-color: transparent;
-        > div:nth-child(1),
-        > div:nth-child(4) {
-          margin-bottom: 20px;
-        }
-        > div:nth-child(2),
-        > div:nth-child(3) {
-          margin-bottom: 0px;
-        }
-        > .light {
-          opacity: 0.6;
-        }
-        > .op {
-          width: 16%;
-          font-family: SourceHanSerifSC-Heavy;
-          font-size: 18px;
-          color: #ffffff;
-          letter-spacing: 0;
-          text-align: center;
-          img {
-            width: 100%;
-            cursor: pointer;
-          }
-          > div {
-            cursor: pointer;
-          }
-        }
-      }
       > .down {
         width: 49.6%;
         height: 68%;

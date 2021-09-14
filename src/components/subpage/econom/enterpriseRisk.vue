@@ -128,7 +128,7 @@ export default {
   color: #ffffff;
 }
 .risk-box-content{
-  margin: 0 40px;
+  margin: 0 5%;
   height: 100%;
 }
 .risk-header{

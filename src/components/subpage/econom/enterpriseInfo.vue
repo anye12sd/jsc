@@ -60,27 +60,8 @@
         <div id="qyhyfb" :class="active == 1 ? '' : 'hide'"></div>
       </div>
     </div>
-    <div class="search-box" @click="dialogVisible = true">搜索</div>
-    <el-dialog
-      title="提示"
-      :visible.sync="dialogVisible"
-      width="60%"
-      :before-close="handleClose"
-    >
-      <el-autocomplete
-        :trigger-on-focus="false"
-        v-model="searchContent"
-        class="el-input-reset"
-        value-key="firm_name"
-        :fetch-suggestions="querySearchAsync"
-        placeholder="请输入内容"
-        @select="handleSelect"
-      ></el-autocomplete>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleClick">确 定</el-button>
-      </span>
-    </el-dialog>
+    
+    
   </div>
 </template>
 
@@ -90,7 +71,7 @@ export default {
   name: "enterpriseInfo",
   data() {
     return {
-      searchContent: "",
+      
       qyhyfb: "",
       qyqrqk: "",
       active: 0,
@@ -98,8 +79,8 @@ export default {
       qyzh_qyxx1: [],
       qyzh_qyxx2: [],
       baseUrl: "http://10.21.197.236:9000",
-      dialogVisible: false,
-      option: [],
+      
+      
     };
   },
   mounted() {
@@ -384,7 +365,7 @@ export default {
           },
           icon: "circle",
           bottom: 10,
-          right: "22%",
+          right: "15%",
           itemGap: 5,
           padding: [0, 0],
           orient: "vertical",
@@ -395,7 +376,7 @@ export default {
         series: [
           {
             type: "pie",
-            center: ["35%", "45%"],
+            center: ["30%", "45%"],
             radius: ["50%", "80%"],
             // color: [
             //   "#FEE449",
@@ -469,31 +450,9 @@ export default {
       };
       qyhyfb.setOption(option);
     },
-    handleClose(done) {
-      done();
-    },
-    handleClick() {
-      this.$emit("showEnterprise", this.searchContent);
-      this.dialogVisible = false;
-    },
-    handleSelect(item) {
-      this.$emit("showEnterprise", item.firm_name);
-      this.dialogVisible = false;
-    },
-    querySearchAsync(queryString, cb) {
-      this.$axios({
-        method: "get",
-        url: this.baseUrl + "/index/economic/qyzh_qyss?nm=" + queryString,
-      }).then((res) => {
-        if (res.data.code == 200) {
-          this.option = res.data.data[0];
-          cb(this.option);
-        } else if (res.data.code == 300) {
-          this.option = [];
-          cb(this.option);
-        }
-      });
-    },
+    
+    
+    
   },
 };
 </script>
@@ -593,29 +552,5 @@ export default {
     top: 0;
     left: 0;
   }
-}
-.search-box {
-  position: absolute;
-  top: -48px;
-  cursor: pointer;
-  border: 1px solid #315a92;
-  color: #ccc;
-  height: 25px;
-  line-height: 25px;
-  width: 50px;
-  padding: 0 2px 0 15px;
-  font-size: 12px;
-  text-align: center;
-  border-radius: 15px;
-  background-image: url("../../../assets/subpage/search@1x.png");
-  background-repeat: no-repeat;
-  background-position: 10px;
-}
-.el-input-reset {
-  width: 100%;
-}
-.el-input-reset /deep/ .el-input__inner {
-  width: 100%;
-  padding: 0 15px;
 }
 </style>
