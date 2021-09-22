@@ -50,6 +50,8 @@ export default {
       lnzt_st3: [],
 
       chart: null,
+      timer: null,
+      timeInterval: 2000
     };
   },
   beforeDestroy() {
@@ -102,7 +104,6 @@ export default {
       var option = {
         tooltip: {
           trigger: "axis",
-          backgroundColor: "rgba(255,255,255,.4)",
           axisPointer: {
             //鼠标触发时显示方式
             type: "line", //鼠标触发时显示灰色方框
@@ -304,6 +305,27 @@ export default {
       };
 
       sgrslnbhqk.setOption(option);
+      let inda = -1;
+      let timer = setInterval(() => {
+        sgrslnbhqk.dispatchAction({
+          type: "downplay",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+        inda = (inda + 1) % y.length;
+        sgrslnbhqk.dispatchAction({
+          type: "highlight",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+
+        sgrslnbhqk.dispatchAction({
+          type: "showTip",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+      }, this.timeInterval);
+      this.timer = timer
     },
   },
 };

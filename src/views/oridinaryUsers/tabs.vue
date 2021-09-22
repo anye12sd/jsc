@@ -59,6 +59,9 @@ export default {
         case "#/oridinaryUsers/pcdrive2":
           this.current = 0;
           break;
+        case "#/oridinaryUsers/pcdrive3":
+          this.current = 0;
+          break;
         case "#/oridinaryUsers/application":
           this.current = 1;
           break;

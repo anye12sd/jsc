@@ -187,6 +187,16 @@ const routes = [
         component:()=>import("../views/oridinaryUsers/pcdrive2")
       },
       {
+        path:"pcdrive3",
+        name:"Pcdirve3",
+        component:()=>import("../views/oridinaryUsers/pcdrive3")
+      },
+      {
+        path:"pcdrive4",
+        name:"Pcdirve4",
+        component:()=>import("../views/oridinaryUsers/pcdrive4")
+      },
+      {
         path:'modelmarket',
         name:"Modelmarket",
         component:()=>import("../views/oridinaryUsers/modelmarket")

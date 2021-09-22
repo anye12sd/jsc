@@ -53,7 +53,9 @@ export default {
       active: 0,
       tzbzqk: '',
       zsyz: '',
-      gytr: ''
+      gytr: '',
+      timer: null,
+      timeInterval: 2000
     };
   },
   mounted() {
@@ -173,7 +175,7 @@ export default {
           show: true,
           trigger: "axis",
           textStyle:{
-            fontSize:(12 / 1080) * document.body.scrollHeight
+            fontSize:(14 / 1080) * document.body.scrollHeight
           },
           formatter: (param) => {
             var str = "";
@@ -389,6 +391,27 @@ export default {
         ],
       };
       zsyz.setOption(option);
+      let inda = -1;
+      let timer = setInterval(() => {
+        zsyz.dispatchAction({
+          type: "downplay",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+        inda = (inda + 1) % y.length;
+        zsyz.dispatchAction({
+          type: "highlight",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+
+        zsyz.dispatchAction({
+          type: "showTip",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+      }, this.timeInterval);
+      this.timer = timer
     },
     itMyChart3() {
       let that = this
@@ -418,6 +441,7 @@ export default {
           backgroundColor: "rgba(0, 0, 0, 0.5)",
           textStyle: {
             color: "#fff",
+            fontSize: (14 / 1080) * document.body.scrollHeight,
           },
           position: (para) => {
             return [para[0] + 10, para[1] + 10];
@@ -577,6 +601,27 @@ export default {
       //     _that.itMyChart4(_that.cyhl_gdzc[params.dataIndex].include.reverse());
       //   });
       tzbzqk.setOption(option);
+      let inda = -1;
+      let timer = setInterval(() => {
+        tzbzqk.dispatchAction({
+          type: "downplay",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+        inda = (inda + 1) % y.length;
+        tzbzqk.dispatchAction({
+          type: "highlight",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+
+        tzbzqk.dispatchAction({
+          type: "showTip",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+      }, this.timeInterval);
+      this.timer = timer
     },
     itMyChart4(xxdata) {
       let gytr = echarts.init(document.getElementById("gytr"));
@@ -715,6 +760,27 @@ export default {
         ],
       };
       gytr.setOption(option);
+      let inda = -1;
+      let timer = setInterval(() => {
+        gytr.dispatchAction({
+          type: "downplay",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+        inda = (inda + 1) % seriesData.length;
+        gytr.dispatchAction({
+          type: "highlight",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+
+        gytr.dispatchAction({
+          type: "showTip",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+      }, this.timeInterval);
+      this.timer = timer
     },
     swit(val) {
       if(val == this.active) return

@@ -23,7 +23,6 @@
                   font-weight: bold;
                   font-size: 16px;
                   color: #32c5ff;
-                  margin-right: 7px;
                 "
                 >{{ qyzh_qyxx.zs }}</span
               >
@@ -71,7 +70,6 @@ export default {
   name: "enterpriseInfo",
   data() {
     return {
-      
       qyhyfb: "",
       qyqrqk: "",
       active: 0,
@@ -79,8 +77,8 @@ export default {
       qyzh_qyxx1: [],
       qyzh_qyxx2: [],
       baseUrl: "http://10.21.197.236:9000",
-      
-      
+      timeInterval: 2000,
+      timer: null
     };
   },
   mounted() {
@@ -125,6 +123,7 @@ export default {
     swit(val) {
       if (val == this.active) return;
       this.active = val;
+      this.timer = null
       if (val == 0) {
         this.qyhyfb.dispose();
         this.$nextTick(function () {
@@ -313,6 +312,27 @@ export default {
         ],
       };
       qyqrqk.setOption(option);
+      let inda = -1;
+      let timer = setInterval(() => {
+        qyqrqk.dispatchAction({
+          type: "downplay",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+        inda = (inda + 1) % y.length;
+        qyqrqk.dispatchAction({
+          type: "highlight",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+
+        qyqrqk.dispatchAction({
+          type: "showTip",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+      }, this.timeInterval);
+      this.timer = timer
     },
     itMyChart10() {
       let qyhyfb = this.$echarts.init(document.getElementById("qyhyfb"));
@@ -449,10 +469,28 @@ export default {
         ],
       };
       qyhyfb.setOption(option);
+      let inda = -1;
+      let timer = setInterval(() => {
+        qyhyfb.dispatchAction({
+          type: "downplay",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+        inda = (inda + 1) % xdata.length;
+        qyhyfb.dispatchAction({
+          type: "highlight",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+
+        qyhyfb.dispatchAction({
+          type: "showTip",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+      }, this.timeInterval);
+      this.timer = timer
     },
-    
-    
-    
   },
 };
 </script>

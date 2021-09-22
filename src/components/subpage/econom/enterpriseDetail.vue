@@ -941,12 +941,10 @@ export default {
 }
 </style>
 <style lang='less'>
-.enterpriseDetail {
-  .aaaa {
-    width: 300px;
-  }
-  .el-dialog {
-    z-index: 2005;
-  }
+.aaaa {
+  width: 300px;
+}
+.el-dialog {
+  z-index: 2005;
 }
 </style>

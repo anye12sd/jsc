@@ -41,7 +41,7 @@ export default {
           category_id: 6,
         },
         {
-          name: "社会治理",
+          name: "基层治理",
           img: f2,
         },
         {
@@ -55,24 +55,38 @@ export default {
     let hash = location.hash;
     if (hash.includes("pcdrive2")) {
       this.current = 1;
+    } else if (hash.includes("pcdrive3")){
+      this.current = 2;
+    } else if (hash.includes("pcdrive4")){
+      this.current = 3;
     }
   },
   methods: {
     changtype(index) {
       if (index == this.current) return;
-      if (index == 2 || index == 3) {
-        this.$message({
-          message: "此分类暂无",
-          type: "warning",
-        });
-        return;
-      }
+      // if (index == 3) {
+      //   this.$message({
+      //     message: "此分类暂无",
+      //     type: "warning",
+      //   });
+      //   return;
+      // }
       this.current = index;
       if (index == 0) {
         this.$router.push("/oridinaryUsers/pcdrive");
+        return
       }
       if (index == 1) {
         this.$router.push("/oridinaryUsers/pcdrive2");
+        return
+      }
+      if (index == 2) {
+        this.$router.push("/oridinaryUsers/pcdrive3");
+        return
+      }
+      if (index == 3) {
+        this.$router.push("/oridinaryUsers/pcdrive4");
+        return
       }
     },
   },

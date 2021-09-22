@@ -41,6 +41,8 @@ export default {
       yezt_cs: null,
       yezt_cs2: [],
       chart:null,
+      timeInterval: 2000,
+      timer: null
     };
   },
   mounted() {
@@ -99,7 +101,13 @@ export default {
             fontSize: "13",
           },
         },
-        tooltip: {},
+        tooltip: {
+          show: true,
+          trigger: "axis",
+          textStyle:{
+            fontSize:(14 / 1080) * document.body.scrollHeight
+          },
+        },
         grid: {
           top: "20%",
           left: "1%",
@@ -236,8 +244,28 @@ export default {
           },
         ],
       };
-
       lsrkqs.setOption(option);
+      let inda = -1;
+      let timer = setInterval(() => {
+        lsrkqs.dispatchAction({
+          type: "downplay",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+        inda = (inda + 1) % y.length;
+        lsrkqs.dispatchAction({
+          type: "highlight",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+
+        lsrkqs.dispatchAction({
+          type: "showTip",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+      }, this.timeInterval);
+      this.timer = timer
     },
   },
 };

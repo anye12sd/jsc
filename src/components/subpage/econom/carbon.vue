@@ -76,7 +76,9 @@ export default {
       huzhoushi: [],
       xiang: [],
       industry: [],
-      chart:null
+      chart:null,
+      timeInterval: 2000,
+      timer: null
     }
   },
   mounted() {
@@ -206,6 +208,27 @@ export default {
         ],
       };
       hzbt.setOption(option);
+      let inda = -1;
+      let timer = setInterval(() => {
+        hzbt.dispatchAction({
+          type: "downplay",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+        inda = (inda + 1) % data.length;
+        hzbt.dispatchAction({
+          type: "highlight",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+
+        hzbt.dispatchAction({
+          type: "showTip",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+      }, this.timeInterval);
+      this.timer = timer
     },
   }
 }

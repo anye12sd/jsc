@@ -32,7 +32,9 @@ export default {
       baseUrl: "http://10.21.197.236:9000",
       xueqiandata: {},
       xueqianechart: [],
-      chart:null
+      chart:null,
+      timeInterval: 2000,
+      timer: null
     };
   },
   mounted() {
@@ -93,6 +95,9 @@ export default {
           trigger: "axis",
           show: true,
           formatter: "{b} {c}",
+          textStyle:{
+            fontSize:(14 / 1080) * document.body.scrollHeight
+          },
         },
         grid: {
           top: "28%",
@@ -231,6 +236,27 @@ export default {
       };
 
       zspblnqk.setOption(option);
+      let inda = -1;
+      let timer = setInterval(() => {
+        zspblnqk.dispatchAction({
+          type: "downplay",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+        inda = (inda + 1) % y.length;
+        zspblnqk.dispatchAction({
+          type: "highlight",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+
+        zspblnqk.dispatchAction({
+          type: "showTip",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+      }, this.timeInterval);
+      this.timer = timer
     },
   },
 };

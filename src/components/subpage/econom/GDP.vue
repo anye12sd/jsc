@@ -72,7 +72,9 @@ export default {
         },
       ],
       baseUrl: 'http://10.21.197.236:9000',
-      chart:null
+      chart: null,
+      timeInterval: 2000,
+      timer: null
     };
   },
   mounted() {
@@ -176,7 +178,7 @@ export default {
           formatter: (param) => {
             var str = "";
             str = `${param[0].name}`;
-            let mar = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-image:linear-gradient(180deg, #0091FF 0%, #000000 100%);"></span>'
+            let mar = '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-image:linear-gradient(180deg, #00EAFF 0%, #1C8CF7 100%);"></span>'
             param.forEach((item) => {
               if (item.data) {
                 if(item.seriesName == '产值') {
@@ -362,6 +364,27 @@ export default {
         ],
       };
       nesynew.setOption(option);
+      let inda = -1;
+      let timer = setInterval(() => {
+        nesynew.dispatchAction({
+          type: "downplay",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+        inda = (inda + 1) % y2.length;
+        nesynew.dispatchAction({
+          type: "highlight",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+
+        nesynew.dispatchAction({
+          type: "showTip",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+      }, this.timeInterval);
+      this.timer = timer
     },
   },
   computed: {

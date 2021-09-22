@@ -55,7 +55,9 @@ export default {
       baseUrl: 'http://10.21.197.236:9000',
       show: true,
       cyhl_bzqk: {},
-      chart: ''
+      chart: '',
+      timeInterval: 2000,
+      timer: null
     };
   },
   mounted() {
@@ -215,6 +217,27 @@ export default {
       };
 
       cyzb.setOption(option);
+      let inda = -1;
+      let timer = setInterval(() => {
+        cyzb.dispatchAction({
+          type: "downplay",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+        inda = (inda + 1) % seriesData.length;
+        cyzb.dispatchAction({
+          type: "highlight",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+
+        cyzb.dispatchAction({
+          type: "showTip",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+      }, this.timeInterval);
+      this.timer = timer
     },
   },
 };

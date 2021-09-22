@@ -27,6 +27,8 @@ export default {
     return {
       baseUrl: "http://10.21.197.236:9000",
       lnzt_st2: {},
+      timeInterval: 2000,
+      timer: null
     };
   },
   mounted() {
@@ -255,6 +257,27 @@ export default {
       };
 
       sgrslnbhqk.setOption(option);
+      let inda = -1;
+      let timer = setInterval(() => {
+        sgrslnbhqk.dispatchAction({
+          type: "downplay",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+        inda = (inda + 1) % y.length;
+        sgrslnbhqk.dispatchAction({
+          type: "highlight",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+
+        sgrslnbhqk.dispatchAction({
+          type: "showTip",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+      }, this.timeInterval);
+      this.timer = timer
     },
   },
 };

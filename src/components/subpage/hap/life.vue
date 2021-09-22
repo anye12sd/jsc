@@ -51,6 +51,8 @@ export default {
       lnzt_sw1: [],
       chart:null,
       active: 1,
+      timeInterval: 2000,
+      timer: null
     };
   },
   components:{
@@ -116,7 +118,6 @@ export default {
         },
         tooltip: {
           trigger: "axis",
-          backgroundColor: "rgba(255,255,255,.4)",
           textStyle: {
             color: "#fff",
             fontSize:(14 / 1080) * document.body.scrollHeight ,
@@ -304,6 +305,27 @@ export default {
       };
 
       pjnlbh.setOption(option);
+      let inda = -1;
+      let timer = setInterval(() => {
+        pjnlbh.dispatchAction({
+          type: "downplay",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+        inda = (inda + 1) % y.length;
+        pjnlbh.dispatchAction({
+          type: "highlight",
+          seriesIndex: 0,
+          dataIndex: inda,
+        });
+
+        pjnlbh.dispatchAction({
+          type: "showTip",
+          seriesIndex: 1,
+          dataIndex: inda,
+        });
+      }, this.timeInterval);
+      this.timer = timer
     },
   },
 };
