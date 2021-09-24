@@ -77,12 +77,15 @@ export default {
   },
   methods: {
     getdata() {
+      let data = btoa('http://jczl.giscloud.cx/front-jczl-dpm/jczl/json/mtxf.json')
+      let url = process.env.NODE_ENV == "development" ? '/api/front-jczl-dpm/jczl/json/mtxf.json' : 'url?url=' + data
       this.$axios({
-        method: "post",
-        url: "api/front-jczl-dpm/jczl/json/mtxf.json",
+        method: "get",
+        url: url,
       })
           .then((res) => {
-            let optionsdata = res.data.data;
+            let optionsdata = res.data.data.data;
+            // let optionsdata = res.data.data; // 本地环境用这个变量
             this.averageContradictionNum = optionsdata.averageContradictionNum
             this.monthContradictionNum = optionsdata.monthContradictionNum
             this.contradictionTypeProportion = optionsdata.contradictionTypeProportion
@@ -93,9 +96,11 @@ export default {
           .catch((err) => {
             console.log(err);
           });
+      let data1 = btoa('http://jczl.giscloud.cx/zhzlApi/jscdp/xfStat')
+      let url1 = process.env.NODE_ENV == "development" ? '/api/zhzlApi/jscdp/xfStat' : 'url?url=' + data1
           this.$axios({
-            method: "post",
-            url: "api/zhzlApi/jscdp/xfStat",
+            method: "get",
+            url: url1,
           })
               .then((res) => {
                 let optionsdata = res.data.data;

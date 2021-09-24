@@ -3,14 +3,18 @@
     <div
       v-for="(k, index) in opt"
       :key="k.name"
-      :class="current == index ? 'op now' : 'op'"
+      class="op"
+      :class="{'now' : current == index, 'showDescribe' : category_id == index}"
       @click="changtype(index)"
+      @mouseover="showDescribe(k.category_id)"
+      @mouseout="hideDescribe"
+      style="position: relative"
     >
       <img :src="k.img" alt=" " />
       <div class="txt">
         {{ k.name }} <img :src="current == index ? icon2 : icon" alt="" />
       </div>
-      <div class="describe"></div>
+      <div class="describe">{{ k.describe }}</div>
     </div>
   </div>
 </template>
@@ -29,24 +33,31 @@ export default {
       current: 0,
       icon,
       icon2,
+      category_id: 100,
       opt: [
         {
           name: "幸福民生",
           img: f1,
-          category_id: 1,
+          category_id: 0,
+          describe: '幸福民生主要以幼儿主题、青少年主题、成年主题、老年主题四个方面，结合各类业务数据，通过统计分析、数据挖掘综合体现民生情况。'
         },
         {
           name: "经济发展",
           img: f4,
-          category_id: 6,
+          category_id: 1,
+          describe: '经济发展主要是结合全县工商、税务、市场监管局、政务服务中心等数据，通过数据关联融合，模型计算等技术手段，从产业情况、GDP预测、碳排放情况、企业经营状态等方面，对长兴县经济发展状况进行全面的展示。',
         },
         {
           name: "基层治理",
           img: f2,
+          category_id: 2,
+          describe: '基层治理通过省市乡镇平安指数、矛调信访、预警信息、社会稳定等方面展示长兴基层治理成果。',
         },
         {
           name: "生态文明",
           img: f3,
+          category_id: 3,
+          describe: '生态文明通过水质监测、空气质量、志愿者服务、文明诚信等方面展示长兴的文明成果，生态环境质量。',
         },
       ],
     };
@@ -89,6 +100,12 @@ export default {
         return
       }
     },
+    showDescribe(index){
+      this.category_id = index
+    },
+    hideDescribe(){
+      this.category_id = 100
+    }
   },
 };
 </script>
@@ -138,10 +155,9 @@ export default {
       display: none;
       position: absolute;
       width: 267px;
-      height: 240px;
-      top: -50px;
-      right: -264px;
-      transform: scaleY(-1);
+      max-height: 240px;
+      top: 0px;
+      right: -313px;
       background-image: linear-gradient(
         180deg,
         rgba(12, 47, 58, 0.32) 2%,
@@ -153,6 +169,7 @@ export default {
       font-size: 14px;
       color: #ffffff;
       overflow-y: auto;
+      padding: 20px
     }
   }
   // > .op:hover {
@@ -163,5 +180,10 @@ export default {
   > .now {
     color: #f3e36f;
   }
+}
+</style>
+<style>
+.showDescribe .describe{
+  display: block !important;
 }
 </style>

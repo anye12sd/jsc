@@ -20,17 +20,17 @@
             <div style="font-weight: bold; color: #32C5FF">{{ qyzh_qypf.qys }}</div>
           </div>
           <div class="flex" style="font-size: 14px; margin-top: 12px; text-align: center">
-            <div class="flex-1" style="position: relative">
+            <div class="flex-1" style="position: relative; cursor: pointer" @click="toScore(1000)">
               <div class="circle1"></div>
               <div class="content">{{ qyzh_qypf.one }}</div>
               <div style="text-align: center; margin-top: 8px">800-1000分</div>
             </div>
-            <div class="flex-1" style="position: relative">
+            <div class="flex-1" style="position: relative; cursor: pointer" @click="toScore(800)">
               <div class="circle2"></div>
               <div class="content">{{ qyzh_qypf.two }}</div>
               <div style="text-align: center; margin-top: 8px">600-800分</div>
             </div>
-            <div class="flex-1" style="position: relative">
+            <div class="flex-1" style="position: relative; cursor: pointer" @click="toScore(600)">
               <div class="circle3"></div>
               <div class="content">{{ qyzh_qypf.three }}</div>
               <div style="text-align: center; margin-top: 8px">600分以下</div>
@@ -120,6 +120,9 @@ export default {
     },
     toDetail(name){
       this.$emit('showEnterprise', name)
+    },
+    toScore(value){
+      this.$emit('showScore', value)
     }
   }
 }

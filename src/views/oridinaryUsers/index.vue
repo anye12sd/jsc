@@ -15,7 +15,7 @@
         >
         <img src="../../assets/oridinary/portrait.png" alt=" " />
         <span>{{ userid[identity] }}</span>
-        <span style="cursor: pointer" @click="signout">退出</span>
+        <span style="cursor: pointer" @click="signout" v-if="identity != '-1'">退出</span>
       </div>
     </div>
     <router-view></router-view>

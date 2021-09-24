@@ -66,12 +66,15 @@ export default {
   },
   methods: {
     getData(){
+      let data = btoa('http://jczl.giscloud.cx/zhzlApi/jscdp/wmcxStat')
+      let url = process.env.NODE_ENV == "development" ? 'api/zhzlApi/jscdp/wmcxStat' : 'url?url=' + data
       this.$axios({
-        method: "post",
-        url: "api/zhzlApi/jscdp/wmcxStat",
+        method: "get",
+        url: url,
       })
           .then((res) => {
-            let optionsdata = res.data.data;
+            let optionsdata = res.data.data.data;
+            // let optionsdata = res.data.data; // 本地环境用这个变量;
             this.child01 = optionsdata.child01
             this.child02 = optionsdata.child02
             this.child03 = optionsdata.child03

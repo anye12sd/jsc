@@ -159,13 +159,15 @@ export default {
   },
   methods: {
     getdata(){
+      let data = btoa('http://jczl.giscloud.cx/zhzlApi/jscdp/shwd')
+      let url = process.env.NODE_ENV == "development" ? '/api/zhzlApi/jscdp/shwd' : 'url?url=' + data
       this.$axios({
-        method: "post",
-        url: "api/zhzlApi/jscdp/shwd",
+        method: "get",
+        url: url,
       })
           .then((res) => {
-            console.log(res)
-            let optionsdata = res.data.data;
+            let optionsdata = res.data.data.data;
+            // let optionsdata = res.data.data; // 本地环境用这个变量
             this.accidentNum = optionsdata.accidentNum
             this.deathNum = optionsdata.deathNum
             this.accidentProportion = optionsdata.accidentProportion

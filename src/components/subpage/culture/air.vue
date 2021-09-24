@@ -45,12 +45,15 @@ export default {
   },
   methods:{
     getData(){
+      let data = btoa('http://jczl.giscloud.cx/front-jczl-dpm/stwm/json/module03.json')
+      let url = process.env.NODE_ENV == "development" ? '/api/front-jczl-dpm/stwm/json/module03.json' : 'url?url=' + data
       this.$axios({
-        method: "post",
-        url: "api/front-jczl-dpm/stwm/json/module03.json",
+        method: "get",
+        url: url,
       })
           .then((res) => {
-            let optionsdata = res.data.data;
+            let optionsdata = res.data.data.data;
+            // let optionsdata = res.data.data; // 本地环境用这个变量
             this.child03 = optionsdata.child03
             this.child02 = optionsdata.child02
             this.child01 = optionsdata.child01

@@ -49,12 +49,15 @@ export default {
   },
   methods: {
     getdata() {
+      let data = btoa('http://jczl.giscloud.cx/zhzlApi/jsc/jscIndex/safetyAllIndexForCX')
+      let url = process.env.NODE_ENV == "development" ? '/api/zhzlApi/jsc/jscIndex/safetyAllIndexForCX' : 'url?url=' + data
       this.$axios({
-        method: "post",
-        url: "api/zhzlApi/jsc/jscIndex/safetyAllIndexForCX",
+        method: "get",
+        url: url,
       })
           .then((res) => {
-            let optionsdata = res.data.data;
+            let optionsdata = res.data.data.data;
+            // let optionsdata = res.data.data; // 本地环境用这个变量
             this.rankIndex = optionsdata.rankIndex
             this.score = optionsdata.score
             this.departmentName = optionsdata.departmentName

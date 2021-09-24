@@ -53,12 +53,24 @@
           <component
             :is="allmodel[4]"
             style="height: 33%"
+            @showEnterprise="showEnterprise"
+            @showScore="showScore"
             :class="enterpriseName ? 'hide' : ''"
           ></component>
           <component
+            v-if="componentShow"
             :is="allmodel[7]"
             style="height: 33%"
             :class="enterpriseName ? 'hide' : ''"
+          ></component>
+          <component
+              v-else
+              :is="allmodel[9]"
+              style="height: 33%"
+              @showEnterprise="showEnterprise"
+              @hideScore="hideScore"
+              :class="enterpriseName ? 'hide' : ''"
+              :scoreValue="scoreValue"
           ></component>
           <component
             :is="allmodel[8]"
@@ -122,8 +134,11 @@ export default {
         "GDP",
         "enterpriseRisk",
         "enterpriseDetail",
+        "enterpriseScoreDetail",
       ],
       enterpriseName: "",
+      scoreValue: "",
+      componentShow: true,
       dialogVisible: false,
       searchContent: "",
       option: [],
@@ -173,9 +188,18 @@ export default {
           this.option = [];
           cb(this.option);
         }
-        
       });
     },
+    showEnterprise(name) {
+      this.enterpriseName = name;
+    },
+    showScore(value) {
+      this.scoreValue = value;
+      this.componentShow = false
+    },
+    hideScore(){
+      this.componentShow = true
+    }
   },
   components: {
     ...allpage,

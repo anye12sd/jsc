@@ -39,7 +39,7 @@ export default {
       chart5: "",
       chart6: "",
       timeInterval: 2000,
-      timer: null
+      timer: null,
     }
   },
   mounted() {
@@ -51,12 +51,15 @@ export default {
   },
   methods: {
     getdata() {
+      let data = btoa('http://jczl.giscloud.cx/zhzlApi/jscdp/syzl')
+      let url = process.env.NODE_ENV == "development" ? '/api/zhzlApi/jscdp/syzl' : 'url?url=' + data
       this.$axios({
-        method: "post",
-        url: "api/zhzlApi/jscdp/syzl",
+        method: "get",
+        url: url,
       })
           .then((res) => {
-            let optionsdata = res.data.data;
+            let optionsdata = res.data.data.data;
+            // let optionsdata = res.data.data; // 本地环境用这个变量
             this.child02 = optionsdata.child02
             this.child01 = optionsdata.child01
             this.$nextTick(function(){
