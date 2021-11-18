@@ -17,8 +17,18 @@
       <div class="nongcun-header flex" style="flex-wrap: wrap" v-if="child02.totalData.length">
         <template v-for="(item, index) in child02.totalData">
           <div class="nongcun-box" :key="index">
-            <div class="nongcun-box-title" :class="'nongcun-box-title' + index">{{item.label}}</div>
-            <div class="nongcun-box-num">{{item.value}}</div>
+            <el-tooltip
+                popper-class="aaaa"
+                class="item flex-1 detail-content-subtitle"
+                effect="dark"
+                :content="item.sydmc ? item.sydmc : '无'"
+                placement="top-start"
+            >
+              <div>
+                <div class="nongcun-box-title" :class="'nongcun-box-title' + index">{{item.label}}</div>
+                <div class="nongcun-box-num">{{item.value}}</div>
+              </div>
+            </el-tooltip>
           </div>
         </template>
       </div>
@@ -58,8 +68,8 @@ export default {
         url: url,
       })
           .then((res) => {
-            let optionsdata = res.data.data.data;
-            // let optionsdata = res.data.data; // 本地环境用这个变量
+            // let optionsdata = res.data.data.data;
+            let optionsdata = res.data.data; // 本地环境用这个变量
             this.child02 = optionsdata.child02
             this.child01 = optionsdata.child01
             this.$nextTick(function(){

@@ -73,8 +73,8 @@ export default {
         url: url,
       })
           .then((res) => {
-            let optionsdata = res.data.data.data;
-            // let optionsdata = res.data.data; // 本地环境用这个变量;
+            // let optionsdata = res.data.data.data;
+            let optionsdata = res.data.data; // 本地环境用这个变量;
             this.child01 = optionsdata.child01
             this.child02 = optionsdata.child02
             this.child03 = optionsdata.child03

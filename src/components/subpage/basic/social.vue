@@ -8,7 +8,7 @@
       <div class="social-header flex">
         <div class="social-header-left flex-1">
           <div class="in">
-            <div>本年度起事故数</div>
+            <div>本年度事故起数</div>
             <div style="text-align: left;">
               <span
                   style="
@@ -100,7 +100,7 @@
                 color: #32c5ff;
                 margin-right: 4px;
               "
-            >{{ caseNumProportion }}</span
+            >{{ caseNum }}</span
             >
             </div>
           </div>

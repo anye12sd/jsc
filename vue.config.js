@@ -5,7 +5,7 @@ module.exports = {
 			"/api":{
 				changeOrigin:true,
 				target:"http://jczl.giscloud.cx/",
-				// target:"http://localhost:8080",
+				// target:"http://10.21.197.237/",
 				pathRewrite:{
 					"^/api":''
 				}

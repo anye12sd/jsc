@@ -28,6 +28,17 @@
         </div>
       </div>
       <div class="item">
+        <label for="modelDescribe" style="width: 40%">模型描述</label>
+        <div style="width: 60%">
+          <textarea
+              class="item_textarea"
+              id="modelDescribe"
+              placeholder="请输入描述"
+              v-model="describe"
+          />
+        </div>
+      </div>
+      <div class="item">
         <div style="width: 40%"></div>
         <div style="width: 60%">
           <div class="cancel" @click="cancel">取消</div>
@@ -48,6 +59,7 @@ export default {
       options: [],
       value: null,
       name: "",
+      describe: "",
     };
   },
   props: ["edit"],
@@ -56,9 +68,9 @@ export default {
       this.options = res.data.data;
     });
     if (this.edit) {
-      console.log(this.edit);
+      // console.log(this.edit);
       this.name = this.edit.modulename;
-      this;
+      this.describe = this.edit.describe;
     }
   },
   methods: {
@@ -81,6 +93,7 @@ export default {
       if (this.edit) {
         modeledit({
           modulename: this.name,
+          describe: this.describe,
           id: this.edit.id,
         }).then((res) => {
         //   console.log(res);
@@ -236,5 +249,22 @@ export default {
   .main > .item:nth-of-type(2) {
     margin-top: 40px;
   }
+}
+</style>
+<style>
+.item_textarea{
+  width: 300px;
+  background: #ffffff;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  padding-left: 20px;
+  padding-top: 10px;
+  height: 75px;
+  font-family: MicrosoftYaHei;
+  font-size: 14px;
+  color: #333333;
+  outline: none;
+  box-sizing: border-box;
+  resize: none;
 }
 </style>

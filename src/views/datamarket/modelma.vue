@@ -38,11 +38,11 @@
             <p @click="goup(k.id, index)" v-if="k.load == 2">
               <img :src="change" alt="图片资源缺失" /> <span>上架</span>
             </p>
-            <p @click="edit(k, index)">
-              <img :src="off" alt="图片资源缺失" /> <span>修改</span>
-            </p>
             <p @click="godown(k.id, index)" v-if="k.load == 1">
               <img :src="puton" alt="图片资源缺失" /> <span>下架</span>
+            </p>
+            <p @click="edit(k, index)">
+              <img :src="off" alt="图片资源缺失" /> <span>修改</span>
             </p>
             <p @click="dele(k.id, index)">
                <span>删除</span>

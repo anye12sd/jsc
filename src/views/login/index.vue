@@ -139,7 +139,7 @@ export default {
             sessionStorage.setItem("mobile", res.data.data.mobile);
             setTimeout(() => {
               if (this.identity == 4) {
-                this.$router.push("/demand");
+                this.$router.push("/demand/waitDemand");
                 this.$store.commit("config/setShowTopBar", true);
               } else {
                 this.$router.push("/oridinaryUsers");
@@ -162,7 +162,7 @@ export default {
   watch: {
     identity(newValue) {
       if (newValue == 4) {
-        this.$router.push("/demand");
+        this.$router.push("/demand/waitDemand");
       } else {
         this.$router.push("/oridinaryUsers");
       }

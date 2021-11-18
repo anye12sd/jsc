@@ -14,7 +14,7 @@
           >前往管理平台</span
         >
         <img src="../../assets/oridinary/portrait.png" alt=" " />
-        <span>{{ userid[identity] }}</span>
+        <span @click="toLogin">{{ userid[identity] }}</span>
         <span style="cursor: pointer" @click="signout" v-if="identity != '-1'">退出</span>
       </div>
     </div>
@@ -98,6 +98,9 @@ export default {
       if (process.env.NODE_ENV == "production") {
         window.location.href = "http://10.21.197.237";
       }
+    },
+    toLogin() {
+
     },
     goafter() {
       this.$store.commit("config/setShowTopBar", true);

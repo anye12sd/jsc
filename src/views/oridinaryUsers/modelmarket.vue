@@ -20,8 +20,13 @@
         </div>
         <img :src="da" alt="图" />
         <div>{{ k.modulename }}</div>
-        <div>
-          <span>所属单位:</span> <span>{{ k.get_branch_name }}</span>
+        <div class="flex">
+          <div>
+            <span>所属单位:</span> <span>{{ k.get_branch_name }}</span>
+          </div>
+          <div class="describe-btn" @click="openDescribe(k)">
+            描述
+          </div>
         </div>
       </div>
       <!-- <div
@@ -245,7 +250,9 @@ export default {
       this.$store.commit("jurisdiction/setModelInfo", item);
     },
     todownload(id, type, modular_type, k) {
-      if(this.identity != 5) {
+      console.log(this.identity)
+      if(this.identity != 5 && this.identity != 1) {
+        // 数据专员和系统管理员才能下载，提示只显示数据专员能下载
         this.$message({
             message: "只有数据专员才能下载",
             type: "warning",
@@ -276,7 +283,8 @@ export default {
       });
     },
     download(id, type, modular_type) {
-      if(this.identity != 5) {
+      if(this.identity != 5 && this.identity != 1) {
+        // 数据专员和系统管理员才能下载，提示只显示数据专员能下载
         this.$message({
             message: "只有数据专员才能下载",
             type: "warning",
@@ -353,7 +361,16 @@ export default {
             }
             // this.modular_type 1 无条件 2 data_jr 3 data_wg
             if (this.modular_type == 1) {
-              this.handleExport(this.id, this.sql_type);
+              // this.handleExport(this.id, this.sql_type);
+              window.open(
+                  "http://10.21.197.237/module/sql?id=" +
+                  this.id +
+                  "&access_token=" +
+                  location.search.split("=")[1] || sessionStorage.getItem("access_token") +
+                  "&sql_type=" + '1' +
+                  "&start_time=" + new Date(this.form.date1).getTime() +
+                  "&end_time=" + new Date(this.form.date2).getTime()
+              );
               return;
             }
             if (
@@ -492,6 +509,14 @@ export default {
     },
     onChange(file, fileList) {
       this.form.file = fileList;
+    },
+    openDescribe(item) {
+      this.$alert(item.describe ? item.describe : '暂无描述', item.modulename, {
+        confirmButtonText: '确定',
+        callback: action => {
+          console.log(action)
+        }
+      });
     },
     // submitUpload() {
     //   this.$refs.upload.submit();
@@ -654,13 +679,13 @@ export default {
       }
       > div:nth-child(4) {
         margin: 1rem 0;
-        > span:nth-child(1) {
+        > div span:nth-child(1) {
           font-family: MicrosoftYaHei;
           font-size: 1.4rem;
           color: #333333;
           letter-spacing: 0;
         }
-        > span:nth-child(2) {
+        > div span:nth-child(2) {
           font-family: MicrosoftYaHei;
           font-size: 1.4rem;
           color: #1987ff;
@@ -675,5 +700,13 @@ export default {
 }
 .form-box .el-input__inner{
   width: 100%;
+}
+.flex{
+  display: flex;
+  justify-content: space-between;
+}
+.describe-btn{
+  color: #1987ff;
+  cursor: pointer;
 }
 </style>

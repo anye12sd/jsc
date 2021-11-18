@@ -103,7 +103,8 @@ export default {
             url: url1,
           })
               .then((res) => {
-                let optionsdata = res.data.data;
+                let optionsdata = res.data.data.data;
+                // let optionsdata = res.data.data; // 本地环境用这个变量
                 this.xfPersonNum = optionsdata.xfPersonNum
               })
               .catch((err) => {
